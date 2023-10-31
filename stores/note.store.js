@@ -1,12 +1,11 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable } from 'mobx';
 
 class NoteStore {
-    notes = [];
+ notes = [];
 
-    constructor() {
-        makeAutoObservable(this);
-    }
-
+ constructor() {
+  makeAutoObservable(this);
+ }
 }
 
 export default NoteStore;
