@@ -13,7 +13,7 @@ const About = observer( () => {
             </Pressable>
         </Link>
 
-            <Pressable onPress={() => userStore.setUserName('Terry')}>
+            <Pressable onPress={() => userStore.setUserName('sony')}>
                 <Text>Home {userStore.name}</Text>
             </Pressable>
         </View>
