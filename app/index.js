@@ -4,9 +4,16 @@ import {StatusBar} from "expo-status-bar";
 import { Link } from 'expo-router';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import {useStores, StoreProvider, trunk} from "../stores";
 import DetailsScreen from "../screens/Detail";
+import Wallet from "../screens/Wallet";
+
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import Test from "../screens/Test";
+
+const Tab = createBottomTabNavigator();
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -20,26 +27,69 @@ export default function App() {
     rehydrate();
   }, []);
 
-  function HomeScreen({navigation}) {
-    return (
-        <View style={styles.container}>
-          <View style={styles.main}>
-            <Text style={styles.title}>Hello World</Text>
-            <Text style={styles.subtitle}>This is the first page of your app.</Text>
-              <Button
-                  title="Go to Details... again"
-                  onPress={() => navigation.push('Detail')}
-              />
-          </View>
-          <View>
-            <Link href="/about">About</Link>
-            <Link href="/user/bacon">View user {userStore.name}</Link>
-          </View>
-          <StatusBar style="auto" />
-        </View>
-    );
-  }
 
+    function SearchScreen() {
+        return <Text>Search</Text>;
+    }
+
+    function NotificationScreen() {
+        return <Text>Notification</Text>;
+    }
+
+    function MessageScreen({navigation}) {
+        return             (<View style={styles.main}>
+            <Button
+                title="Go to Details... again"
+                onPress={() => navigation.navigate('Detail')}
+            />
+        </View>)
+    }
+    function MyTab() {
+        return (
+                <Tab.Navigator initialRouteName="Wallet" screenOptions={{ headerShown: false }}>
+                    <Tab.Screen
+                        name="Wallet"
+                        component={Wallet}
+                        options={{
+                            title: '홈',
+                            tabBarIcon: ({color, size}) => (
+                                <Icon name="home" color={color} size={size} />
+                            ),
+                        }}
+                    />
+                    <Tab.Screen
+                        name="Search"
+                        component={SearchScreen}
+                        options={{
+                            title: '알림',
+                            tabBarIcon: ({color, size}) => (
+                                <Icon name="notifications" color={color} size={size} />
+                            ),
+                        }}
+                    />
+                    <Tab.Screen
+                        name="Notification"
+                        component={NotificationScreen}
+                        options={{
+                            title: '검색',
+                            tabBarIcon: ({color, size}) => (
+                                <Icon name="search" color={color} size={size} />
+                            ),
+                        }}
+                    />
+                    <Tab.Screen
+                        name="Message"
+                        component={MessageScreen}
+                        options={{
+                            title: '메시지',
+                            tabBarIcon: ({color, size}) => (
+                                <Icon name="message" color={color} size={size} />
+                            ),
+                        }}
+                    />
+                </Tab.Navigator>
+        );
+    }
 
   const { noteStore, userStore } = useStores();
 
@@ -50,12 +100,14 @@ export default function App() {
         </View>
     );
   } else {
+      console.log('kk')
     return (
-        <NavigationContainer  independent={true}>
-          <Stack.Navigator>
-            <Stack.Screen name="Home" component={HomeScreen} options={{headerShown:false}} />
-              <Stack.Screen name="Detail" component={DetailsScreen}  />
-          </Stack.Navigator>
+        <NavigationContainer independent={true} >
+            <Stack.Navigator>
+                <Stack.Screen name="MyTab" component={MyTab} options={{headerShown:false}} />
+                <Stack.Screen name="Detail" component={DetailsScreen}  />
+                <Stack.Screen name="Test" component={Test}  />
+            </Stack.Navigator>
         </NavigationContainer>
     );
   }
