@@ -1,15 +1,15 @@
-import { makeAutoObservable, action } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 
 class UserStore {
- name = '';
+	name = '';
 
- constructor() {
-  makeAutoObservable(this);
- }
+	constructor() {
+		makeAutoObservable(this);
+	}
 
- setUserName = (name) => {
-  this.name = name;
- };
+	setUserName = (name) => {
+		this.name = name;
+	};
 }
 
 export default UserStore;

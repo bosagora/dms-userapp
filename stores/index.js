@@ -5,10 +5,10 @@ import UserStore from './user.store';
 import NoteStore from './note.store';
 
 class RootStore {
- constructor() {
-  this.userStore = new UserStore(this);
-  this.noteStore = new NoteStore(this);
- }
+  constructor() {
+    this.userStore = new UserStore(this);
+    this.noteStore = new NoteStore(this);
+  }
 }
 
 export const rootStore = new RootStore();
