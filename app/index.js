@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Button,
+  Platform,
+  StatusBar,
   StyleSheet,
   Text,
   View,
@@ -10,7 +12,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { GluestackUIProvider } from '@gluestack-ui/themed';
-import { styled, StyledProvider } from '@gluestack-style/react';
+import * as Notifications from 'expo-notifications';
+
 import { config } from '../gluestack-style.config.js';
 import { useStores, StoreProvider, trunk } from '../stores';
 import DetailsScreen from '../screens/Detail';
@@ -21,12 +24,89 @@ import Test from '../screens/Test';
 import About from '../screens/About';
 import ActionSheetScreen from '../screens/ActionSheet';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-
+import LocalNotification from '../screens/LocalNotification';
+import Constants from 'expo-constants';
+import * as Device from 'expo-device';
 const Tab = createBottomTabNavigator();
 
 const Stack = createNativeStackNavigator();
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
+async function registerForPushNotificationsAsync() {
+  let token;
+
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+
+  // if (Device.isDevice) {
+  if (3) {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    token = await Notifications.getExpoPushTokenAsync({
+      projectId: 'dfff3581-3', // Expo Project ID
+    });
+    console.log(token);
+  } else {
+    alert('Must use physical device for Push Notifications');
+  }
+
+  return token.data;
+}
+
 export default function App() {
   const [isStoreLoaded, setIsStoreLoaded] = useState(false);
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
+  useEffect(() => {
+    if (Device.isDevice) {
+      registerForPushNotificationsAsync().then((token) => {
+        console.log('token :', token);
+        setExpoPushToken(token);
+      });
+
+      notificationListener.current =
+        Notifications.addNotificationReceivedListener((notification) => {
+          setNotification(notification);
+        });
+
+      responseListener.current =
+        Notifications.addNotificationResponseReceivedListener((response) => {
+          console.log(response);
+        });
+
+      return () => {
+        Notifications.removeNotificationSubscription(
+          notificationListener.current,
+        );
+        Notifications.removeNotificationSubscription(responseListener.current);
+      };
+    }
+  }, []);
 
   useEffect(() => {
     const rehydrate = async () => {
@@ -81,7 +161,7 @@ export default function App() {
         />
         <Tab.Screen
           name='Notification'
-          component={NotificationScreen}
+          component={LocalNotification}
           options={{
             title: '알림',
             tabBarIcon: ({ color, size }) => (
@@ -130,6 +210,7 @@ export default function App() {
               <Stack.Screen name='About' component={About} />
               <Stack.Screen name='Test' component={Test} />
             </Stack.Navigator>
+            <StatusBar style='auto' />
           </GluestackUIProvider>
         </NavigationContainer>
       </BottomSheetModalProvider>
