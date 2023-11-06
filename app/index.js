@@ -6,6 +6,7 @@ import {
   StatusBar,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -181,6 +182,9 @@ export default function App() {
             title: '메시지',
             tabBarIcon: ({ color, size }) => (
               <Icon name='message' color={color} size={size} />
+            ),
+            tabBarButton: (props) => (
+              <TouchableOpacity {...props} onPress={() => console.log('TTT')} />
             ),
           }}
         />
