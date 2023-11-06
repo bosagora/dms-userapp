@@ -18,7 +18,7 @@ const EResult = {
   SUCCESS: 'SUCCESS',
 };
 
-export default function BiometricAuthScreen() {
+export default function BiometricAuthScreen({ navigation }) {
   const [facialRecognitionAvailable, setFacialRecognitionAvailable] =
     React.useState(false);
   const [fingerprintAvailable, setFingerprintAvailable] = React.useState(false);
