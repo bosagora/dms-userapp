@@ -30,6 +30,7 @@ import LocalNotification from '../screens/LocalNotification';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import BiometricAuthScreen from '../screens/BiometricAuthScreen';
+import HandelAuthentication from '../screens/HandelAuthentication';
 const Tab = createBottomTabNavigator();
 
 const Stack = createNativeStackNavigator();
@@ -214,6 +215,10 @@ export default function App() {
               <Stack.Screen name='Test' component={Test} />
               <Stack.Screen name='SignIn' component={SignIn} />
               <Stack.Screen
+                name='HandelAuthentication'
+                component={HandelAuthentication}
+              />
+              <Stack.Screen
                 name='BiometricAuthScreen'
                 component={BiometricAuthScreen}
               />
@@ -231,7 +236,7 @@ export default function App() {
 const PinCodeComp = () => {
   const [pin, setPin] = useState('1111');
   const [pinVisible, setPinVisible] = useState(true);
-  const [pinMode, setPinMode] = useState(PinCodeT.Modes.Set);
+  const [pinMode, setPinMode] = useState(PinCodeT.Modes.Enter);
 
   return (
     <PinCode
