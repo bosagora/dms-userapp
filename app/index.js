@@ -29,6 +29,7 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import LocalNotification from '../screens/LocalNotification';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
+import BiometricAuthScreen from '../screens/BiometricAuthScreen';
 const Tab = createBottomTabNavigator();
 
 const Stack = createNativeStackNavigator();
@@ -212,6 +213,10 @@ export default function App() {
               <Stack.Screen name='About' component={About} />
               <Stack.Screen name='Test' component={Test} />
               <Stack.Screen name='SignIn' component={SignIn} />
+              <Stack.Screen
+                name='BiometricAuthScreen'
+                component={BiometricAuthScreen}
+              />
             </Stack.Navigator>
             <StatusBar style='auto' />
           </GluestackUIProvider>
@@ -226,7 +231,7 @@ export default function App() {
 const PinCodeComp = () => {
   const [pin, setPin] = useState('1111');
   const [pinVisible, setPinVisible] = useState(true);
-  const [pinMode, setPinMode] = useState(PinCodeT.Modes.Enter);
+  const [pinMode, setPinMode] = useState(PinCodeT.Modes.Set);
 
   return (
     <PinCode
