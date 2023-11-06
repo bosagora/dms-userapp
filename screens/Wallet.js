@@ -27,6 +27,16 @@ export default function Wallet({ navigation }) {
             <Text>Go to Detail </Text>
             <ButtonIcon as={AddIcon} />
           </Button>
+          <Button
+            size='md'
+            variant='solid'
+            action='primary'
+            isDisabled={false}
+            isFocusVisible={false}
+            onPress={() => navigation.navigate('SignIn')}>
+            <Text>Go to SignIn </Text>
+            <ButtonIcon as={AddIcon} />
+          </Button>
         </Box>
       </VStack>
     </Box>

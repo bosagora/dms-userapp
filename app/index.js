@@ -19,6 +19,7 @@ import { config } from '../gluestack-style.config.js';
 import { useStores, StoreProvider, trunk } from '../stores';
 import DetailsScreen from '../screens/Detail';
 import Wallet from '../screens/Wallet';
+import SignIn from '../screens/SignIn';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Test from '../screens/Test';
@@ -210,6 +211,7 @@ export default function App() {
               />
               <Stack.Screen name='About' component={About} />
               <Stack.Screen name='Test' component={Test} />
+              <Stack.Screen name='SignIn' component={SignIn} />
             </Stack.Navigator>
             <StatusBar style='auto' />
           </GluestackUIProvider>
