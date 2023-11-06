@@ -14,6 +14,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { GluestackUIProvider } from '@gluestack-ui/themed';
 import * as Notifications from 'expo-notifications';
 
+import { PinCode, PinCodeT } from '@anhnch/react-native-pincode';
 import { config } from '../gluestack-style.config.js';
 import { useStores, StoreProvider, trunk } from '../stores';
 import DetailsScreen from '../screens/Detail';
@@ -213,10 +214,82 @@ export default function App() {
             <StatusBar style='auto' />
           </GluestackUIProvider>
         </NavigationContainer>
+
+        <PinCodeComp />
       </BottomSheetModalProvider>
     );
   }
 }
+
+const PinCodeComp = () => {
+  const [pin, setPin] = useState('1111');
+  const [pinVisible, setPinVisible] = useState(true);
+  const [pinMode, setPinMode] = useState(PinCodeT.Modes.Enter);
+
+  return (
+    <PinCode
+      pin={pin}
+      visible={pinVisible}
+      mode={pinMode}
+      options={{
+        backSpace: <Icon name='backspace' size={24} color='white' />,
+        lockIcon: <Icon name='lock' size={24} color='white' />,
+        retryLockDuration: 1000,
+        maxAttempt: 5,
+      }}
+      textOptions={customTexts}
+      styles={customStyles}
+      onEnter={() => setPinVisible(false)}
+      onSet={(newPin) => {
+        setPin(newPin);
+        setPinVisible(false);
+      }}
+      onSetCancel={() => setPinVisible(false)}
+      onReset={() => setPin(undefined)}
+    />
+  );
+};
+const customTexts = {
+  enter: {
+    subTitle: 'Enter PIN to access.',
+  },
+  set: {
+    subTitle: 'Enter {{pinLength}} digits.',
+  },
+  locked: {
+    title: 'Locked',
+    subTitle: `Wrong PIN {{maxAttempt}} times.\nTemporarily locked in {{lockDuration}}.`,
+  },
+};
+
+const EnterAndSet = {
+  header: {
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    minHeight: 100,
+  },
+  title: { fontSize: 24 },
+};
+
+const customStyles = {
+  main: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 99,
+    backgroundColor: 'blue',
+  },
+  enter: {
+    ...EnterAndSet,
+    buttonTextDisabled: { color: 'gray' },
+  },
+  set: EnterAndSet,
+  locked: {
+    countdown: { borderColor: 'black' },
+    countdownText: { color: 'black' },
+  },
+  reset: {
+    confirmText: { color: 'red' },
+  },
+};
 
 const styles = StyleSheet.create({
   container: {
