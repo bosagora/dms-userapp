@@ -8,6 +8,7 @@ import {
   Heading,
   Text,
 } from '@gluestack-ui/themed';
+import BiometricAuthScreen from './BiometricAuthScreen';
 
 export default function Wallet({ navigation }) {
   return (
@@ -35,6 +36,16 @@ export default function Wallet({ navigation }) {
             isFocusVisible={false}
             onPress={() => navigation.navigate('SignIn')}>
             <Text>Go to SignIn </Text>
+            <ButtonIcon as={AddIcon} />
+          </Button>
+          <Button
+            size='md'
+            variant='solid'
+            action='primary'
+            isDisabled={false}
+            isFocusVisible={false}
+            onPress={() => navigation.navigate('BiometricAuthScreen')}>
+            <Text>Go to BiometricAuthScreen </Text>
             <ButtonIcon as={AddIcon} />
           </Button>
         </Box>
