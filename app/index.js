@@ -31,6 +31,7 @@ import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import BiometricAuthScreen from '../screens/BiometricAuthScreen';
 import HandelAuthentication from '../screens/HandelAuthentication';
+import ModalScreen from '../screens/ModalScreen';
 const Tab = createBottomTabNavigator();
 
 const Stack = createNativeStackNavigator();
@@ -214,6 +215,7 @@ export default function App() {
               <Stack.Screen name='About' component={About} />
               <Stack.Screen name='Test' component={Test} />
               <Stack.Screen name='SignIn' component={SignIn} />
+              <Stack.Screen name='ModalScreen' component={ModalScreen} />
               <Stack.Screen
                 name='HandelAuthentication'
                 component={HandelAuthentication}
