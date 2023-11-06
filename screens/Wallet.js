@@ -10,6 +10,7 @@ import {
 } from '@gluestack-ui/themed';
 import BiometricAuthScreen from './BiometricAuthScreen';
 import HandelAuthentication from './HandelAuthentication';
+import ModalScreen from './ModalScreen';
 
 export default function Wallet({ navigation }) {
   return (
@@ -57,6 +58,16 @@ export default function Wallet({ navigation }) {
             isFocusVisible={false}
             onPress={() => navigation.navigate('HandelAuthentication')}>
             <Text>Go to HandelAuthentication </Text>
+            <ButtonIcon as={AddIcon} />
+          </Button>
+          <Button
+            size='md'
+            variant='solid'
+            action='primary'
+            isDisabled={false}
+            isFocusVisible={false}
+            onPress={() => navigation.navigate('ModalScreen')}>
+            <Text>Go to ModalScreen </Text>
             <ButtonIcon as={AddIcon} />
           </Button>
         </Box>
