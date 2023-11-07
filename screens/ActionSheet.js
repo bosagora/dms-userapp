@@ -54,6 +54,7 @@ export default function ActionSheetScreen() {
                   borderColor='$borderLight300'
                   rounded='$sm'>
                   <Image
+                    role='img'
                     source={{ uri: 'https://i.imgur.com/UwTLr26.png' }}
                     alt='kk'
                     flex={1}

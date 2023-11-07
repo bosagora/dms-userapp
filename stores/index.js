@@ -3,11 +3,17 @@ import { AsyncTrunk } from 'mobx-sync';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserStore from './user.store';
 import NoteStore from './note.store';
+import SecretStore from './secret.store';
+import PinStore from './pin.store';
+import LoyaltyStore from './Loyalty.store';
 
 class RootStore {
   constructor() {
     this.userStore = new UserStore(this);
     this.noteStore = new NoteStore(this);
+    this.secretStore = new SecretStore(this);
+    this.pinStore = new PinStore(this);
+    this.loyaltyStore = new LoyaltyStore(this);
   }
 }
 
