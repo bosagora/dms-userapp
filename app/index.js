@@ -14,27 +14,34 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { GluestackUIProvider } from '@gluestack-ui/themed';
 import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { PinCode, PinCodeT } from '@anhnch/react-native-pincode';
-import { config } from '../gluestack-style.config.js';
-import { useStores, StoreProvider, trunk } from '../stores';
 import DetailsScreen from '../screens/Detail';
 import Wallet from '../screens/Wallet';
 import SignIn from '../screens/SignIn';
-
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import Test from '../screens/Test';
 import About from '../screens/About';
 import ActionSheetScreen from '../screens/ActionSheet';
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import LocalNotification from '../screens/LocalNotification';
-import Constants from 'expo-constants';
-import * as Device from 'expo-device';
 import BiometricAuthScreen from '../screens/BiometricAuthScreen';
 import HandelAuthentication from '../screens/HandelAuthentication';
 import ModalScreen from '../screens/ModalScreen';
+import PinCodeScreen from '../screens/PinCodeScreen';
+
+import { config } from '../gluestack-style.config.js';
+import { useStores, StoreProvider, trunk } from '../stores';
+import Term from '../screens/initScreens/Term';
+import PhoneAuth from '../screens/initScreens/PhoneAuth';
+import Secret from '../screens/initScreens/Secret';
+import { AUTH_STATE } from '../stores/user.store';
+import InitPinCodeScreen from '../screens/initScreens/InitPinCodeScreen';
+import { observer } from 'mobx-react';
+
 const Tab = createBottomTabNavigator();
 
+const InitStack = createNativeStackNavigator();
 const Stack = createNativeStackNavigator();
 
 Notifications.setNotificationHandler({
@@ -81,12 +88,14 @@ async function registerForPushNotificationsAsync() {
   return token.data;
 }
 
-export default function App() {
+// export default function App() {
+const App = observer(() => {
   const [isStoreLoaded, setIsStoreLoaded] = useState(false);
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
+  const { pinStore, userStore } = useStores();
 
   useEffect(() => {
     if (Device.isDevice) {
@@ -122,6 +131,86 @@ export default function App() {
     rehydrate();
   }, []);
 
+  if (!isStoreLoaded) {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator size='large' />
+      </View>
+    );
+  } else {
+    return (
+      <BottomSheetModalProvider>
+        <NavigationContainer independent={true}>
+          <GluestackUIProvider config={config} colorMode='dark'>
+            {userStore.state !== AUTH_STATE.DONE ? (
+              <InitStackScreen />
+            ) : (
+              <MainStackScreen />
+            )}
+          </GluestackUIProvider>
+        </NavigationContainer>
+
+        <PinCodeScreen />
+      </BottomSheetModalProvider>
+    );
+  }
+});
+
+function InitStackScreen() {
+  return (
+    <InitStack.Navigator>
+      <Stack.Screen
+        name='Term'
+        component={Term}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name='Secret'
+        component={Secret}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name='InitPinCodeScreen'
+        component={InitPinCodeScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name='PhoneAuth'
+        component={PhoneAuth}
+        options={{ headerShown: false }}
+      />
+    </InitStack.Navigator>
+  );
+}
+
+function MainStackScreen() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name='MyTab'
+        component={MyTab}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name='Detail' component={DetailsScreen} />
+      <Stack.Screen name='ActionSheetScreen' component={ActionSheetScreen} />
+      <Stack.Screen name='About' component={About} />
+      <Stack.Screen name='Test' component={Test} />
+      <Stack.Screen name='SignIn' component={SignIn} />
+      <Stack.Screen name='ModalScreen' component={ModalScreen} />
+
+      <Stack.Screen
+        name='HandelAuthentication'
+        component={HandelAuthentication}
+      />
+      <Stack.Screen
+        name='BiometricAuthScreen'
+        component={BiometricAuthScreen}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function MyTab() {
   function SearchScreen() {
     return <Text>Search</Text>;
   }
@@ -140,174 +229,59 @@ export default function App() {
       </View>
     );
   }
-  function MyTab() {
-    return (
-      <Tab.Navigator
-        initialRouteName='Wallet'
-        screenOptions={{ headerShown: false }}>
-        <Tab.Screen
-          name='Wallet'
-          component={Wallet}
-          options={{
-            title: '홈',
-            tabBarIcon: ({ color, size }) => (
-              <Icon name='home' color={color} size={size} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name='Search'
-          component={SearchScreen}
-          options={{
-            title: '검색',
-            tabBarIcon: ({ color, size }) => (
-              <Icon name='search' color={color} size={size} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name='Notification'
-          component={LocalNotification}
-          options={{
-            title: '알림',
-            tabBarIcon: ({ color, size }) => (
-              <Icon name='notifications' color={color} size={size} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name='Message'
-          component={MessageScreen}
-          options={{
-            title: '메시지',
-            tabBarIcon: ({ color, size }) => (
-              <Icon name='message' color={color} size={size} />
-            ),
-            tabBarButton: (props) => (
-              <TouchableOpacity {...props} onPress={() => console.log('TTT')} />
-            ),
-          }}
-        />
-      </Tab.Navigator>
-    );
-  }
-
-  const { noteStore, userStore } = useStores();
-
-  if (!isStoreLoaded) {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size='large' />
-      </View>
-    );
-  } else {
-    return (
-      <BottomSheetModalProvider>
-        <NavigationContainer independent={true}>
-          <GluestackUIProvider config={config}>
-            <Stack.Navigator>
-              <Stack.Screen
-                name='MyTab'
-                component={MyTab}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen name='Detail' component={DetailsScreen} />
-              <Stack.Screen
-                name='ActionSheetScreen'
-                component={ActionSheetScreen}
-              />
-              <Stack.Screen name='About' component={About} />
-              <Stack.Screen name='Test' component={Test} />
-              <Stack.Screen name='SignIn' component={SignIn} />
-              <Stack.Screen name='ModalScreen' component={ModalScreen} />
-              <Stack.Screen
-                name='HandelAuthentication'
-                component={HandelAuthentication}
-              />
-              <Stack.Screen
-                name='BiometricAuthScreen'
-                component={BiometricAuthScreen}
-              />
-            </Stack.Navigator>
-            <StatusBar style='auto' />
-          </GluestackUIProvider>
-        </NavigationContainer>
-
-        <PinCodeComp />
-      </BottomSheetModalProvider>
-    );
-  }
-}
-
-const PinCodeComp = () => {
-  const [pin, setPin] = useState('1111');
-  const [pinVisible, setPinVisible] = useState(true);
-  const [pinMode, setPinMode] = useState(PinCodeT.Modes.Enter);
-
   return (
-    <PinCode
-      pin={pin}
-      visible={pinVisible}
-      mode={pinMode}
-      options={{
-        backSpace: <Icon name='backspace' size={24} color='white' />,
-        lockIcon: <Icon name='lock' size={24} color='white' />,
-        retryLockDuration: 1000,
-        maxAttempt: 5,
-      }}
-      textOptions={customTexts}
-      styles={customStyles}
-      onEnter={() => setPinVisible(false)}
-      onSet={(newPin) => {
-        setPin(newPin);
-        setPinVisible(false);
-      }}
-      onSetCancel={() => setPinVisible(false)}
-      onReset={() => setPin(undefined)}
-    />
+    <Tab.Navigator
+      initialRouteName='Wallet'
+      screenOptions={{ headerShown: false }}>
+      <Tab.Screen
+        name='Wallet'
+        component={Wallet}
+        options={{
+          title: '홈',
+          tabBarIcon: ({ color, size }) => (
+            <Icon name='home' color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name='Search'
+        component={SearchScreen}
+        options={{
+          title: '검색',
+          tabBarIcon: ({ color, size }) => (
+            <Icon name='search' color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name='Notification'
+        component={LocalNotification}
+        options={{
+          title: '알림',
+          tabBarIcon: ({ color, size }) => (
+            <Icon name='notifications' color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name='Message'
+        component={MessageScreen}
+        options={{
+          title: '메시지',
+          tabBarIcon: ({ color, size }) => (
+            <Icon name='message' color={color} size={size} />
+          ),
+          tabBarButton: (props) => (
+            <TouchableOpacity
+              {...props}
+              onPress={() => console.log('Touchable for tab screen')}
+            />
+          ),
+        }}
+      />
+    </Tab.Navigator>
   );
-};
-const customTexts = {
-  enter: {
-    subTitle: 'Enter PIN to access.',
-  },
-  set: {
-    subTitle: 'Enter {{pinLength}} digits.',
-  },
-  locked: {
-    title: 'Locked',
-    subTitle: `Wrong PIN {{maxAttempt}} times.\nTemporarily locked in {{lockDuration}}.`,
-  },
-};
-
-const EnterAndSet = {
-  header: {
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    minHeight: 100,
-  },
-  title: { fontSize: 24 },
-};
-
-const customStyles = {
-  main: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: 99,
-    backgroundColor: 'blue',
-  },
-  enter: {
-    ...EnterAndSet,
-    buttonTextDisabled: { color: 'gray' },
-  },
-  set: EnterAndSet,
-  locked: {
-    countdown: { borderColor: 'black' },
-    countdownText: { color: 'black' },
-  },
-  reset: {
-    confirmText: { color: 'red' },
-  },
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -330,3 +304,5 @@ const styles = StyleSheet.create({
     color: '#38434D',
   },
 });
+
+export default App;
