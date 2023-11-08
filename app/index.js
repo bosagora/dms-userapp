@@ -191,7 +191,11 @@ function MainStackScreen() {
         component={TabScreens}
         options={{ headerShown: false }}
       />
-      <MainStack.Screen name='Temp' component={Temp} />
+      <MainStack.Screen
+        name='Temp'
+        component={Temp}
+        options={{ headerShown: false }}
+      />
       <MainStack.Screen name='Detail' component={DetailsScreen} />
       <MainStack.Screen
         name='ActionSheetScreen'
