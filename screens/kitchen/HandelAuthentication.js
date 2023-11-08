@@ -23,12 +23,12 @@ export default function HandelAuthentication({ navigation }) {
   const handleAuthentication = async () => {
     if (authenticationType === 'biometrics') {
       await authenticateWithBiometrics();
-      navigation.navigate('Wallet');
+      navigation.navigate('Kitchen');
     } else {
       // Implement PIN code authentication logic here
       // For simplicity, let's just log a message
       console.log('Authenticate with PIN code');
-      navigation.navigate('Wallet');
+      navigation.navigate('Kitchen');
     }
   };
 

@@ -1,8 +1,8 @@
 import { makeAutoObservable } from 'mobx';
 
 class PinStore {
-  mode = 'enter';
-  code = '1112';
+  mode = '';
+  code = '';
   visible = true;
   nextScreen = '';
   needPinCode = false;

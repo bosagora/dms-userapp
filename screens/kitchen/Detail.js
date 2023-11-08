@@ -1,5 +1,5 @@
 import { Button, View, Text } from 'react-native';
-import { useStores } from '../stores';
+import { useStores } from '../../stores';
 import { observer } from 'mobx-react';
 import React from 'react';
 
@@ -19,7 +19,7 @@ const DetailsScreen = observer(({ navigation }) => {
       />
       <Button
         title='Go to Home'
-        onPress={() => navigation.navigate('Wallet')}
+        onPress={() => navigation.navigate('Kitchen')}
       />
       <Button title='Go back' onPress={() => navigation.goBack()} />
     </View>

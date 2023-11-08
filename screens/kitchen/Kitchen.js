@@ -13,11 +13,13 @@ import BiometricAuthScreen from './BiometricAuthScreen';
 import HandelAuthentication from './HandelAuthentication';
 import ModalScreen from './ModalScreen';
 import { PinCodeT } from '@anhnch/react-native-pincode';
-import { useStores } from '../stores';
-import { AUTH_STATE } from '../stores/user.store';
+import { useStores } from '../../stores';
+import { AUTH_STATE } from '../../stores/user.store';
 import { autorun } from 'mobx';
+import { observer } from 'mobx-react';
 
-export default function Wallet({ navigation }) {
+// export default function Kitchen({ navigation }) {
+const Kitchen = observer(({ navigation }) => {
   const { pinStore, userStore } = useStores();
   function initAuth() {
     console.log('initAuth');
@@ -26,17 +28,18 @@ export default function Wallet({ navigation }) {
   }
 
   function goToAuthScreen(nextScreen) {
+    console.log('goToAuthScreen');
+    pinStore.setMode('enter');
     pinStore.setSuccessEnter(false);
     pinStore.setNextScreen(nextScreen);
     pinStore.setNeedPinCode(true);
   }
-
-  autorun(() => {
-    console.log(' needPinCode:', pinStore.needPinCode);
-    if (!pinStore.needPinCode && pinStore.successEnter) {
-      navigation.navigate(pinStore.nextScreen);
-    }
-  });
+  //
+  // autorun(() => {
+  //   if (!pinStore.needPinCode) {
+  //     if (pinStore.successEnter) navigation.navigate(pinStore.nextScreen);
+  //   }
+  // });
 
   return (
     <Box flex={1} justifyContent='center' bg='$primary950'>
@@ -45,7 +48,10 @@ export default function Wallet({ navigation }) {
           <Heading mb='$4' color='white'>
             Sign in form using formik -:
           </Heading>
-
+          <Button my='$2' onPress={() => navigation.navigate('Temp')}>
+            <ButtonText>Go to Temp </ButtonText>
+            <ButtonIcon as={AddIcon} />
+          </Button>
           <Button my='$2' onPress={() => navigation.navigate('Detail')}>
             <ButtonText>Go to Detail </ButtonText>
             <ButtonIcon as={AddIcon} />
@@ -74,7 +80,7 @@ export default function Wallet({ navigation }) {
             isDisabled={false}
             isFocusVisible={false}
             onPress={() => navigation.navigate('BiometricAuthScreen')}>
-            <ButtonText>Go to BiometricAuthScreen </ButtonText>
+            <ButtonText>Go to Biometric AuthScreen </ButtonText>
             <ButtonIcon as={AddIcon} />
           </Button>
           <Button
@@ -85,7 +91,7 @@ export default function Wallet({ navigation }) {
             isDisabled={false}
             isFocusVisible={false}
             onPress={() => navigation.navigate('HandelAuthentication')}>
-            <ButtonText>Go to HandelAuthentication </ButtonText>
+            <ButtonText>Go to Handle Authentication </ButtonText>
             <ButtonIcon as={AddIcon} />
           </Button>
           <Button
@@ -115,4 +121,6 @@ export default function Wallet({ navigation }) {
       </VStack>
     </Box>
   );
-}
+});
+
+export default Kitchen;

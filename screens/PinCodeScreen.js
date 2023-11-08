@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PinCode, PinCodeT } from '@anhnch/react-native-pincode';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { StyleSheet } from 'react-native';
+import { Button, StyleSheet, View } from 'react-native';
 import { useStores } from '../stores';
 import { observer } from 'mobx-react';
 
@@ -22,21 +22,32 @@ const PinCodeScreen = observer(({ navigation, route }) => {
       textOptions={customTexts}
       styles={customStyles}
       onEnter={() => {
+        console.log('onEnter');
         pinStore.setSuccessEnter(true);
         pinStore.setNeedPinCode(false);
       }}
       onSet={(newPin) => {
+        console.log('onSet');
         pinStore.setCode(newPin);
         pinStore.setMode(PinCodeT.Modes.Enter);
         navigation.goBack();
       }}
-      onReset={() => pinStore.setCode(undefined)}
-      onSetCancel={() => pinStore.setMode('enter')}
+      onReset={() => {
+        console.log('onReset');
+        pinStore.setCode(undefined);
+      }}
+      onSetCancel={() => {
+        console.log('onSetCancel');
+        pinStore.setMode('enter');
+      }}
       onModeChanged={(lastMode, newMode) => {
+        console.log('onModeChanged');
         console.log(lastMode, newMode);
         if (newMode === 'reset') {
-          pinStore.setMode('set');
+          pinStore.setNeedPinCode(false);
         }
+
+        pinStore.setMode('enter');
       }}
     />
   );
@@ -45,6 +56,7 @@ const PinCodeScreen = observer(({ navigation, route }) => {
 const customTexts = {
   enter: {
     subTitle: 'Enter PIN to access.',
+    footerText: 'Cancel',
   },
   set: {
     subTitle: 'Enter {{pinLength}} digits.',
