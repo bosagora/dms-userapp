@@ -18,31 +18,32 @@ import * as Device from 'expo-device';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import DetailsScreen from '../screens/Detail';
-import Wallet from '../screens/Wallet';
-import SignIn from '../screens/SignIn';
-import Test from '../screens/Test';
-import About from '../screens/About';
-import ActionSheetScreen from '../screens/ActionSheet';
-import LocalNotification from '../screens/LocalNotification';
-import BiometricAuthScreen from '../screens/BiometricAuthScreen';
-import HandelAuthentication from '../screens/HandelAuthentication';
-import ModalScreen from '../screens/ModalScreen';
+import DetailsScreen from '../screens/kitchen/Detail';
+import Kitchen from '../screens/kitchen/Kitchen';
+import SignIn from '../screens/kitchen/SignIn';
+import Test from '../screens/kitchen/Test';
+import About from '../screens/kitchen/About';
+import ActionSheetScreen from '../screens/kitchen/ActionSheet';
+import LocalNotification from '../screens/kitchen/LocalNotification';
+import BiometricAuthScreen from '../screens/kitchen/BiometricAuthScreen';
+import HandelAuthentication from '../screens/kitchen/HandelAuthentication';
+import ModalScreen from '../screens/kitchen/ModalScreen';
 import PinCodeScreen from '../screens/PinCodeScreen';
-
-import { config } from '../gluestack-style.config.js';
-import { useStores, StoreProvider, trunk } from '../stores';
 import Term from '../screens/initScreens/Term';
 import PhoneAuth from '../screens/initScreens/PhoneAuth';
 import Secret from '../screens/initScreens/Secret';
 import { AUTH_STATE } from '../stores/user.store';
 import InitPinCodeScreen from '../screens/initScreens/InitPinCodeScreen';
+import Temp from '../screens/Temp';
+
+import { config } from '../gluestack-style.config.js';
+import { useStores, StoreProvider, trunk } from '../stores';
+
 import { observer } from 'mobx-react';
 
-const Tab = createBottomTabNavigator();
-
 const InitStack = createNativeStackNavigator();
-const Stack = createNativeStackNavigator();
+const MainStack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -88,7 +89,6 @@ async function registerForPushNotificationsAsync() {
   return token.data;
 }
 
-// export default function App() {
 const App = observer(() => {
   const [isStoreLoaded, setIsStoreLoaded] = useState(false);
   const [expoPushToken, setExpoPushToken] = useState('');
@@ -159,22 +159,22 @@ const App = observer(() => {
 function InitStackScreen() {
   return (
     <InitStack.Navigator>
-      <Stack.Screen
+      <InitStack.Screen
         name='Term'
         component={Term}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
+      <InitStack.Screen
         name='Secret'
         component={Secret}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
+      <InitStack.Screen
         name='InitPinCodeScreen'
         component={InitPinCodeScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
+      <InitStack.Screen
         name='PhoneAuth'
         component={PhoneAuth}
         options={{ headerShown: false }}
@@ -185,32 +185,36 @@ function InitStackScreen() {
 
 function MainStackScreen() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name='MyTab'
-        component={MyTab}
+    <MainStack.Navigator>
+      <MainStack.Screen
+        name='TabScreens'
+        component={TabScreens}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name='Detail' component={DetailsScreen} />
-      <Stack.Screen name='ActionSheetScreen' component={ActionSheetScreen} />
-      <Stack.Screen name='About' component={About} />
-      <Stack.Screen name='Test' component={Test} />
-      <Stack.Screen name='SignIn' component={SignIn} />
-      <Stack.Screen name='ModalScreen' component={ModalScreen} />
+      <MainStack.Screen name='Temp' component={Temp} />
+      <MainStack.Screen name='Detail' component={DetailsScreen} />
+      <MainStack.Screen
+        name='ActionSheetScreen'
+        component={ActionSheetScreen}
+      />
+      <MainStack.Screen name='About' component={About} />
+      <MainStack.Screen name='Test' component={Test} />
+      <MainStack.Screen name='SignIn' component={SignIn} />
+      <MainStack.Screen name='ModalScreen' component={ModalScreen} />
 
-      <Stack.Screen
+      <MainStack.Screen
         name='HandelAuthentication'
         component={HandelAuthentication}
       />
-      <Stack.Screen
+      <MainStack.Screen
         name='BiometricAuthScreen'
         component={BiometricAuthScreen}
       />
-    </Stack.Navigator>
+    </MainStack.Navigator>
   );
 }
 
-function MyTab() {
+function TabScreens() {
   function SearchScreen() {
     return <Text>Search</Text>;
   }
@@ -221,7 +225,7 @@ function MyTab() {
 
   function MessageScreen({ navigation }) {
     return (
-      <View style={styles.main}>
+      <View>
         <Button
           title='Go to Details... again'
           onPress={() => navigation.navigate('Detail')}
@@ -231,11 +235,11 @@ function MyTab() {
   }
   return (
     <Tab.Navigator
-      initialRouteName='Wallet'
+      initialRouteName='Kitchen'
       screenOptions={{ headerShown: false }}>
       <Tab.Screen
-        name='Wallet'
-        component={Wallet}
+        name='Kitchen'
+        component={Kitchen}
         options={{
           title: '홈',
           tabBarIcon: ({ color, size }) => (
@@ -282,27 +286,5 @@ function MyTab() {
     </Tab.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 24,
-  },
-  main: {
-    flex: 1,
-    justifyContent: 'center',
-    maxWidth: 960,
-    marginHorizontal: 'auto',
-  },
-  title: {
-    fontSize: 64,
-    fontWeight: 'bold',
-  },
-  subtitle: {
-    fontSize: 36,
-    color: '#38434D',
-  },
-});
 
 export default App;
