@@ -17,6 +17,7 @@ import { useStores } from '../../stores';
 import { AUTH_STATE } from '../../stores/user.store';
 import { autorun } from 'mobx';
 import { observer } from 'mobx-react';
+import QRActionSheet from './QRActionSheet';
 
 // export default function Kitchen({ navigation }) {
 const Kitchen = observer(({ navigation }) => {
@@ -52,8 +53,8 @@ const Kitchen = observer(({ navigation }) => {
             <ButtonText>Go to Temp </ButtonText>
             <ButtonIcon as={AddIcon} />
           </Button>
-          <Button my='$2' onPress={() => navigation.navigate('QRViewer')}>
-            <ButtonText>Go to QRViewer</ButtonText>
+          <Button my='$2' onPress={() => navigation.navigate('QRActionSheet')}>
+            <ButtonText>Go to QRActionSheet</ButtonText>
             <ButtonIcon as={AddIcon} />
           </Button>
           <Button my='$2' onPress={() => navigation.navigate('Detail')}>
