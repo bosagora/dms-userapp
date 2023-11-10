@@ -51,9 +51,10 @@ const QRViewer = observer(({ navigation }) => {
                 borderColor: '$borderDark800',
               },
             }}>
-            <Box>
+            <Box w='$full' p={20}>
 
               {walletAddress ? ( <QRCode
+                 size={250}
                   value={walletAddress}
               />) : null}
             </Box>
