@@ -5,18 +5,24 @@ import React, { useEffect } from 'react';
 import { PinCodeT } from '@anhnch/react-native-pincode';
 import 'react-native-get-random-values';
 import '@ethersproject/shims';
-import { ethers } from 'ethers'; //for ethers.js
+import { ethers } from 'ethers';
+import {getSecureValue, saveSecureValue} from "../../utils/secure.store"; //for ethers.js
 const { Wallet } = ethers;
 
 const Secret = observer(({ navigation }) => {
     const { pinStore, userStore } = useStores();
 
-    function createWallet() {
+    async function createWallet() {
         const wallet = Wallet.createRandom();
 
         console.log('address :', wallet.address);
         console.log('mnemonic :', wallet.mnemonic);
         console.log('privateKey :', wallet.privateKey);
+
+        await saveSecureValue('address', wallet.address);
+        const address = await getSecureValue('address');
+        console.log('get address :', address);
+
     }
     function resetPinCode() {
         navigation.navigate('InitPinCodeScreen');
