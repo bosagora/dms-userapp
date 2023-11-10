@@ -52,6 +52,10 @@ const Kitchen = observer(({ navigation }) => {
             <ButtonText>Go to Temp </ButtonText>
             <ButtonIcon as={AddIcon} />
           </Button>
+          <Button my='$2' onPress={() => navigation.navigate('QRViewer')}>
+            <ButtonText>Go to QRViewer</ButtonText>
+            <ButtonIcon as={AddIcon} />
+          </Button>
           <Button my='$2' onPress={() => navigation.navigate('Detail')}>
             <ButtonText>Go to Detail </ButtonText>
             <ButtonIcon as={AddIcon} />
