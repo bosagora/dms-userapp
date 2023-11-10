@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 import { useStores } from '../../stores';
 import {
@@ -12,18 +12,18 @@ import {
 } from '@gluestack-ui/themed';
 import { Link } from 'expo-router';
 import QRCode from 'react-native-qrcode-svg';
-import {getSecureValue} from "../../utils/secure.store";
+import { getSecureValue } from '../../utils/secure.store';
 
 const QRViewer = observer(({ navigation }) => {
   const { userStore } = useStores();
   const [walletAddress, SetWalletAddress] = useState('');
   useEffect(() => {
-    async function fetchWalletAddress() { 1
+    async function fetchWalletAddress() {
       const address = await getSecureValue('address');
       SetWalletAddress(address);
     }
     fetchWalletAddress();
-  },[]);
+  }, []);
   return (
     <View
       h='$full'
@@ -52,17 +52,14 @@ const QRViewer = observer(({ navigation }) => {
               },
             }}>
             <Box w='$full' p={20}>
-
-              {walletAddress ? ( <QRCode
-                 size={250}
-                  value={walletAddress}
-              />) : null}
+              {walletAddress ? (
+                <QRCode size={250} value={walletAddress} />
+              ) : null}
             </Box>
             <VStack px='$6' pt='$4' pb='$6'>
               <Text _dark={{ color: '$textLight200' }} fontSize='$sm' my='$1.5'>
                 User Address : {walletAddress}
               </Text>
-
             </VStack>
           </Box>
         </HStack>

@@ -40,7 +40,8 @@ import { config } from '../gluestack-style.config.js';
 import { useStores, StoreProvider, trunk } from '../stores';
 
 import { observer } from 'mobx-react';
-import QRViewer from "../screens/kitchen/QRViewer";
+import QRViewer from '../screens/kitchen/QRViewer';
+import QRActionSheet from '../screens/kitchen/QRActionSheet';
 
 const InitStack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
@@ -197,10 +198,7 @@ function MainStackScreen() {
         component={Temp}
         options={{ headerShown: false }}
       />
-        <MainStack.Screen
-            name='QRViewer'
-            component={QRViewer}
-        />
+      <MainStack.Screen name='QRActionSheet' component={QRActionSheet} />
       <MainStack.Screen name='Detail' component={DetailsScreen} />
       <MainStack.Screen
         name='ActionSheetScreen'
