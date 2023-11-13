@@ -21,6 +21,10 @@ const PinCodeScreen = observer(({ navigation, route }) => {
       }}
       textOptions={customTexts}
       styles={customStyles}
+      onEnterCancel={() => {
+        console.log('Cancel Enter');
+        pinStore.setNeedPinCode(false);
+      }}
       onEnter={() => {
         console.log('onEnter');
         pinStore.setSuccessEnter(true);
@@ -42,12 +46,6 @@ const PinCodeScreen = observer(({ navigation, route }) => {
       }}
       onModeChanged={(lastMode, newMode) => {
         console.log('onModeChanged');
-        console.log(lastMode, newMode);
-        if (newMode === 'reset') {
-          pinStore.setNeedPinCode(false);
-        }
-
-        pinStore.setMode('enter');
       }}
     />
   );
