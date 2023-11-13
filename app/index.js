@@ -43,7 +43,8 @@ import { useStores, StoreProvider, trunk } from '../stores';
 
 import { observer } from 'mobx-react';
 import QRViewer from '../screens/kitchen/QRViewer';
-import QRActionSheet from '../screens/kitchen/QRActionSheet';
+import QRActionSheet from '../screens/QRActionSheet';
+import secretStore from '../stores/secret.store';
 
 const InitStack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
@@ -151,6 +152,8 @@ const App = observer(() => {
             ) : (
               <MainStackScreen />
             )}
+
+            <QRActionSheet />
           </GluestackUIProvider>
         </NavigationContainer>
 
@@ -223,7 +226,8 @@ function MainStackScreen() {
   );
 }
 
-function TabScreens() {
+const TabScreens = observer(() => {
+  const { secretStore } = useStores();
   function SearchScreen() {
     return <Text>Search</Text>;
   }
@@ -242,9 +246,13 @@ function TabScreens() {
       </View>
     );
   }
+  const handleQRSheet = () => {
+    secretStore.setShowQRSheet(!secretStore.showQRSheet);
+  };
+
   return (
     <Tab.Navigator
-      initialRouteName='Kitchen'
+      initialRouteName='Wallet'
       screenOptions={{ headerShown: false, tabBarShowLabel: false }}>
       <Tab.Screen
         name='Wallet'
@@ -290,10 +298,7 @@ function TabScreens() {
             <Ionicons name='qr-code' size={24} color='black' />
           ),
           tabBarButton: (props) => (
-            <TouchableOpacity
-              {...props}
-              onPress={() => console.log('Touchable for tab screen')}
-            />
+            <TouchableOpacity {...props} onPress={() => handleQRSheet()} />
           ),
         }}
       />
@@ -313,6 +318,6 @@ function TabScreens() {
       />
     </Tab.Navigator>
   );
-}
+});
 
 export default App;
