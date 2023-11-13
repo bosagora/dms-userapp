@@ -35,7 +35,9 @@ import Secret from '../screens/initScreens/Secret';
 import { AUTH_STATE } from '../stores/user.store';
 import InitPinCodeScreen from '../screens/initScreens/InitPinCodeScreen';
 import Temp from '../screens/Temp';
-
+import Wallet from '../screens/Wallet';
+import { Ionicons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { config } from '../gluestack-style.config.js';
 import { useStores, StoreProvider, trunk } from '../stores';
 
@@ -243,49 +245,68 @@ function TabScreens() {
   return (
     <Tab.Navigator
       initialRouteName='Kitchen'
-      screenOptions={{ headerShown: false }}>
+      screenOptions={{ headerShown: false, tabBarShowLabel: false }}>
       <Tab.Screen
-        name='Kitchen'
-        component={Kitchen}
+        name='Wallet'
+        component={Wallet}
         options={{
           title: '홈',
-          tabBarIcon: ({ color, size }) => (
-            <Icon name='home' color={color} size={size} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons
+              name='wallet-outline'
+              size={24}
+              color={focused ? 'red' : 'black'}
+            />
           ),
         }}
       />
-      <Tab.Screen
-        name='Search'
-        component={SearchScreen}
-        options={{
-          title: '검색',
-          tabBarIcon: ({ color, size }) => (
-            <Icon name='search' color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name='Notification'
-        component={LocalNotification}
-        options={{
-          title: '알림',
-          tabBarIcon: ({ color, size }) => (
-            <Icon name='notifications' color={color} size={size} />
-          ),
-        }}
-      />
+
+      {/*<Tab.Screen*/}
+      {/*  name='Search'*/}
+      {/*  component={SearchScreen}*/}
+      {/*  options={{*/}
+      {/*    title: '검색',*/}
+      {/*    tabBarIcon: ({ color, size }) => (*/}
+      {/*      <Icon name='search' color={color} size={size} />*/}
+      {/*    ),*/}
+      {/*  }}*/}
+      {/*/>*/}
+      {/*<Tab.Screen*/}
+      {/*  name='Notification'*/}
+      {/*  component={LocalNotification}*/}
+      {/*  options={{*/}
+      {/*    title: '알림',*/}
+      {/*    tabBarIcon: ({ color, size }) => (*/}
+      {/*      <Icon name='notifications' color={color} size={size} />*/}
+      {/*    ),*/}
+      {/*  }}*/}
+      {/*/>*/}
       <Tab.Screen
         name='Message'
         component={MessageScreen}
         options={{
           title: '메시지',
           tabBarIcon: ({ color, size }) => (
-            <Icon name='message' color={color} size={size} />
+            <Ionicons name='qr-code' size={24} color='black' />
           ),
           tabBarButton: (props) => (
             <TouchableOpacity
               {...props}
               onPress={() => console.log('Touchable for tab screen')}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name='Kitchen'
+        component={Kitchen}
+        options={{
+          title: '홈',
+          tabBarIcon: ({ color, size, focused }) => (
+            <MaterialIcons
+              name='kitchen'
+              size={24}
+              color={focused ? 'red' : 'black'}
             />
           ),
         }}
