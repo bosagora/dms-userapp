@@ -5,6 +5,8 @@ class SecretStore {
   address = '';
   mnemonic = '';
 
+  showQRSheet = false;
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -19,6 +21,10 @@ class SecretStore {
 
   setMnemonic = (mnemonic) => {
     this.mnemonic = mnemonic;
+  };
+
+  setShowQRSheet = (show) => {
+    this.showQRSheet = show;
   };
 }
 

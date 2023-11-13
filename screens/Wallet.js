@@ -18,7 +18,12 @@ import {
 import { Link } from 'expo-router';
 
 const Wallet = observer(({ navigation }) => {
-  const { userStore } = useStores();
+  const { secretStore, userStore } = useStores();
+  const handleQRSheet = () => {
+    secretStore.setShowQRSheet(!secretStore.showQRSheet);
+    console.log('handle QR sheet : ', secretStore.showQRSheet);
+  };
+
   return (
     <View
       h='$full'
@@ -28,7 +33,7 @@ const Wallet = observer(({ navigation }) => {
           borderColor: '$borderDark800',
         },
       }}>
-      <VStack justifyContent='center' alignItems='center' p={15}>
+      <VStack justifyContent='center' alignItems='center' p='$5'>
         <HStack>
           <Box
             // maxWidth='$64'
@@ -36,11 +41,11 @@ const Wallet = observer(({ navigation }) => {
             borderColor='$orange400'
             borderRadius='$xl'
             borderWidth='$5'
-            my='$4'
+            p='$4'
             overflow='hidden'
             sx={{
               '@base': {
-                mx: '$5',
+                m: '$3',
               },
               _dark: {
                 bg: '$backgroundDark900',
@@ -48,16 +53,15 @@ const Wallet = observer(({ navigation }) => {
               },
             }}>
             <Box>
-              <Heading _dark={{ color: '$textLight200' }} size='sm'>
+              <Heading _dark={{ color: '$textLight200' }} size='lg'>
                 나의 KIOS 마일리지
               </Heading>
               <Text _dark={{ color: '$textLight200' }} fontSize='$xs' my='$1.5'>
                 모든 키오스크에서 상품 교환이 가능한 통합 마일리지
               </Text>
-
-              <Divider mt='$1' mb='$1' mr='$1' bg='$darkBlue300' />
             </Box>
 
+            <Divider my='$5' mr='$1' bg='$darkBlue300' />
             <Box>
               <HStack justifyContent='space-between'>
                 <HStack m='$30'>
@@ -85,7 +89,7 @@ const Wallet = observer(({ navigation }) => {
                   (1 point ≒ 1 KRW)
                 </Text>
               </HStack>
-              <Button mt='$12' onPress={() => navigation.navigate('Temp')}>
+              <Button mt='$12' onPress={() => handleQRSheet()}>
                 <ButtonText>키오스트에서 사용하기(QR)</ButtonText>
               </Button>
               <Box mt='$4' alignItems='flex-end'>
