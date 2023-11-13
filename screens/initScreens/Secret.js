@@ -10,7 +10,7 @@ import { getSecureValue, saveSecureValue } from '../../utils/secure.store'; //fo
 const { Wallet } = ethers;
 
 const Secret = observer(({ navigation }) => {
-  const { pinStore, userStore } = useStores();
+  const { pinStore, userStore, secretStore } = useStores();
 
   async function createWallet() {
     const wallet = Wallet.createRandom();
@@ -19,6 +19,7 @@ const Secret = observer(({ navigation }) => {
     console.log('mnemonic :', wallet.mnemonic);
     console.log('privateKey :', wallet.privateKey);
 
+    secretStore.setAddress(wallet.address);
     await saveSecureValue('address', wallet.address);
     await saveSecureValue('mnemonic', JSON.stringify(wallet.mnemonic));
     await saveSecureValue('privateKey', wallet.privateKey);

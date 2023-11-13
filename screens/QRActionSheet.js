@@ -41,7 +41,7 @@ const QRActionSheet = observer(() => {
       SetWalletAddress(address);
     }
     fetchWalletAddress();
-  }, []);
+  }, [secretStore.address]);
   const handleClose = () =>
     secretStore.setShowQRSheet(!secretStore.showQRSheet);
   return (
