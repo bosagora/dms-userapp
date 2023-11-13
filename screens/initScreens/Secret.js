@@ -20,7 +20,7 @@ const Secret = observer(({ navigation }) => {
     console.log('privateKey :', wallet.privateKey);
 
     await saveSecureValue('address', wallet.address);
-    await saveSecureValue('mnemonic', wallet.mnemonic);
+    await saveSecureValue('mnemonic', JSON.stringify(wallet.mnemonic));
     await saveSecureValue('privateKey', wallet.privateKey);
   }
   function resetPinCode() {
