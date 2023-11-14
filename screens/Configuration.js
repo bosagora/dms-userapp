@@ -68,7 +68,11 @@ const Configuration = observer(() => {
                 },
               }}
               py='$2'>
-              <HStack space='md' justifyContent='space-between'>
+              <HStack
+                h={30}
+                space='md'
+                alignItems='center'
+                justifyContent='space-between'>
                 <VStack>
                   <Text
                     fontSize='$sm'
@@ -81,18 +85,17 @@ const Configuration = observer(() => {
                     {item.name}
                   </Text>
                 </VStack>
-                {item.id !== '3ac68afc-c605-48d3-a4f8-fbd91aa97f63' ? (
-                  <MaterialIcons
-                    name='arrow-forward-ios'
-                    size={20}
-                    color='white'
-                  />
-                ) : (
-                  <HStack space='sm'>
+                <Box>
+                  {item.id !== '3ac68afc-c605-48d3-a4f8-fbd91aa97f63' ? (
+                    <MaterialIcons
+                      name='arrow-forward-ios'
+                      size={20}
+                      color='white'
+                    />
+                  ) : (
                     <Switch size='sm' />
-                    <FormControlLabelText>Dark Mode</FormControlLabelText>
-                  </HStack>
-                )}
+                  )}
+                </Box>
               </HStack>
             </Box>
           )}
