@@ -1,21 +1,253 @@
-import { Button, View, Text } from 'react-native';
-import { useStores } from '../../stores';
+import {
+  Input,
+  InputField,
+  Button,
+  Heading,
+  FormControlErrorIcon,
+  FormControlErrorText,
+  FormControl,
+  ButtonText,
+  FormControlError,
+  FormControlLabelText,
+  FormControlLabel,
+  AlertCircleIcon,
+  useToast,
+  Toast,
+  ToastTitle,
+  VStack,
+  Box,
+  InputIcon,
+  InputSlot,
+  EyeIcon,
+  EyeOffIcon,
+  HStack,
+  Text,
+  Icon,
+  ArrowLeftIcon,
+  Divider,
+} from '@gluestack-ui/themed';
+import { SafeAreaView } from 'react-native';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { useState } from 'react';
+import { config } from '@gluestack-ui/config';
 import { observer } from 'mobx-react';
-import React from 'react';
+import StyledExpoRouterLink from '../../components/StyledExpoRouterLink';
 import { AUTH_STATE } from '../../stores/user.store';
+import { useStores } from '../../stores';
+const registerSchema = yup.object().shape({
+  n1: yup
+    .string()
+    .required()
+    .matches(/^[0-9]+$/, 'Must be only digits')
+    .min(2, 'Must be exactly 2 digits')
+    .max(2, 'Must be exactly 2 digits'),
+  n2: yup
+    .string()
+    .required()
+    .matches(/^[0-9]+$/, 'Must be only digits')
+    .min(2, 'Must be exactly 2 digits')
+    .max(2, 'Must be exactly 2 digits'),
+  n3: yup
+    .string()
+    .required()
+    .matches(/^[0-9]+$/, 'Must be only digits')
+    .min(2, 'Must be exactly 2 digits')
+    .max(2, 'Must be exactly 2 digits'),
+});
+
+const registerInitialValues = {
+  n1: '',
+  n2: '',
+  n3: '',
+};
 
 const PhoneAuth = observer(({ navigation }) => {
+  const toast = useToast();
   const { userStore } = useStores();
   function completeAuth() {
     userStore.setAuthState(AUTH_STATE.DONE);
   }
+  const formik = useFormik({
+    initialValues: registerInitialValues,
+    validationSchema: registerSchema,
 
+    onSubmit: (values, { resetForm }) => {
+      toast.show({
+        placement: 'bottom right',
+        render: ({ id }) => {
+          return (
+            <Toast nativeID={id} variant='accent' action='success'>
+              <ToastTitle>Signed in successfully</ToastTitle>
+            </Toast>
+          );
+        },
+      });
+      completeAuth();
+      resetForm();
+    },
+  });
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleState = () => {
+    setShowPassword((showState) => {
+      return !showState;
+    });
+  };
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Phone Auth Screen </Text>
-      <Button title='Next' onPress={() => completeAuth()} />
-    </View>
+    <SafeAreaView>
+      <Box
+        sx={{
+          _dark: { bg: '$backgroundDark800' },
+          _web: {
+            height: '100vh',
+            w: '100vw',
+            overflow: 'hidden',
+          },
+        }}
+        height='$full'
+        bg='$backgroundLight0'>
+        <MobileHeader />
+        <Box
+          p='$4'
+          flex={1}
+          maxWidth='$96'
+          alignSelf='center'
+          // justifyContent='center'
+          w='$full'>
+          <Text fontWeight='$bold' fontSize='$md'>
+            전화번호
+          </Text>
+          <HStack my='$3' alignItems='center'>
+            <Box flex={4}>
+              <Input
+                variant='outline'
+                mr='$2'
+                size='md'
+                isDisabled={false}
+                isInvalid={false}
+                isReadOnly={false}>
+                <InputField />
+              </Input>
+            </Box>
+            <Button onPress={() => {}} flex={1}>
+              <ButtonText>전송</ButtonText>
+            </Button>
+          </HStack>
+          <Text
+            fontSize='$sm'
+            fontWeight='normal'
+            color='$primary300'
+            sx={{
+              _dark: { color: '$textDark400' },
+            }}>
+            전화번호 전송 후에 문자 메세지의 인증 코드 3개를 문자에 표시된
+            번호(#1, #2, #3)에 맞추어 입력하고 인증을 진행해 주세요.
+          </Text>
+          <Divider
+            my='$6'
+            bg='$backgroundLight200'
+            sx={{ _dark: { bg: '$backgroundDark700' } }}
+          />
+          <VStack>
+            <Text
+              fontSize='$sm'
+              fontWeight='normal'
+              color='$primary300'
+              alignSelf='flex-end'
+              mb='$2'
+              sx={{
+                _dark: { color: '$textDark400' },
+              }}>
+              유효시간 : 02:32
+            </Text>
+            <FormControl
+              size='md'
+              isRequired={true}
+              isInvalid={!!formik.errors.n1}>
+              <Input>
+                <InputField
+                  type='text'
+                  placeholder='#1'
+                  onChangeText={formik.handleChange('n1')}
+                  onBlur={formik.handleBlur('n1')}
+                  value={formik.values?.n1}
+                />
+              </Input>
+            </FormControl>
+            <FormControl
+              size='md'
+              isRequired={true}
+              isInvalid={!!formik.errors.n2}>
+              <Input>
+                <InputField
+                  placeholder='#2'
+                  onChangeText={formik.handleChange('n2')}
+                  onBlur={formik.handleBlur('n2')}
+                  value={formik.values?.n2}
+                />
+              </Input>
+            </FormControl>
+            <FormControl
+              size='md'
+              isRequired={true}
+              isInvalid={!!formik.errors.n3}>
+              {/*<FormControlLabel>*/}
+              {/*  <FormControlLabelText>#3</FormControlLabelText>*/}
+              {/*</FormControlLabel>*/}
+              <Input>
+                <InputField
+                  placeholder='#3'
+                  onChangeText={formik.handleChange('n3')}
+                  onBlur={formik.handleBlur('n3')}
+                  value={formik.values?.n3}
+                />
+              </Input>
+            </FormControl>
+            <Button onPress={formik.handleSubmit} my='$4'>
+              <ButtonText>인증</ButtonText>
+            </Button>
+          </VStack>
+        </Box>
+      </Box>
+    </SafeAreaView>
   );
 });
+
+function MobileHeader() {
+  return (
+    <VStack px='$3' mt='$4.5' space='md'>
+      {/*<HStack space='md' alignItems='center'>*/}
+      {/*  <StyledExpoRouterLink href='..'>*/}
+      {/*    <Icon*/}
+      {/*      as={ArrowLeftIcon}*/}
+      {/*      color='$textLight50'*/}
+      {/*      sx={{ _dark: { color: '$textDark50' } }}*/}
+      {/*    />*/}
+      {/*  </StyledExpoRouterLink>*/}
+      {/*  <Text*/}
+      {/*    color='$textLight50'*/}
+      {/*    sx={{ _dark: { color: '$textDark50' } }}*/}
+      {/*    fontSize='$lg'>*/}
+      {/*    Sign In*/}
+      {/*  </Text>*/}
+      {/*</HStack>*/}
+      <VStack space='xs' ml='$1' my='$4'>
+        <Heading color='$textLight50' sx={{ _dark: { color: '$textDark50' } }}>
+          전화번호 인증
+        </Heading>
+        <Text
+          fontSize='$md'
+          fontWeight='normal'
+          color='$primary300'
+          sx={{
+            _dark: { color: '$textDark400' },
+          }}>
+          마일리지 사용을 위한 본인 인증
+        </Text>
+      </VStack>
+    </VStack>
+  );
+}
 
 export default PhoneAuth;
