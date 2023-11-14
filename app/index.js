@@ -45,6 +45,7 @@ import { observer } from 'mobx-react';
 import QRViewer from '../screens/kitchen/QRViewer';
 import QRActionSheet from '../screens/QRActionSheet';
 import secretStore from '../stores/secret.store';
+import Configuration from '../screens/Configuration';
 
 const InitStack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
@@ -303,19 +304,33 @@ const TabScreens = observer(() => {
         }}
       />
       <Tab.Screen
-        name='Kitchen'
-        component={Kitchen}
+        name='Configuration'
+        component={Configuration}
         options={{
           title: '홈',
           tabBarIcon: ({ color, size, focused }) => (
-            <MaterialIcons
-              name='kitchen'
+            <Ionicons
+              name='ios-settings-outline'
               size={24}
               color={focused ? 'red' : 'black'}
             />
           ),
         }}
       />
+      {/*<Tab.Screen*/}
+      {/*  name='Kitchen'*/}
+      {/*  component={Kitchen}*/}
+      {/*  options={{*/}
+      {/*    title: '홈',*/}
+      {/*    tabBarIcon: ({ color, size, focused }) => (*/}
+      {/*      <MaterialIcons*/}
+      {/*        name='kitchen'*/}
+      {/*        size={24}*/}
+      {/*        color={focused ? 'red' : 'black'}*/}
+      {/*      />*/}
+      {/*    ),*/}
+      {/*  }}*/}
+      {/*/>*/}
     </Tab.Navigator>
   );
 });
