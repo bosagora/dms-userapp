@@ -6,7 +6,7 @@ export default function HandelAuthentication({ navigation }) {
   const [authenticationType, setAuthenticationType] = useState(null);
 
   useEffect(() => {
-    checkBiometrics();
+    // checkBiometrics();
   }, []);
 
   const checkBiometrics = async () => {

@@ -33,7 +33,7 @@ const Kitchen = observer(({ navigation }) => {
     pinStore.setMode('enter');
     pinStore.setSuccessEnter(false);
     pinStore.setNextScreen(nextScreen);
-    pinStore.setNeedPinCode(true);
+    pinStore.setVisible(true);
   }
   //
   // autorun(() => {

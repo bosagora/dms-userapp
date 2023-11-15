@@ -1,17 +1,69 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PinCode, PinCodeT } from '@anhnch/react-native-pincode';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Button, StyleSheet, View } from 'react-native';
 import { useStores } from '../stores';
 import { observer } from 'mobx-react';
+import * as LocalAuthentication from 'expo-local-authentication';
 
 const PinCodeScreen = observer(({ navigation, route }) => {
   const { pinStore, userStore } = useStores();
-  console.log('pinStore :', pinStore);
+
+  // show pincode and bio(if enrolled) together
+  useEffect(() => {
+    console.log('useEffect');
+    // 앱 초기 등록 화면이 아니고
+    // 핀 코드 화면이 활성 상태 이고
+    if (userStore.state === 'DONE' && pinStore.visible) checkBiometrics();
+  }, [pinStore.visible]);
+
+  const checkBiometrics = async () => {
+    const hasBiometrics = await LocalAuthentication.hasHardwareAsync();
+    const hasEnrolledBiometrics = await LocalAuthentication.isEnrolledAsync();
+
+    if (hasBiometrics && hasEnrolledBiometrics && userStore.enableBio) {
+      await authenticateWithBiometrics();
+    } else {
+      pinStore.setMode(PinCodeT.Modes.Enter);
+      pinStore.setSuccessEnter(false);
+      pinStore.setVisible(true);
+    }
+  };
+
+  const authenticateWithBiometrics = async () => {
+    const result = await LocalAuthentication.authenticateAsync({
+      promptMessage: 'Authenticate with biometrics',
+    });
+
+    if (result.success) {
+      // Biometric authentication successful
+      console.log('Biometric authentication successful');
+    } else {
+      // Biometric authentication failed
+      console.log('Biometric authentication failed');
+    }
+    if (pinStore.nextScreen === 'setPincode') {
+      pinStore.setMode(PinCodeT.Modes.Set);
+    } else {
+      pinStore.setMode(PinCodeT.Modes.Enter);
+      pinStore.setSuccessEnter(false);
+      pinStore.setVisible(false);
+    }
+  };
+
+  function enterCase() {
+    if (pinStore.nextScreen === 'setPincode') {
+      pinStore.setMode(PinCodeT.Modes.Set);
+      pinStore.setNextScreen('none');
+    } else {
+      pinStore.setSuccessEnter(true);
+      pinStore.setVisible(false);
+    }
+  }
   return (
     <PinCode
       pin={pinStore.code}
-      visible={pinStore.needPinCode}
+      visible={pinStore.visible}
       mode={pinStore.mode}
       options={{
         backSpace: <Icon name='backspace' size={24} color='white' />,
@@ -23,18 +75,17 @@ const PinCodeScreen = observer(({ navigation, route }) => {
       styles={customStyles}
       onEnterCancel={() => {
         console.log('Cancel Enter');
-        pinStore.setNeedPinCode(false);
+        pinStore.setVisible(false);
       }}
       onEnter={() => {
         console.log('onEnter');
-        pinStore.setSuccessEnter(true);
-        pinStore.setNeedPinCode(false);
+        enterCase();
       }}
       onSet={(newPin) => {
         console.log('onSet');
         pinStore.setCode(newPin);
         pinStore.setMode(PinCodeT.Modes.Enter);
-        navigation.goBack();
+        pinStore.setVisible(false);
       }}
       onReset={() => {
         console.log('onReset');
@@ -42,6 +93,7 @@ const PinCodeScreen = observer(({ navigation, route }) => {
       }}
       onSetCancel={() => {
         console.log('onSetCancel');
+        pinStore.setVisible(false);
         pinStore.setMode('enter');
       }}
       onModeChanged={(lastMode, newMode) => {
