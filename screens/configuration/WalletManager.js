@@ -47,9 +47,6 @@ const WalletManager = observer(({ navigation }) => {
   async function exportWallet() {
     setShowModal(true);
   }
-  function resetPinCode() {
-    navigation.navigate('InitPinCodeScreen');
-  }
 
   async function saveKey(key) {
     const privateKey = key.includes('0x') ? key.split('0x')[0] : key;
@@ -57,7 +54,6 @@ const WalletManager = observer(({ navigation }) => {
     const wallet = new Wallet(key);
     secretStore.setAddress(wallet.address);
     await saveSecureValue('address', wallet.address);
-    resetPinCode();
   }
   const [showModal, setShowModal] = useState(false);
   return (
