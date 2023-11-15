@@ -1,32 +1,51 @@
 import { SafeAreaView } from 'react-native';
 import { trunk, useStores } from '../../stores';
 import { observer } from 'mobx-react';
-import React, { useEffect } from 'react';
-import { PinCodeT } from '@anhnch/react-native-pincode';
+import React, { useEffect, useState } from 'react';
 import 'react-native-get-random-values';
 import '@ethersproject/shims';
 import { ethers } from 'ethers';
+import * as Clipboard from 'expo-clipboard';
+
 import { getSecureValue, saveSecureValue } from '../../utils/secure.store';
 import ImportPrivateKey from '../../components/ImportPrivateKey';
-import { Box, ButtonText, Button, Center, VStack } from '@gluestack-ui/themed';
+import {
+  Box,
+  ButtonText,
+  Button,
+  Center,
+  VStack,
+  Modal,
+  ModalBackdrop,
+  ModalContent,
+  ModalBody,
+  Heading,
+  Text,
+  FormControl,
+  FormControlHelper,
+  FormControlHelperText,
+  Input,
+  InputField,
+  ButtonGroup,
+} from '@gluestack-ui/themed';
 import MobileHeader from '../../components/MobileHeader'; //for ethers.js
 const { Wallet } = ethers;
 
 const WalletManager = observer(({ navigation }) => {
   const { secretStore } = useStores();
+  const [privateKey, setPrivateKey] = useState(
+    '0000000000000000000000000000000000000000000000000000000000000001',
+  );
+  useEffect(() => {
+    async function fetchKey() {
+      const key = await getSecureValue('privateKey');
+      setPrivateKey(key);
+    }
+    fetchKey();
+  }, []);
 
   async function exportWallet() {
-    const wallet = Wallet.createRandom();
-
-    console.log('address :', wallet.address);
-    console.log('mnemonic :', wallet.mnemonic);
-    console.log('privateKey :', wallet.privateKey);
-
-    secretStore.setAddress(wallet.address);
-    await saveSecureValue('address', wallet.address);
-    await saveSecureValue('mnemonic', JSON.stringify(wallet.mnemonic));
-    await saveSecureValue('privateKey', wallet.privateKey);
-    resetPinCode();
+    setShowModal(true);
   }
   function resetPinCode() {
     navigation.navigate('InitPinCodeScreen');
@@ -40,7 +59,7 @@ const WalletManager = observer(({ navigation }) => {
     await saveSecureValue('address', wallet.address);
     resetPinCode();
   }
-
+  const [showModal, setShowModal] = useState(false);
   return (
     <SafeAreaView>
       <Box
@@ -63,6 +82,69 @@ const WalletManager = observer(({ navigation }) => {
           </Box>
           <ImportPrivateKey saveKey={saveKey} />
         </VStack>
+        <Box>
+          <Modal
+            isOpen={showModal}
+            onClose={() => {
+              setShowModal(false);
+            }}>
+            <ModalBackdrop />
+            <ModalContent maxWidth='$96'>
+              <ModalBody p='$5'>
+                <VStack space='xs' mb='$4'>
+                  <Heading>지갑 비공개키</Heading>
+                  <Text size='sm'>
+                    이 키를 다른 기기에 설치된 THE9 앱에 붙여 넣으면 현재 지갑을
+                    복구해 사용할 수 있습니다. (다른 기기의 THE9 앱에서 ‘다른
+                    지갑 불러오기’ 선택)
+                  </Text>
+                  <Text size='sm'>
+                    경고 : 이 키를 노출하지 마세요. 비공개 키가 있는 사람이라면
+                    누구든 회원님의 계정에 있는 자산을 훔칠 수 있습니다.
+                  </Text>
+                </VStack>
+                <VStack py='$2' space='xl'>
+                  <FormControl>
+                    <FormControlHelper>
+                      <FormControlHelperText>
+                        여기에 비공개 키 문자열을 붙여넣으세요.
+                      </FormControlHelperText>
+                    </FormControlHelper>
+                    <Input>
+                      <InputField value={privateKey} />
+                    </Input>
+                  </FormControl>
+                </VStack>
+
+                <ButtonGroup space='md' alignSelf='center'>
+                  <Button
+                    variant='outline'
+                    py='$2.5'
+                    action='secondary'
+                    onPress={() => {
+                      setShowModal(false);
+                    }}>
+                    <ButtonText fontSize='$sm' fontWeight='$medium'>
+                      Close
+                    </ButtonText>
+                  </Button>
+                  <Button
+                    variant='solid'
+                    bg='$success700'
+                    borderColor='$success700'
+                    onPress={async () => {
+                      await Clipboard.setStringAsync(privateKey);
+                      setShowModal(false);
+                    }}>
+                    <ButtonText fontSize='$sm' fontWeight='$medium'>
+                      Copy
+                    </ButtonText>
+                  </Button>
+                </ButtonGroup>
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+        </Box>
       </Box>
     </SafeAreaView>
   );
