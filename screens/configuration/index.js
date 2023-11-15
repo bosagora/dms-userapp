@@ -10,10 +10,10 @@ import {
   Switch,
 } from '@gluestack-ui/themed';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useStores } from '../stores';
+import { useStores } from '../../stores';
 import { PinCodeT } from '@anhnch/react-native-pincode';
 
-const Configuration = observer(() => {
+const Configuration = observer(({ navigation }) => {
   const { pinStore, userStore } = useStores();
   const [isEnabled, setIsEnabled] = useState(false);
 
@@ -34,21 +34,35 @@ const Configuration = observer(() => {
     pinStore.setVisible(true);
   };
 
+  const goWalletManager = () => {
+    pinStore.setNextScreen('WalletManager');
+    pinStore.setSuccessEnter(false);
+    pinStore.setVisible(true);
+  };
+
+  const goProperScreen = (id) => {
+    console.log('item.name :', id);
+    if (id === 'bd7acbea') {
+      setPincode();
+    } else if (id === '58694a0f') {
+      goWalletManager();
+    }
+  };
+
   const data = [
     {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+      id: 'bd7acbea',
       name: 'PIN 번호 변경',
     },
     {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+      id: '3ac68afc',
       name: '바이오 인증 사용',
     },
     {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      name: '마일리지 설정',
+      id: '58694a0f',
+      name: '월렛 설정',
     },
   ];
-  const [nData, setNData] = useState([]);
   return (
     <Box
       sx={{
@@ -104,12 +118,12 @@ const Configuration = observer(() => {
                 </Text>
               </VStack>
               <Box>
-                {item.id !== '3ac68afc-c605-48d3-a4f8-fbd91aa97f63' ? (
+                {item.id !== '3ac68afc' ? (
                   <MaterialIcons
                     name='arrow-forward-ios'
                     size={20}
                     color='white'
-                    onPress={() => setPincode()}
+                    onPress={() => goProperScreen(item.id)}
                   />
                 ) : (
                   <Switch size='sm' onToggle={toggleSwitch} value={isEnabled} />

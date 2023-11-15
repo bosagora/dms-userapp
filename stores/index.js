@@ -5,7 +5,7 @@ import UserStore from './user.store';
 import NoteStore from './note.store';
 import SecretStore from './secret.store';
 import PinStore from './pin.store';
-import LoyaltyStore from './Loyalty.store';
+import LoyaltyStore from './loyalty.store';
 
 class RootStore {
   constructor() {

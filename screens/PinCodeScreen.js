@@ -5,10 +5,11 @@ import { Button, StyleSheet, View } from 'react-native';
 import { useStores } from '../stores';
 import { observer } from 'mobx-react';
 import * as LocalAuthentication from 'expo-local-authentication';
+import { useNavigation } from 'expo-router';
+import * as RootNavigation from '../utils/root.navigation';
 
-const PinCodeScreen = observer(({ navigation, route }) => {
+const PinCodeScreen = observer(() => {
   const { pinStore, userStore } = useStores();
-
   // show pincode and bio(if enrolled) together
   useEffect(() => {
     console.log('useEffect');
@@ -56,6 +57,7 @@ const PinCodeScreen = observer(({ navigation, route }) => {
       pinStore.setMode(PinCodeT.Modes.Set);
       pinStore.setNextScreen('none');
     } else {
+      RootNavigation.navigate(pinStore.nextScreen);
       pinStore.setSuccessEnter(true);
       pinStore.setVisible(false);
     }
