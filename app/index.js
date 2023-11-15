@@ -42,15 +42,14 @@ import { config } from '../gluestack-style.config.js';
 import { useStores, StoreProvider, trunk } from '../stores';
 
 import { observer } from 'mobx-react';
-import QRViewer from '../screens/kitchen/QRViewer';
 import QRActionSheet from '../screens/QRActionSheet';
-import secretStore from '../stores/secret.store';
-import Configuration from '../screens/Configuration';
+import Configuration from '../screens/configuration';
+import WalletManager from '../screens/configuration/WalletManager';
+import { navigationRef } from '../utils/root.navigation';
 
 const InitStack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -146,7 +145,7 @@ const App = observer(() => {
   } else {
     return (
       <BottomSheetModalProvider>
-        <NavigationContainer independent={true}>
+        <NavigationContainer independent={true} ref={navigationRef}>
           <GluestackUIProvider config={config} colorMode='dark'>
             {userStore.state !== AUTH_STATE.DONE ? (
               <InitStackScreen />
@@ -204,6 +203,7 @@ function MainStackScreen() {
         component={Temp}
         options={{ headerShown: false }}
       />
+      <MainStack.Screen name='WalletManager' component={WalletManager} />
       <MainStack.Screen name='QRActionSheet' component={QRActionSheet} />
       <MainStack.Screen name='Detail' component={DetailsScreen} />
       <MainStack.Screen
