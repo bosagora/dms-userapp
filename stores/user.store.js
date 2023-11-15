@@ -15,7 +15,7 @@ class UserStore {
   email = '';
   phone = '';
   country = 'KR';
-  useBio = false;
+  enableBio = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -40,8 +40,8 @@ class UserStore {
     this.country = country;
   };
 
-  setUseBio = (useBio) => {
-    this.useBio = useBio;
+  setEnableBio = (enableBio) => {
+    this.enableBio = enableBio;
   };
 }
 

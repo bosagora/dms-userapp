@@ -317,20 +317,20 @@ const TabScreens = observer(() => {
           ),
         }}
       />
-      {/*<Tab.Screen*/}
-      {/*  name='Kitchen'*/}
-      {/*  component={Kitchen}*/}
-      {/*  options={{*/}
-      {/*    title: '홈',*/}
-      {/*    tabBarIcon: ({ color, size, focused }) => (*/}
-      {/*      <MaterialIcons*/}
-      {/*        name='kitchen'*/}
-      {/*        size={24}*/}
-      {/*        color={focused ? 'red' : 'black'}*/}
-      {/*      />*/}
-      {/*    ),*/}
-      {/*  }}*/}
-      {/*/>*/}
+      <Tab.Screen
+        name='Kitchen'
+        component={Kitchen}
+        options={{
+          title: '홈',
+          tabBarIcon: ({ color, size, focused }) => (
+            <MaterialIcons
+              name='kitchen'
+              size={24}
+              color={focused ? 'red' : 'black'}
+            />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 });
