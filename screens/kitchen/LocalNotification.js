@@ -21,8 +21,9 @@ async function schedulePushNotification() {
   if (hasPushNotificationPermissionGranted) {
     await Notifications.scheduleNotificationAsync({
       content: {
-        title: "You've got mail! 📬",
+        title: "You've got mail! 2 📬",
         body: 'Here is the notification body',
+        message: 'mileage-redeem',
       },
       trigger: { seconds: 2 },
     });
