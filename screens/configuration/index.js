@@ -101,7 +101,6 @@ const Configuration = observer(({ navigation }) => {
             }}
             py='$2'>
             <HStack
-              h={30}
               space='md'
               alignItems='center'
               justifyContent='space-between'>

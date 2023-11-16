@@ -47,6 +47,8 @@ import WalletManager from '../screens/configuration/WalletManager';
 import { navigationRef } from '../utils/root.navigation';
 import Wallet from '../screens/wallet';
 import MileageHistory from '../screens/wallet/MileageHistory';
+import MileageRedeemNotification from '../screens/wallet/MileageRedeemNotification';
+import * as RootNavigation from '../utils/root.navigation';
 
 const InitStack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
@@ -95,6 +97,39 @@ async function registerForPushNotificationsAsync() {
   return token.data;
 }
 
+function useNotificationObserver() {
+  React.useEffect(() => {
+    let isMounted = true;
+
+    function redirect(notification) {
+      const url = notification.request.content.data?.url;
+      // if (url) {
+      //     router.push(url);
+      // }
+      RootNavigation.navigate('MileageRedeemNotification');
+      console.log('redirect > content :', notification.request.content);
+    }
+
+    Notifications.getLastNotificationResponseAsync().then((response) => {
+      if (!isMounted || !response?.notification) {
+        return;
+      }
+      redirect(response?.notification);
+    });
+
+    const subscription = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        redirect(response.notification);
+      },
+    );
+
+    return () => {
+      isMounted = false;
+      subscription.remove();
+    };
+  }, []);
+}
+
 const App = observer(() => {
   const [isStoreLoaded, setIsStoreLoaded] = useState(false);
   const [expoPushToken, setExpoPushToken] = useState('');
@@ -102,7 +137,7 @@ const App = observer(() => {
   const notificationListener = useRef();
   const responseListener = useRef();
   const { pinStore, userStore } = useStores();
-
+  useNotificationObserver();
   useEffect(() => {
     if (Device.isDevice) {
       registerForPushNotificationsAsync().then((token) => {
@@ -207,7 +242,14 @@ function MainStackScreen() {
       <MainStack.Screen name='WalletManager' component={WalletManager} />
       <MainStack.Screen name='QRActionSheet' component={QRActionSheet} />
       <MainStack.Screen name='MileageHistory' component={MileageHistory} />
-
+      <MainStack.Screen
+        name='MileageRedeemNotification'
+        component={MileageRedeemNotification}
+      />
+      <MainStack.Screen
+        name='LocalNotification'
+        component={LocalNotification}
+      />
       <MainStack.Screen name='Detail' component={DetailsScreen} />
       <MainStack.Screen
         name='ActionSheetScreen'
@@ -217,7 +259,6 @@ function MainStackScreen() {
       <MainStack.Screen name='Test' component={Test} />
       <MainStack.Screen name='SignIn' component={SignIn} />
       <MainStack.Screen name='ModalScreen' component={ModalScreen} />
-
       <MainStack.Screen
         name='HandelAuthentication'
         component={HandelAuthentication}

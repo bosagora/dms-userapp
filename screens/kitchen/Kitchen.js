@@ -18,6 +18,8 @@ import { AUTH_STATE } from '../../stores/user.store';
 import { autorun } from 'mobx';
 import { observer } from 'mobx-react';
 import QRActionSheet from './QRActionSheet';
+import LocalNotification from './LocalNotification';
+import MileageRedeemNotification from '../wallet/MileageRedeemNotification';
 
 // export default function Kitchen({ navigation }) {
 const Kitchen = observer(({ navigation }) => {
@@ -46,11 +48,20 @@ const Kitchen = observer(({ navigation }) => {
     <Box flex={1} justifyContent='center' bg='$primary950'>
       <VStack p='$12' reversed={false}>
         <Box space='md'>
-          <Heading mb='$4' color='white'>
-            Sign in form using formik -:
-          </Heading>
           <Button my='$2' onPress={() => navigation.navigate('Temp')}>
             <ButtonText>Go to Temp </ButtonText>
+            <ButtonIcon as={AddIcon} />
+          </Button>
+          <Button
+            my='$2'
+            onPress={() => navigation.navigate('MileageRedeemNotification')}>
+            <ButtonText>Go to MileageRedeemNotification </ButtonText>
+            <ButtonIcon as={AddIcon} />
+          </Button>
+          <Button
+            my='$2'
+            onPress={() => navigation.navigate('LocalNotification')}>
+            <ButtonText>Go to LocalNotification </ButtonText>
             <ButtonIcon as={AddIcon} />
           </Button>
           <Button my='$2' onPress={() => navigation.navigate('QRActionSheet')}>
