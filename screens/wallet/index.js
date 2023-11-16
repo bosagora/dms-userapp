@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { useStores } from '../stores';
+import { useStores } from '../../stores';
 import {
   Box,
   Heading,
@@ -14,10 +14,11 @@ import {
   ButtonText,
   ButtonIcon,
   AddIcon,
+  Pressable,
 } from '@gluestack-ui/themed';
 import { Link } from 'expo-router';
 
-const Wallet = observer(({ navigation }) => {
+const Index = observer(({ navigation }) => {
   const { secretStore, userStore } = useStores();
   const handleQRSheet = () => {
     secretStore.setShowQRSheet(!secretStore.showQRSheet);
@@ -75,11 +76,12 @@ const Wallet = observer(({ navigation }) => {
                     point
                   </Text>
                 </HStack>
-                <Link href='https://gluestack.io/' isExternal>
+                <Pressable
+                  onPress={() => navigation.navigate('MileageHistory')}>
                   <Text fontSize='$sm' color='$pink600'>
                     적립/사용 내역
                   </Text>
-                </Link>
+                </Pressable>
               </HStack>
               <HStack m='$2'>
                 <Text _dark={{ color: '$textLight200' }} fontSize='$sm' mr='$1'>
@@ -107,4 +109,4 @@ const Wallet = observer(({ navigation }) => {
   );
 });
 
-export default Wallet;
+export default Index;

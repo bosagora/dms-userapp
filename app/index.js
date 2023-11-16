@@ -35,7 +35,6 @@ import Secret from '../screens/initScreens/Secret';
 import { AUTH_STATE } from '../stores/user.store';
 import InitPinCodeScreen from '../screens/initScreens/InitPinCodeScreen';
 import Temp from '../screens/Temp';
-import Wallet from '../screens/Wallet';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { config } from '../gluestack-style.config.js';
@@ -46,6 +45,8 @@ import QRActionSheet from '../screens/QRActionSheet';
 import Configuration from '../screens/configuration';
 import WalletManager from '../screens/configuration/WalletManager';
 import { navigationRef } from '../utils/root.navigation';
+import Wallet from '../screens/wallet';
+import MileageHistory from '../screens/wallet/MileageHistory';
 
 const InitStack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
@@ -205,6 +206,8 @@ function MainStackScreen() {
       />
       <MainStack.Screen name='WalletManager' component={WalletManager} />
       <MainStack.Screen name='QRActionSheet' component={QRActionSheet} />
+      <MainStack.Screen name='MileageHistory' component={MileageHistory} />
+
       <MainStack.Screen name='Detail' component={DetailsScreen} />
       <MainStack.Screen
         name='ActionSheetScreen'
