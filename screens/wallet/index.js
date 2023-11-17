@@ -1,28 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { observer } from 'mobx-react';
 import { useStores } from '../../stores';
 import {
   Box,
   Heading,
   VStack,
-  Image,
   Text,
   HStack,
   View,
   Divider,
   Button,
   ButtonText,
-  ButtonIcon,
-  AddIcon,
   Pressable,
+  Modal,
+  ModalBackdrop,
+  ModalContent,
+  ModalBody,
+  ButtonGroup,
 } from '@gluestack-ui/themed';
-import { Link } from 'expo-router';
 
 const Index = observer(({ navigation }) => {
   const { secretStore, userStore } = useStores();
+  const [showModal, setShowModal] = useState(false);
   const handleQRSheet = () => {
     secretStore.setShowQRSheet(!secretStore.showQRSheet);
     console.log('handle QR sheet : ', secretStore.showQRSheet);
+  };
+
+  const convertToToken = () => {
+    console.log('convert to token');
+    setShowModal(true);
   };
 
   return (
@@ -30,7 +37,7 @@ const Index = observer(({ navigation }) => {
       h='$full'
       sx={{
         _dark: {
-          bg: '$backgroundDark900',
+          bg: '$backgroundDark800',
           borderColor: '$borderDark800',
         },
       }}>
@@ -95,16 +102,64 @@ const Index = observer(({ navigation }) => {
                 <ButtonText>키오스트에서 사용하기(QR)</ButtonText>
               </Button>
               <Box mt='$4' alignItems='flex-end'>
-                <Link href='https://gluestack.io/' isExternal mr='$2'>
+                <Pressable onPress={() => convertToToken()}>
                   <Text fontSize='$sm' color='$pink600'>
-                    > 포인트를 토근으로 전환하기
+                    > 토근으로 전환하기
                   </Text>
-                </Link>
+                </Pressable>
               </Box>
             </Box>
           </Box>
         </HStack>
       </VStack>
+
+      <Box>
+        <Modal
+          isOpen={showModal}
+          size='full'
+          onClose={() => {
+            setShowModal(false);
+          }}>
+          <ModalBackdrop />
+          <ModalContent maxWidth='$96'>
+            <ModalBody p='$5'>
+              <VStack space='lg' mb='$4'>
+                <Heading>토큰으로 전환하기</Heading>
+                <Text size='sm'>
+                  포인트를 토큰으로 전환한 후에는 다시 포인트로 전환할 수
+                  없으며, 향후 마일리지는 토큰으로 지급됩니다.
+                </Text>
+                <Text size='sm'>계속 진행하려면 확인을 클릭하세요.</Text>
+              </VStack>
+
+              <ButtonGroup space='md' alignSelf='center'>
+                <Button
+                  variant='outline'
+                  py='$2.5'
+                  action='secondary'
+                  onPress={() => {
+                    setShowModal(false);
+                  }}>
+                  <ButtonText fontSize='$sm' fontWeight='$medium'>
+                    취소
+                  </ButtonText>
+                </Button>
+                <Button
+                  variant='solid'
+                  bg='$success700'
+                  borderColor='$success700'
+                  onPress={() => {
+                    setShowModal(false);
+                  }}>
+                  <ButtonText fontSize='$sm' fontWeight='$medium'>
+                    확인
+                  </ButtonText>
+                </Button>
+              </ButtonGroup>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      </Box>
     </View>
   );
 });
