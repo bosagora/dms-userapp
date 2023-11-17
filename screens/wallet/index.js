@@ -46,9 +46,10 @@ const Index = observer(({ navigation }) => {
           <Box
             // maxWidth='$64'
             w='$full'
+            h='$full'
             borderColor='$orange400'
             borderRadius='$xl'
-            borderWidth='$5'
+            borderWidth='$2'
             p='$4'
             overflow='hidden'
             sx={{
@@ -116,7 +117,7 @@ const Index = observer(({ navigation }) => {
       <Box>
         <Modal
           isOpen={showModal}
-          size='full'
+          size='lg'
           onClose={() => {
             setShowModal(false);
           }}>
