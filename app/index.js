@@ -49,7 +49,7 @@ import Wallet from '../screens/wallet';
 import MileageHistory from '../screens/wallet/MileageHistory';
 import MileageRedeemNotification from '../screens/wallet/MileageRedeemNotification';
 import * as RootNavigation from '../utils/root.navigation';
-
+import 'react-native-url-polyfill/auto';
 const InitStack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();

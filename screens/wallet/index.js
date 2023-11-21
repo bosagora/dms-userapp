@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 import { useStores } from '../../stores';
 import {
@@ -18,10 +18,58 @@ import {
   ModalBody,
   ButtonGroup,
 } from '@gluestack-ui/themed';
+import { getSecureValue, saveSecureValue } from '../../utils/secure.store';
+import { Client, Context, LIVE_CONTRACTS } from 'dms-sdk-client';
+import { Wallet } from 'ethers';
+export const web3EndpointsMainnet = {
+  working: ['https://mainnet.bosagora.org/'],
+  failing: ['https://bad-url-gateway.io/'],
+};
 
+export const web3EndpointsDevnet = {
+  working: ['http://rpc.devnet.bosagora.org:8545/'],
+  failing: ['https://bad-url-gateway.io/'],
+};
+
+export const TEST_WALLET_ADDRESS = '0x64D111eA9763c93a003cef491941A011B8df5a49';
+export const TEST_WALLET =
+  '70438bc3ed02b5e4b76d496625cb7c06d6b7bf4362295b16fdfe91a046d4586c';
+
+const grapqhlEndpoints = {
+  working: [
+    {
+      url: 'http://subgraph.devnet.bosagora.org:8000/subgraphs/name/bosagora/dms-osx-devnet',
+    },
+  ],
+  timeout: [
+    {
+      url: 'https://httpstat.us/504?sleep=100',
+    },
+    {
+      url: 'https://httpstat.us/504?sleep=200',
+    },
+    {
+      url: 'https://httpstat.us/504?sleep=300',
+    },
+  ],
+  failing: [{ url: 'https://bad-url-gateway.io/' }],
+};
+
+export const relayEndpointsDevnet = {
+  working: 'http://relay.devnet.bosagora.org:7070/',
+  failing: 'https://bad-url-gateway.io/',
+};
+const contextParamsDevnet = {
+  network: 24680,
+  signer: new Wallet(TEST_WALLET),
+  web3Providers: web3EndpointsDevnet.working,
+  relayEndpoint: relayEndpointsDevnet.working,
+  graphqlNodes: grapqhlEndpoints.working,
+};
 const Index = observer(({ navigation }) => {
   const { secretStore, userStore } = useStores();
   const [showModal, setShowModal] = useState(false);
+  const [client, setClient] = useState(null);
   const handleQRSheet = () => {
     secretStore.setShowQRSheet(!secretStore.showQRSheet);
     console.log('handle QR sheet : ', secretStore.showQRSheet);
@@ -31,6 +79,50 @@ const Index = observer(({ navigation }) => {
     console.log('convert to token');
     setShowModal(true);
   };
+  useEffect(() => {
+    async function fetchKey() {
+      console.log('1');
+      console.log(
+        'process.env.public TESTING :',
+        process.env.EXPO_PUBLIC_TESTING,
+      );
+      process.env.TESTING = process.env.EXPO_PUBLIC_TESTING;
+      console.log('process.env.TESTING :', process.env.TESTING);
+      await getSecureValue('privateKey');
+      console.log(
+        'LIVE_CONTRACTS.bosagora_devnet.LedgerAddress :',
+        LIVE_CONTRACTS.bosagora_devnet.LedgerAddress,
+      );
+
+      const ctx = new Context({
+        network: 24680,
+        signer: new Wallet(TEST_WALLET),
+        web3Providers: web3EndpointsDevnet.working,
+        relayEndpoint: relayEndpointsDevnet.working,
+        graphqlNodes: grapqhlEndpoints.working,
+        ledgerAddress: LIVE_CONTRACTS['bosagora_devnet'].LedgerAddress,
+        tokenAddress: LIVE_CONTRACTS['bosagora_devnet'].TokenAddress,
+        phoneLinkCollectionAddress:
+          LIVE_CONTRACTS['bosagora_devnet'].PhoneLinkCollectionAddress,
+        validatorCollectionAddress:
+          LIVE_CONTRACTS['bosagora_devnet'].ValidatorCollectionAddress,
+        currencyRateAddress:
+          LIVE_CONTRACTS['bosagora_devnet'].CurrencyRateAddress,
+        shopCollectionAddress:
+          LIVE_CONTRACTS['bosagora_devnet'].ShopCollectionAddress,
+      });
+      console.log('2');
+      const clienttmp = new Client(ctx);
+      console.log('3');
+      console.log('clienttmp :', clienttmp);
+      setClient(clienttmp);
+      const isUp = await client.ledger.isRelayUp();
+      console.log('isUp:', isUp);
+      const balance = await client.ledger.getPointBalance(TEST_WALLET_ADDRESS);
+      console.log('balance :', balance);
+    }
+    fetchKey();
+  }, []);
 
   return (
     <View
