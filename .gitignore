@@ -37,3 +37,5 @@ yarn-error.*
 # eas
 app.json
 eas.json
+
+.idea
