@@ -10,7 +10,8 @@ import { getSecureValue, saveSecureValue } from '../../utils/secure.store';
 import ImportPrivateKey from '../../components/ImportPrivateKey';
 import { Box, ButtonText, Button, Center, VStack } from '@gluestack-ui/themed';
 import MobileHeader from '../../components/MobileHeader'; //for ethers.js
-const { Wallet } = ethers;
+// import { Client, Context, LIVE_CONTRACTS } from 'dms-sdk-client';
+import { Wallet } from 'ethers';
 
 const Secret = observer(({ navigation }) => {
   const { pinStore, userStore, secretStore } = useStores();

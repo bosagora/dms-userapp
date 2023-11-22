@@ -29,12 +29,16 @@ import {
 import { SafeAreaView } from 'react-native';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { config } from '@gluestack-ui/config';
 import { observer } from 'mobx-react';
-import StyledExpoRouterLink from '../../components/StyledExpoRouterLink';
 import { AUTH_STATE } from '../../stores/user.store';
 import { useStores } from '../../stores';
+import '@ethersproject/shims';
+import { ContractUtils } from 'dms-sdk-client';
+
+import { getClient } from '../../utils/client';
+
 const registerSchema = yup.object().shape({
   n1: yup
     .string()
@@ -63,8 +67,56 @@ const registerInitialValues = {
 };
 
 const PhoneAuth = observer(({ navigation }) => {
+  const [client, setClient] = useState(null);
+  const [address, setAddress] = useState('');
+  const [phone, setPhone] = useState('08201010002000');
+  const [authNum, setAuthNum] = useState('000102');
   const toast = useToast();
   const { userStore } = useStores();
+
+  useEffect(() => {
+    async function fetchClient() {
+      console.log('PhoneAuth > fetchClient');
+      const { client, address } = await getClient();
+      setClient(client);
+      setAddress(address);
+
+      const web3Status = await client.web3.isUp();
+      console.log('web3Status :', web3Status);
+      const isUp = await client.ledger.isRelayUp();
+      console.log('isUp:', isUp);
+    }
+    fetchClient().then(() => console.log('end of fetchClient'));
+  }, []);
+  async function registerPhone() {
+    const steps = [];
+    for await (const step of client.link.register(phone)) {
+      console.log('register step :', step);
+      steps.push(step);
+    }
+    if (steps.length === 2) {
+      const requestId = steps[1].requestId;
+      for await (const step of client.link.submit(requestId, authNum)) {
+        console.log('submit step :', step);
+      }
+    }
+  }
+
+  async function changeUnpayableToPayable() {
+    const balance = await client.ledger.getPointBalance(address);
+    console.log('balance :', balance);
+
+    const phoneHash = ContractUtils.getPhoneHash(phone);
+    const unpayablePoint =
+      await client.ledger.getUnPayablePointBalance(phoneHash);
+    console.log('unpayable point :', unpayablePoint);
+
+    for await (const step of client.ledger.changeToPayablePoint(phone)) {
+      console.log('change unpayable to payable step :', step);
+    }
+    const afterBalance = await client.ledger.getPointBalance(address);
+    console.log('afterBalance :', afterBalance);
+  }
   function completeAuth() {
     userStore.setAuthState(AUTH_STATE.DONE);
   }
@@ -130,7 +182,11 @@ const PhoneAuth = observer(({ navigation }) => {
                 <InputField />
               </Input>
             </Box>
-            <Button onPress={() => {}} flex={1}>
+            <Button
+              onPress={() => {
+                registerPhone();
+              }}
+              flex={1}>
               <ButtonText>전송</ButtonText>
             </Button>
           </HStack>
