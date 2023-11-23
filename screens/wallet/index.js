@@ -19,12 +19,17 @@ import {
   ButtonGroup,
 } from '@gluestack-ui/themed';
 import { getClient } from '../../utils/client';
+import { ContractUtils } from 'dms-sdk-client';
 
 const Index = observer(({ navigation }) => {
   const { secretStore, userStore } = useStores();
   const [showModal, setShowModal] = useState(false);
   const [client, setClient] = useState(null);
   const [address, setAddress] = useState('');
+  const [payablePoint, setPayablePoint] = useState(0);
+  const [unpayablePoint, setUnpayablePoint] = useState(0);
+  const [phone, setPhone] = useState('');
+
   useEffect(() => {
     async function fetchClient() {
       console.log('Wallet > fetchClient');
@@ -36,9 +41,26 @@ const Index = observer(({ navigation }) => {
       console.log('web3Status :', web3Status);
       const isUp = await client.ledger.isRelayUp();
       console.log('isUp:', isUp);
+
+      const phone = userStore.phone;
+      setPhone(phone);
+      console.log('user phone :', phone);
+
+      await fetchPoints();
     }
     fetchClient().then(() => console.log('end of Wallet > fetchClient'));
   }, []);
+  async function fetchPoints() {
+    const point = await client.ledger.getPointBalance(address);
+    setPayablePoint(point);
+    console.log('point :', point);
+
+    const phoneHash = ContractUtils.getPhoneHash(phone);
+    const unpayablePoint =
+      await client.ledger.getUnPayablePointBalance(phoneHash);
+    setUnpayablePoint(unpayablePoint);
+    console.log('unpayable point :', unpayablePoint);
+  }
   const handleQRSheet = () => {
     secretStore.setShowQRSheet(!secretStore.showQRSheet);
     console.log('handle QR sheet : ', secretStore.showQRSheet);
@@ -95,7 +117,7 @@ const Index = observer(({ navigation }) => {
                     _dark={{ color: '$textLight200' }}
                     fontSize='$xl'
                     mr='$1'>
-                    63
+                    {payablePoint.toString()}
                   </Text>
                   <Text _dark={{ color: '$textLight200' }} fontSize='$sm'>
                     point
@@ -110,7 +132,7 @@ const Index = observer(({ navigation }) => {
               </HStack>
               <HStack m='$2'>
                 <Text _dark={{ color: '$textLight200' }} fontSize='$sm' mr='$1'>
-                  ≒ 63 KRW
+                  ≒ {payablePoint.toString()} KRW
                 </Text>
                 <Text _dark={{ color: '$textLight200' }} fontSize='$sm'>
                   (1 point ≒ 1 KRW)
