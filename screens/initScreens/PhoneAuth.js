@@ -61,16 +61,17 @@ const registerSchema = yup.object().shape({
 });
 
 const registerInitialValues = {
-  n1: '',
-  n2: '',
-  n3: '',
+  n1: '00',
+  n2: '01',
+  n3: '02',
 };
 
 const PhoneAuth = observer(({ navigation }) => {
   const [client, setClient] = useState(null);
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('08201010002000');
-  const [authNum, setAuthNum] = useState('000102');
+  const [requestId, setRequestId] = useState('');
+  // const [authNum, setAuthNum] = useState('000102');
   const toast = useToast();
   const { userStore } = useStores();
 
@@ -94,14 +95,26 @@ const PhoneAuth = observer(({ navigation }) => {
       console.log('register step :', step);
       steps.push(step);
     }
-    if (steps.length === 2) {
+    if (steps.length === 2 && steps[1].key === 'requested') {
       const requestId = steps[1].requestId;
-      for await (const step of client.link.submit(requestId, authNum)) {
-        console.log('submit step :', step);
-      }
+      setRequestId(requestId);
     }
   }
 
+  async function submitPhone(authNum) {
+    const steps = [];
+    for await (const step of client.link.submit(requestId, authNum)) {
+      steps.push(step);
+      console.log('submit step :', step);
+    }
+    if (steps.length === 2 && steps[1].key === 'accepted') {
+      completeAuth();
+    }
+  }
+  function completeAuth() {
+    userStore.setPhone(phone);
+    userStore.setAuthState(AUTH_STATE.DONE);
+  }
   async function changeUnpayableToPayable() {
     const balance = await client.ledger.getPointBalance(address);
     console.log('balance :', balance);
@@ -117,9 +130,7 @@ const PhoneAuth = observer(({ navigation }) => {
     const afterBalance = await client.ledger.getPointBalance(address);
     console.log('afterBalance :', afterBalance);
   }
-  function completeAuth() {
-    userStore.setAuthState(AUTH_STATE.DONE);
-  }
+
   const formik = useFormik({
     initialValues: registerInitialValues,
     validationSchema: registerSchema,
@@ -135,7 +146,15 @@ const PhoneAuth = observer(({ navigation }) => {
           );
         },
       });
-      completeAuth();
+
+      console.log('form values :', values);
+      const authNums = values.n1 + values.n2 + values.n3;
+      submitPhone(authNums).then((r) => {
+        if (r === true) {
+          completeAuth();
+        }
+      });
+      // completeAuth();
       resetForm();
     },
   });
@@ -179,7 +198,7 @@ const PhoneAuth = observer(({ navigation }) => {
                 isDisabled={false}
                 isInvalid={false}
                 isReadOnly={false}>
-                <InputField />
+                <InputField value={phone} />
               </Input>
             </Box>
             <Button

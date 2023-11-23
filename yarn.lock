@@ -3938,11 +3938,6 @@ at-least-node@^1.0.0:
   resolved "https://registry.npmjs.org/at-least-node/-/at-least-node-1.0.0.tgz"
   integrity sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==
 
-atob@2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
-  integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
-
 available-typed-arrays@^1.0.5:
   version "1.0.5"
   resolved "https://registry.npmjs.org/available-typed-arrays/-/available-typed-arrays-1.0.5.tgz"
@@ -4757,7 +4752,7 @@ define-properties@^1.1.3, define-properties@^1.1.4:
     has-property-descriptors "^1.0.0"
     object-keys "^1.1.1"
 
-del-osx-lib@1.1.2:
+del-osx-lib@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/del-osx-lib/-/del-osx-lib-1.1.2.tgz#c8f8abe04fa5ad4870f11691b0587f85a29204ea"
   integrity sha512-1Dlk39K+ohn5ptnNTHCb7FO39Lzeo9sI+ZxMgALhN0rbIws6TCfWbz0ioMMI+wtIDfrR6IMvpP3r+Y9k1pEeiQ==
@@ -4824,17 +4819,17 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
-dms-osx-lib@1.1.7:
-  version "1.1.7"
-  resolved "https://registry.yarnpkg.com/dms-osx-lib/-/dms-osx-lib-1.1.7.tgz#30b5b4d3cc5f68393120e76083fe6193bd57ad16"
-  integrity sha512-F5BzEVPJ1DEZ4o17yDPPArlu3adAzl+whK6RwzYPpqrMrArWNd+Nj2spVRHUT/C84e3kVvLcA1CsgTQEE4Ps9g==
+dms-osx-lib@^1.1.7:
+  version "1.1.12"
+  resolved "https://registry.yarnpkg.com/dms-osx-lib/-/dms-osx-lib-1.1.12.tgz#9df6a903bcf3ade1f09801e88c4706e0d4a2c657"
+  integrity sha512-BD9qupJVDvCNJj2sd0ly/XFIvjlWNG0u5FUqoSlCyTonXEm4IHpt3JBqVDkXm+G7E0MOwe2hoAeSWzrI4E4rxA==
   dependencies:
     ethers "^5.7.0"
 
-dms-sdk-client@^1.0.7:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/dms-sdk-client/-/dms-sdk-client-1.0.8.tgz#32b8be5d5a92ef499faef7bfab216a773d4bc3cf"
-  integrity sha512-NxGu5yGIqyGPY/+nb2a71wJm9KsEI3L3D5GcELHrjav7AewYV1yUSix+VVXsRDq2a+gbQWlNnDz6Xy+SpOTgqA==
+dms-sdk-client@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/dms-sdk-client/-/dms-sdk-client-1.0.9.tgz#93580af7520bbe27c53b1579b704262b59037339"
+  integrity sha512-dToUY90HeoxBaU4YXZwCnEpFqYWzy6tjwJx4wQ9CCPFiYVJ0ho8FrdnF8Wok3wtsmue//palMdKE1gVyIeMwYw==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/abstract-signer" "^5.7.0"
@@ -4848,9 +4843,8 @@ dms-sdk-client@^1.0.7:
     "@ethersproject/providers" "^5.7.0"
     "@ethersproject/random" "^5.7.0"
     "@ethersproject/wallet" "^5.7.0"
-    atob "2.1.2"
-    del-osx-lib "1.1.2"
-    dms-osx-lib "1.1.7"
+    del-osx-lib "^1.1.2"
+    dms-osx-lib "^1.1.7"
     dms-sdk-common "^1.0.3"
     graphql "^16.5.0"
     graphql-request "^4.3.0"

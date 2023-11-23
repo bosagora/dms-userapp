@@ -21,8 +21,7 @@
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.16",
-
-    "dms-sdk-client": "^1.0.7",
+    "dms-sdk-client": "^1.0.9",
     "ethers": "npm:boa-ethers2@^5.7.9",
     "expo": "~49.0.15",
     "expo-clipboard": "~4.3.1",
