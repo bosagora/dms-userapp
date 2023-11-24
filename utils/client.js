@@ -37,6 +37,7 @@ export async function getClient() {
   }
   const client = createClient(pKey);
   console.log('client :', client);
+  console.log('>> address :', address);
   return { client, address };
 }
 

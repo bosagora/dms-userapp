@@ -24,32 +24,43 @@ import { ContractUtils } from 'dms-sdk-client';
 const Index = observer(({ navigation }) => {
   const { secretStore, userStore } = useStores();
   const [showModal, setShowModal] = useState(false);
-  const [client, setClient] = useState(null);
+  const [client, setClient] = useState();
   const [address, setAddress] = useState('');
   const [payablePoint, setPayablePoint] = useState(0);
   const [unpayablePoint, setUnpayablePoint] = useState(0);
   const [phone, setPhone] = useState('');
 
   useEffect(() => {
+    console.log('=================');
     async function fetchClient() {
       console.log('Wallet > fetchClient');
-      const { client, address } = await getClient();
-      setClient(client);
-      setAddress(address);
+      const { client: client1, address: userAddress } = await getClient();
+      console.log('>>>>>>> userAddress :', userAddress);
+      setClient(client1);
+      setAddress(userAddress);
 
-      const web3Status = await client.web3.isUp();
+      const web3Status = await client1.web3.isUp();
       console.log('web3Status :', web3Status);
-      const isUp = await client.ledger.isRelayUp();
+      const isUp = await client1.ledger.isRelayUp();
       console.log('isUp:', isUp);
 
       const phone = userStore.phone;
       setPhone(phone);
       console.log('user phone :', phone);
 
-      await fetchPoints();
+      const point = await client1.ledger.getPointBalance(userAddress);
+      setPayablePoint(point);
+      console.log('point :', point);
+
+      const phoneHash = ContractUtils.getPhoneHash(phone);
+      const unpayablePoint =
+        await client1.ledger.getUnPayablePointBalance(phoneHash);
+      setUnpayablePoint(unpayablePoint);
+      console.log('unpayable point :', unpayablePoint);
     }
-    fetchClient().then(() => console.log('end of Wallet > fetchClient'));
+    fetchClient().then(() => console.log('end of wallet fetch client'));
   }, []);
+
   async function fetchPoints() {
     const point = await client.ledger.getPointBalance(address);
     setPayablePoint(point);
@@ -61,7 +72,8 @@ const Index = observer(({ navigation }) => {
     setUnpayablePoint(unpayablePoint);
     console.log('unpayable point :', unpayablePoint);
   }
-  const handleQRSheet = () => {
+  const handleQRSheet = async () => {
+    // await fetchPoints();
     secretStore.setShowQRSheet(!secretStore.showQRSheet);
     console.log('handle QR sheet : ', secretStore.showQRSheet);
   };
