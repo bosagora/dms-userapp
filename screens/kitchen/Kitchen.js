@@ -61,7 +61,7 @@ const Kitchen = observer(({ navigation }) => {
           <Button
             my='$2'
             onPress={() => navigation.navigate('LocalNotification')}>
-            <ButtonText>Go to LocalNotification </ButtonText>
+            <ButtonText>Go to SendNotification </ButtonText>
             <ButtonIcon as={AddIcon} />
           </Button>
           <Button my='$2' onPress={() => navigation.navigate('QRActionSheet')}>
