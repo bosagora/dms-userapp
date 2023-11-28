@@ -5,7 +5,7 @@ import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 
-export const usePushNotification = () => {
+export const usePushNotification = (userStore) => {
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
       shouldPlaySound: false,
@@ -40,6 +40,7 @@ export const usePushNotification = () => {
       });
     } else {
       alert('Must be using a physical device for Push Notification.');
+      return;
     }
 
     if (Platform.OS === 'android') {
@@ -73,7 +74,7 @@ export const usePushNotification = () => {
       );
       Notifications.removeNotificationSubscription(responseListener.current);
     };
-  }, []);
+  }, [userStore.permissionsCount]);
 
   return { expoPushToken, notification };
 };

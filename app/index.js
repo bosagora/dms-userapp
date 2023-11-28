@@ -44,6 +44,7 @@ import MileageHistory from '../screens/wallet/MileageHistory';
 import MileageRedeemNotification from '../screens/wallet/MileageRedeemNotification';
 import 'react-native-url-polyfill/auto';
 import { usePushNotification } from '../hooks/usePushNotification';
+import Permissions from '../screens/initScreens/Permissions';
 
 const InitStack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
@@ -53,8 +54,11 @@ const App = observer(() => {
   const [isStoreLoaded, setIsStoreLoaded] = useState(false);
   const { pinStore, userStore } = useStores();
 
-  const { expoPushToken } = usePushNotification();
+  const { expoPushToken } = usePushNotification(userStore);
   console.log('push token :', expoPushToken);
+  if (expoPushToken !== undefined && expoPushToken.length > 10) {
+    userStore.setExpoPushToken(expoPushToken);
+  }
 
   useEffect(() => {
     const rehydrate = async () => {
@@ -95,6 +99,11 @@ const App = observer(() => {
 function InitStackScreen() {
   return (
     <InitStack.Navigator>
+      <InitStack.Screen
+        name='Permissions'
+        component={Permissions}
+        options={{ headerShown: false }}
+      />
       <InitStack.Screen
         name='Term'
         component={Term}

@@ -2,6 +2,7 @@ import { makeAutoObservable } from 'mobx';
 
 export const AUTH_STATE = {
   INIT: 'INIT',
+  PERMISSIONS: 'PERMISSIONS',
   TERM: 'TERM',
   PIN: 'PIN',
   SECRET: 'SECRET',
@@ -16,6 +17,9 @@ class UserStore {
   phone = '';
   country = 'KR';
   enableBio = false;
+
+  permissionsCount = 0;
+  expoPushToken = '';
 
   constructor() {
     makeAutoObservable(this);
@@ -42,6 +46,14 @@ class UserStore {
 
   setEnableBio = (enableBio) => {
     this.enableBio = enableBio;
+  };
+
+  setPermissionsCount = () => {
+    this.permissionsCount = this.permissionsCount + 1;
+  };
+
+  setExpoPushToken = (token) => {
+    this.expoPushToken = token;
   };
 }
 
