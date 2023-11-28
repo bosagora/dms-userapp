@@ -27,9 +27,29 @@ const Secret = observer(({ navigation }) => {
     await saveSecureValue('address', wallet.address);
     await saveSecureValue('mnemonic', JSON.stringify(wallet.mnemonic));
     await saveSecureValue('privateKey', wallet.privateKey);
-    resetPinCode();
+    registerPushToken();
+  }
+
+  function registerPushToken() {
+    fetch('http://192.168.50.83:8333/api/notification/', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        address: secretStore.address,
+        token: userStore.expoPushToken,
+        lang: 'kr',
+        platform: 'ios',
+      }),
+    }).then((res) => {
+      console.log('response of register token :', JSON.stringify(res));
+      resetPinCode();
+    });
   }
   function resetPinCode() {
+    console.log('registerPushToken >>');
     navigation.navigate('InitPinCodeScreen');
   }
 
@@ -39,7 +59,7 @@ const Secret = observer(({ navigation }) => {
     const wallet = new Wallet(key);
     secretStore.setAddress(wallet.address);
     await saveSecureValue('address', wallet.address);
-    resetPinCode();
+    registerPushToken();
   }
 
   return (
