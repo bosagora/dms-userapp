@@ -55,16 +55,15 @@ const App = observer(() => {
   const { pinStore, userStore } = useStores();
 
   const { expoPushToken } = usePushNotification(userStore);
-  console.log('push token :', expoPushToken);
-  if (expoPushToken !== undefined && expoPushToken.length > 10) {
-    userStore.setExpoPushToken(expoPushToken);
-  }
-
   useEffect(() => {
     const rehydrate = async () => {
       await trunk.init();
       setIsStoreLoaded(true);
       pinStore.setVisible(false);
+      console.log('push token :', expoPushToken);
+      if (expoPushToken !== undefined && expoPushToken?.data?.length > 10) {
+        userStore.setExpoPushToken(expoPushToken.data);
+      }
     };
     rehydrate();
   }, []);

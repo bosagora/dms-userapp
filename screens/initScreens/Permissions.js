@@ -36,6 +36,7 @@ const Permissions = observer(({ navigation }) => {
 
   function checkPushToken() {
     console.log('checkPushToken > permision count', userStore.permissionsCount);
+    console.log('checkPushToken >expoPushToken', userStore.expoPushToken);
     if (userStore.expoPushToken === '') return false;
     console.log('1');
     if (userStore.expoPushToken.length < 10) return false;
@@ -47,9 +48,12 @@ const Permissions = observer(({ navigation }) => {
   function agreePermissions() {
     console.log('agreePermissions >');
     if (Device.isDevice) {
-      if (checkPushToken()) navigation.navigate('Term');
-      alert('알림 허용이 필요합니다.');
-      userStore.setPermissionsCount();
+      if (checkPushToken()) {
+        navigation.navigate('Term');
+      } else {
+        alert('알림 허용이 필요합니다.');
+        userStore.setPermissionsCount();
+      }
     } else {
       navigation.navigate('Term');
     }
