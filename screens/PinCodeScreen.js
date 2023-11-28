@@ -12,7 +12,7 @@ const PinCodeScreen = observer(() => {
   const { pinStore, userStore } = useStores();
   // show pincode and bio(if enrolled) together
   useEffect(() => {
-    console.log('useEffect');
+    console.log('PinCodeScreen > useEffect : ', pinStore);
     // 앱 초기 등록 화면이 아니고
     // 핀 코드 화면이 활성 상태 이고
     if (userStore.state === 'DONE' && pinStore.visible) checkBiometrics();

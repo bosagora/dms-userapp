@@ -2,9 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Button,
-  Platform,
-  StatusBar,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -13,10 +10,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { GluestackUIProvider } from '@gluestack-ui/themed';
-import * as Notifications from 'expo-notifications';
-import * as Device from 'expo-device';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import DetailsScreen from '../screens/kitchen/Detail';
 import Kitchen from '../screens/kitchen/Kitchen';
@@ -48,126 +42,25 @@ import { navigationRef } from '../utils/root.navigation';
 import Wallet from '../screens/wallet';
 import MileageHistory from '../screens/wallet/MileageHistory';
 import MileageRedeemNotification from '../screens/wallet/MileageRedeemNotification';
-import * as RootNavigation from '../utils/root.navigation';
 import 'react-native-url-polyfill/auto';
+import { usePushNotification } from '../hooks/usePushNotification';
+
 const InitStack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
-
-async function registerForPushNotificationsAsync() {
-  let token;
-
-  if (Platform.OS === 'android') {
-    Notifications.setNotificationChannelAsync('default', {
-      name: 'default',
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C',
-    });
-  }
-
-  // if (Device.isDevice) {
-  if (3) {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== 'granted') {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!');
-      return;
-    }
-    token = await Notifications.getExpoPushTokenAsync({
-      projectId: 'dfff3581-3', // Expo Project ID
-    });
-    console.log(token);
-  } else {
-    alert('Must use physical device for Push Notifications');
-  }
-
-  return token.data;
-}
-
-function useNotificationObserver() {
-  React.useEffect(() => {
-    let isMounted = true;
-
-    function redirect(notification) {
-      const url = notification.request.content.data?.url;
-      // if (url) {
-      //     router.push(url);
-      // }
-      RootNavigation.navigate('MileageRedeemNotification');
-      console.log('redirect > content :', notification.request.content);
-    }
-
-    Notifications.getLastNotificationResponseAsync().then((response) => {
-      if (!isMounted || !response?.notification) {
-        return;
-      }
-      redirect(response?.notification);
-    });
-
-    const subscription = Notifications.addNotificationResponseReceivedListener(
-      (response) => {
-        redirect(response.notification);
-      },
-    );
-
-    return () => {
-      isMounted = false;
-      subscription.remove();
-    };
-  }, []);
-}
 
 const App = observer(() => {
   const [isStoreLoaded, setIsStoreLoaded] = useState(false);
-  const [expoPushToken, setExpoPushToken] = useState('');
-  const [notification, setNotification] = useState(false);
-  const notificationListener = useRef();
-  const responseListener = useRef();
   const { pinStore, userStore } = useStores();
-  useNotificationObserver();
-  useEffect(() => {
-    if (Device.isDevice) {
-      registerForPushNotificationsAsync().then((token) => {
-        console.log('token :', token);
-        setExpoPushToken(token);
-      });
 
-      notificationListener.current =
-        Notifications.addNotificationReceivedListener((notification) => {
-          setNotification(notification);
-        });
-
-      responseListener.current =
-        Notifications.addNotificationResponseReceivedListener((response) => {
-          console.log(response);
-        });
-
-      return () => {
-        Notifications.removeNotificationSubscription(
-          notificationListener.current,
-        );
-        Notifications.removeNotificationSubscription(responseListener.current);
-      };
-    }
-  }, []);
+  const { expoPushToken } = usePushNotification();
+  console.log('push token :', expoPushToken);
 
   useEffect(() => {
     const rehydrate = async () => {
       await trunk.init();
       setIsStoreLoaded(true);
+      pinStore.setVisible(false);
     };
     rehydrate();
   }, []);
