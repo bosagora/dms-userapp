@@ -5,6 +5,9 @@ import { observer } from 'mobx-react';
 import { Box, FlatList, HStack, Text, VStack } from '@gluestack-ui/themed';
 import MobileHeader from '../../components/MobileHeader';
 import { getClient } from '../../utils/client';
+import { convertProperValue } from '../../utils/convert';
+import { Amount, BOACoin } from 'dms-sdk-client';
+import { BigNumber } from '@ethersproject/bignumber';
 
 const MileageHistory = observer(({ navigation }) => {
   const { secretStore, userStore } = useStores();
@@ -315,9 +318,14 @@ const MileageHistory = observer(({ navigation }) => {
                 </VStack>
                 <Box>
                   <Text>
-                    {item.loyaltyType === 1
-                      ? item.amountToken
-                      : item.amountPoint}{' '}
+                    {convertProperValue(
+                      item.loyaltyType === 1
+                        ? new Amount(
+                            BigNumber.from(item.amountToken),
+                            9,
+                          ).toBOAString()
+                        : item.amountPoint,
+                    )}{' '}
                     {item.loyaltyTypeName}
                   </Text>
                 </Box>

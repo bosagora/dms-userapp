@@ -19,15 +19,22 @@ import {
   ButtonGroup,
 } from '@gluestack-ui/themed';
 import { getClient } from '../../utils/client';
-import { ContractUtils } from 'dms-sdk-client';
+import { Amount, BOACoin, ContractUtils } from 'dms-sdk-client';
+import { convertProperValue } from '../../utils/convert';
 
 const Index = observer(({ navigation }) => {
   const { secretStore, userStore } = useStores();
   const [showModal, setShowModal] = useState(false);
   const [client, setClient] = useState();
   const [address, setAddress] = useState('');
-  const [payablePoint, setPayablePoint] = useState(0);
-  const [unpayablePoint, setUnpayablePoint] = useState(0);
+  const [payablePoint, setPayablePoint] = useState(new BOACoin(0));
+  const [payablePointRate, setPayablePointRate] = useState(new BOACoin(0));
+  const [onePointRate, setOnePointRate] = useState(new BOACoin(0));
+  const [userTokenBalance, setUserTokenBalance] = useState(new BOACoin(0));
+  const [userTokenRate, setUserTokenRate] = useState(new BOACoin(0));
+  const [oneTokenRate, setOneTokenRate] = useState(new BOACoin(0));
+  // const [unpayablePoint, setUnpayablePoint] = useState(0);
+  const [userLoyaltyType, setUserLoyaltyType] = useState(0);
   const [phone, setPhone] = useState('');
 
   useEffect(() => {
@@ -48,15 +55,49 @@ const Index = observer(({ navigation }) => {
       setPhone(phone);
       console.log('user phone :', phone);
 
-      const point = await client1.ledger.getPointBalance(userAddress);
-      setPayablePoint(point);
-      console.log('point :', point);
+      const loyaltyType = await client1.ledger.getLoyaltyType(userAddress);
+      setUserLoyaltyType(loyaltyType);
+      console.log('userLoyaltyType :', loyaltyType);
 
-      const phoneHash = ContractUtils.getPhoneHash(phone);
-      const unpayablePoint =
-        await client1.ledger.getUnPayablePointBalance(phoneHash);
-      setUnpayablePoint(unpayablePoint);
-      console.log('unpayable point :', unpayablePoint);
+      const tokenBalance = await client1.ledger.getTokenBalance(userAddress);
+      console.log('tokenBalance :', tokenBalance.toString());
+      const tokenBalConv = new BOACoin(tokenBalance);
+      console.log('tokenBalConv :', tokenBalConv.toBOAString());
+      setUserTokenBalance(tokenBalConv);
+
+      // const tokenAmount = Amount.make(tokenBalance, 18).value;
+      let userTokenCurrencyRate = await client1.currency.tokenToCurrency(
+        tokenBalance,
+        'krw',
+      );
+      console.log('userTokenCurrencyRate :', userTokenCurrencyRate.toString());
+      const oneConv = new BOACoin(userTokenCurrencyRate);
+      console.log('oneConv :', oneConv.toBOAString());
+      setUserTokenRate(oneConv);
+
+      const oneTokenAmount = BOACoin.make(1, 18).value;
+      let oneTokenCurrencyRate = await client1.currency.tokenToCurrency(
+        oneTokenAmount,
+        'krw',
+      );
+
+      console.log('oneTokenCurrencyRate :', oneTokenCurrencyRate.toString());
+      const boaConv = new BOACoin(oneTokenCurrencyRate);
+      console.log('boaBal :', boaConv.toBOAString());
+      setOneTokenRate(boaConv);
+
+      const userPoint = await client1.ledger.getPointBalance(userAddress);
+      const payableConv = new BOACoin(userPoint);
+      console.log('payableConv :', payableConv.toBOAString());
+      setPayablePoint(payableConv);
+
+      let pointCurrencyRate = await client1.currency.pointToCurrency(
+        userPoint,
+        'krw',
+      );
+      const pointRateConv = new BOACoin(pointCurrencyRate);
+      console.log('pointRateConv :', pointRateConv.toBOAString());
+      setPayablePointRate(pointRateConv);
     }
     fetchClient().then(() => console.log('end of wallet fetch client'));
   }, []);
@@ -65,12 +106,6 @@ const Index = observer(({ navigation }) => {
     const point = await client.ledger.getPointBalance(address);
     setPayablePoint(point);
     console.log('point :', point);
-
-    const phoneHash = ContractUtils.getPhoneHash(phone);
-    const unpayablePoint =
-      await client.ledger.getUnPayablePointBalance(phoneHash);
-    setUnpayablePoint(unpayablePoint);
-    console.log('unpayable point :', unpayablePoint);
   }
   const handleQRSheet = async () => {
     // await fetchPoints();
@@ -122,45 +157,87 @@ const Index = observer(({ navigation }) => {
             </Box>
 
             <Divider my='$5' mr='$1' bg='$darkBlue300' />
-            <Box>
-              <HStack justifyContent='space-between'>
-                <HStack m='$30'>
+            {userLoyaltyType === 0 ? (
+              <Box>
+                <HStack justifyContent='space-between'>
+                  <HStack m='$30'>
+                    <Text
+                      _dark={{ color: '$textLight200' }}
+                      fontSize='$xl'
+                      mr='$1'>
+                      {convertProperValue(payablePoint.toBOAString())}
+                    </Text>
+                    <Text _dark={{ color: '$textLight200' }} fontSize='$sm'>
+                      point
+                    </Text>
+                  </HStack>
+                  <Pressable
+                    onPress={() => navigation.navigate('MileageHistory')}>
+                    <Text fontSize='$sm' color='$pink600'>
+                      적립/사용 내역
+                    </Text>
+                  </Pressable>
+                </HStack>
+                <HStack m='$2'>
                   <Text
                     _dark={{ color: '$textLight200' }}
-                    fontSize='$xl'
+                    fontSize='$sm'
                     mr='$1'>
-                    {payablePoint.toString()}
+                    ≒ {convertProperValue(payablePointRate.toBOAString())} KRW
                   </Text>
                   <Text _dark={{ color: '$textLight200' }} fontSize='$sm'>
-                    point
+                    (1 point ≒ 1 KRW)
                   </Text>
                 </HStack>
-                <Pressable
-                  onPress={() => navigation.navigate('MileageHistory')}>
-                  <Text fontSize='$sm' color='$pink600'>
-                    적립/사용 내역
-                  </Text>
-                </Pressable>
-              </HStack>
-              <HStack m='$2'>
-                <Text _dark={{ color: '$textLight200' }} fontSize='$sm' mr='$1'>
-                  ≒ {payablePoint.toString()} KRW
-                </Text>
-                <Text _dark={{ color: '$textLight200' }} fontSize='$sm'>
-                  (1 point ≒ 1 KRW)
-                </Text>
-              </HStack>
-              <Button mt='$12' onPress={() => handleQRSheet()}>
-                <ButtonText>키오스트에서 사용하기(QR)</ButtonText>
-              </Button>
-              <Box mt='$4' alignItems='flex-end'>
-                <Pressable onPress={() => convertToToken()}>
-                  <Text fontSize='$sm' color='$pink600'>
-                    > 토근으로 전환하기
-                  </Text>
-                </Pressable>
+                <Button mt='$12' onPress={() => handleQRSheet()}>
+                  <ButtonText>키오스트에서 사용하기(QR)</ButtonText>
+                </Button>
+                <Box mt='$4' alignItems='flex-end'>
+                  <Pressable onPress={() => convertToToken()}>
+                    <Text fontSize='$sm' color='$pink600'>
+                      > 토근으로 전환하기
+                    </Text>
+                  </Pressable>
+                </Box>
               </Box>
-            </Box>
+            ) : (
+              <Box>
+                <HStack justifyContent='space-between'>
+                  <HStack m='$30'>
+                    <Text
+                      _dark={{ color: '$textLight200' }}
+                      fontSize='$xl'
+                      mr='$1'>
+                      {convertProperValue(userTokenBalance.toBOAString())}
+                    </Text>
+                    <Text _dark={{ color: '$textLight200' }} fontSize='$sm'>
+                      THE9
+                    </Text>
+                  </HStack>
+                  <Pressable
+                    onPress={() => navigation.navigate('MileageHistory')}>
+                    <Text fontSize='$sm' color='$pink600'>
+                      적립/사용 내역
+                    </Text>
+                  </Pressable>
+                </HStack>
+                <HStack m='$2'>
+                  <Text
+                    _dark={{ color: '$textLight200' }}
+                    fontSize='$sm'
+                    mr='$1'>
+                    ≒ {convertProperValue(userTokenRate.toBOAString())} KRW
+                  </Text>
+                  <Text _dark={{ color: '$textLight200' }} fontSize='$sm'>
+                    (1 THE9 ≒{' '}
+                    {convertProperValue(oneTokenRate.toBOAString(), 2, 10)} KRW)
+                  </Text>
+                </HStack>
+                <Button mt='$12' onPress={() => handleQRSheet()}>
+                  <ButtonText>키오스트에서 사용하기(QR)</ButtonText>
+                </Button>
+              </Box>
+            )}
           </Box>
         </HStack>
       </VStack>
