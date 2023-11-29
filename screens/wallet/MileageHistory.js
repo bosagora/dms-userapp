@@ -53,7 +53,12 @@ const MileageHistory = observer(({ navigation }) => {
       // const isUp = await client1.ledger.isRelayUp();
       // console.log('isUp:', isUp);
 
-      const res = await client1.ledger.getSaveAndUseHistory(userAddress);
+      const res = await client1.ledger.getSaveAndUseHistory(userAddress, {
+        limit: 100,
+        skip: 0,
+        sortDirection: 'desc',
+        sortBy: 'blockNumber',
+      });
       console.log('res :', res);
       console.log('len :', res.userTradeHistories?.length);
       const history = res.userTradeHistories
@@ -79,177 +84,6 @@ const MileageHistory = observer(({ navigation }) => {
     };
     fetchHistory();
   }, []);
-
-  const data = [
-    {
-      id: 'bd7acbea',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: 'PIN 번호 변경',
-    },
-    {
-      id: '3ac68afc',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '바이오 인증 사용',
-    },
-    {
-      id: '58694a0f',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-    {
-      id: '58694a0f-1',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-    {
-      id: '58694a0f-2',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-    {
-      id: '58694a0f-3',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-    {
-      id: '58694a0f-4',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-    {
-      id: '58694a0f-5',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-    {
-      id: '58694a0f-6',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-    {
-      id: '58694a0f-7',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-    {
-      id: '58694a0f-8',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-    {
-      id: '58694a0f-9',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-    {
-      id: '58694a0f-10',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-    {
-      id: '58694a0f-11',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-    {
-      id: '58694a0f-12',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-    {
-      id: '58694a0f-13',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-    {
-      id: '58694a0f-14',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-    {
-      id: '58694a0f-15',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-    {
-      id: '58694a0f-16',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-    {
-      id: '58694a0f-17',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-    {
-      id: '58694a0f-18',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-    {
-      id: '58694a0f-19',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-    {
-      id: '58694a0f-20',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-    {
-      id: '58694a0f-21',
-      type: '적립',
-      date: '2023/06/01 15:27:54',
-      amount: '5400',
-      name: '월렛 설정',
-    },
-  ];
 
   return (
     <SafeAreaView>

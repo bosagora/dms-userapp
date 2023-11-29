@@ -133,24 +133,6 @@ const Index = observer(({ navigation }) => {
     }
     await fetchBalances();
 
-    // if (steps.length === 2 && steps[1].key === 'accepted') {
-    //   completeAuth();
-    // }
-    //   switch (step.key) {
-    //     case NormalSteps.PREPARED:
-    //       expect(step.account).toEqual(userAddress);
-    //       break;
-    //     case NormalSteps.SENT:
-    //       expect(typeof step.txHash).toBe("string");
-    //       expect(step.txHash).toMatch(/^0x[A-Fa-f0-9]{64}$/i);
-    //       break;
-    //     case NormalSteps.DONE:
-    //       expect(step.account).toBe(userWallets[0].address);
-    //       break;
-    //     default:
-    //       throw new Error("Unexpected change loyalty step: " + JSON.stringify(step, null, 2));
-    //   }
-    // }
     setShowModal(false);
   };
 
