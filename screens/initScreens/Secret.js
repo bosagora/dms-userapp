@@ -2,16 +2,14 @@ import { SafeAreaView } from 'react-native';
 import { trunk, useStores } from '../../stores';
 import { observer } from 'mobx-react';
 import React, { useEffect } from 'react';
-import { PinCodeT } from '@anhnch/react-native-pincode';
 import 'react-native-get-random-values';
 import '@ethersproject/shims';
-import { ethers } from 'ethers';
 import { getSecureValue, saveSecureValue } from '../../utils/secure.store';
 import ImportPrivateKey from '../../components/ImportPrivateKey';
 import { Box, ButtonText, Button, Center, VStack } from '@gluestack-ui/themed';
-import MobileHeader from '../../components/MobileHeader'; //for ethers.js
-// import { Client, Context, LIVE_CONTRACTS } from 'dms-sdk-client';
+import MobileHeader from '../../components/MobileHeader';
 import { Wallet } from 'ethers';
+import * as Device from 'expo-device';
 
 const Secret = observer(({ navigation }) => {
   const { pinStore, userStore, secretStore } = useStores();
@@ -27,7 +25,13 @@ const Secret = observer(({ navigation }) => {
     await saveSecureValue('address', wallet.address);
     await saveSecureValue('mnemonic', JSON.stringify(wallet.mnemonic));
     await saveSecureValue('privateKey', wallet.privateKey);
-    registerPushToken();
+
+    if (Device.isDevice) {
+      registerPushToken();
+    } else {
+      console.log('Not on device.');
+      resetPinCode();
+    }
   }
 
   function registerPushToken() {
