@@ -65,6 +65,7 @@ const Secret = observer(({ navigation }) => {
     const wallet = new Wallet(key);
     secretStore.setAddress(wallet.address);
     await saveSecureValue('address', wallet.address);
+    await saveSecureValue('privateKey', privateKey);
 
     if (Device.isDevice) {
       registerPushToken();

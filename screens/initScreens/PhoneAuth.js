@@ -3,34 +3,19 @@ import {
   InputField,
   Button,
   Heading,
-  FormControlErrorIcon,
-  FormControlErrorText,
   FormControl,
   ButtonText,
-  FormControlError,
-  FormControlLabelText,
-  FormControlLabel,
-  AlertCircleIcon,
   useToast,
-  Toast,
-  ToastTitle,
   VStack,
   Box,
-  InputIcon,
-  InputSlot,
-  EyeIcon,
-  EyeOffIcon,
   HStack,
   Text,
-  Icon,
-  ArrowLeftIcon,
   Divider,
 } from '@gluestack-ui/themed';
 import { SafeAreaView } from 'react-native';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useEffect, useState } from 'react';
-import { config } from '@gluestack-ui/config';
 import { observer } from 'mobx-react';
 import { AUTH_STATE } from '../../stores/user.store';
 import { useStores } from '../../stores';
@@ -69,7 +54,7 @@ const registerInitialValues = {
 const PhoneAuth = observer(({ navigation }) => {
   const [client, setClient] = useState(null);
   const [address, setAddress] = useState('');
-  const [phone, setPhone] = useState('08201010002050');
+  const [phone, setPhone] = useState('08201010002000');
   const [requestId, setRequestId] = useState('');
   // const [authNum, setAuthNum] = useState('000102');
   const toast = useToast();
@@ -203,7 +188,7 @@ const PhoneAuth = observer(({ navigation }) => {
                 isDisabled={false}
                 isInvalid={false}
                 isReadOnly={false}>
-                <InputField value={phone} />
+                <InputField value={phone} onChangeText={setPhone} />
               </Input>
             </Box>
             <Button
