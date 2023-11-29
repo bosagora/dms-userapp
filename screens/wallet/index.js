@@ -102,10 +102,13 @@ const Index = observer(({ navigation }) => {
     fetchClient().then(() => console.log('end of wallet fetch client'));
   }, []);
 
-  async function fetchPoints() {
+  async function fetchBalances() {
+    const loyaltyType = await client.ledger.getLoyaltyType(address);
+    console.log('userLoyaltyType :', loyaltyType);
     const point = await client.ledger.getPointBalance(address);
-    setPayablePoint(point);
-    console.log('point :', point);
+    console.log('pointBalance :', point.toString());
+    const tokenBalance = await client.ledger.getTokenBalance(address);
+    console.log('tokenBalance :', tokenBalance.toString());
   }
   const handleQRSheet = async () => {
     // await fetchPoints();
@@ -116,6 +119,39 @@ const Index = observer(({ navigation }) => {
   const convertToToken = () => {
     console.log('convert to token');
     setShowModal(true);
+  };
+
+  const confirmToToken = async () => {
+    console.log('confirm to token');
+    let steps = [];
+    for await (const step of client.ledger.changeToLoyaltyToken()) {
+      steps.push(step);
+      console.log('confirm to token step :', step);
+    }
+    if (steps.length === 3 && steps[2].key === 'done') {
+      setUserLoyaltyType(1);
+    }
+    await fetchBalances();
+
+    // if (steps.length === 2 && steps[1].key === 'accepted') {
+    //   completeAuth();
+    // }
+    //   switch (step.key) {
+    //     case NormalSteps.PREPARED:
+    //       expect(step.account).toEqual(userAddress);
+    //       break;
+    //     case NormalSteps.SENT:
+    //       expect(typeof step.txHash).toBe("string");
+    //       expect(step.txHash).toMatch(/^0x[A-Fa-f0-9]{64}$/i);
+    //       break;
+    //     case NormalSteps.DONE:
+    //       expect(step.account).toBe(userWallets[0].address);
+    //       break;
+    //     default:
+    //       throw new Error("Unexpected change loyalty step: " + JSON.stringify(step, null, 2));
+    //   }
+    // }
+    setShowModal(false);
   };
 
   return (
@@ -278,7 +314,7 @@ const Index = observer(({ navigation }) => {
                   bg='$success700'
                   borderColor='$success700'
                   onPress={() => {
-                    setShowModal(false);
+                    confirmToToken();
                   }}>
                   <ButtonText fontSize='$sm' fontWeight='$medium'>
                     확인

@@ -6,7 +6,7 @@ import { Wallet } from 'ethers';
 export async function getClient() {
   async function fetchKey() {
     let pKey = await getSecureValue('privateKey');
-    if (pKey) {
+    if (pKey.includes('0x')) {
       pKey = pKey.split('0x')[1];
       console.log('pKey :', pKey);
     }
