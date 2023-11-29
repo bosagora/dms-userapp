@@ -112,23 +112,28 @@ const PhoneAuth = observer(({ navigation }) => {
     }
   }
   function completeAuth() {
-    userStore.setPhone(phone);
-    userStore.setAuthState(AUTH_STATE.DONE);
+    changeUnpayableToPayable().then(() => {
+      alert('성공적으로 인증되었습니다.');
+      userStore.setPhone(phone);
+      userStore.setAuthState(AUTH_STATE.DONE);
+    });
   }
   async function changeUnpayableToPayable() {
     const balance = await client.ledger.getPointBalance(address);
-    console.log('balance :', balance);
+    console.log('Point balance Before changing :', balance);
 
     const phoneHash = ContractUtils.getPhoneHash(phone);
     const unpayablePoint =
       await client.ledger.getUnPayablePointBalance(phoneHash);
-    console.log('unpayable point :', unpayablePoint);
+    console.log('Unpayable point :', unpayablePoint.toString());
+
+    if (unpayablePoint.lte(0)) return;
 
     for await (const step of client.ledger.changeToPayablePoint(phone)) {
       console.log('change unpayable to payable step :', step);
     }
     const afterBalance = await client.ledger.getPointBalance(address);
-    console.log('afterBalance :', afterBalance);
+    console.log('Point balance After changing :', afterBalance);
   }
 
   const formik = useFormik({
@@ -279,7 +284,10 @@ const PhoneAuth = observer(({ navigation }) => {
                 />
               </Input>
             </FormControl>
-            <Button onPress={formik.handleSubmit} my='$4'>
+            <Button
+              isDisabled={requestId === ''}
+              onPress={formik.handleSubmit}
+              my='$4'>
               <ButtonText>인증</ButtonText>
             </Button>
           </VStack>
