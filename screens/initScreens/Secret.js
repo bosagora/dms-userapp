@@ -54,16 +54,24 @@ const Secret = observer(({ navigation }) => {
   }
   function resetPinCode() {
     console.log('registerPushToken >>');
+    alert('지갑이 생성되었습니다.');
     navigation.navigate('InitPinCodeScreen');
   }
 
   async function saveKey(key) {
-    const privateKey = key.includes('0x') ? key.split('0x')[0] : key;
+    console.log('key :', key);
+    const privateKey = key.includes('0x') ? key.split('0x')[1] : key;
     console.log('save privateKey :', privateKey);
     const wallet = new Wallet(key);
     secretStore.setAddress(wallet.address);
     await saveSecureValue('address', wallet.address);
-    registerPushToken();
+
+    if (Device.isDevice) {
+      registerPushToken();
+    } else {
+      console.log('Not on device.');
+      resetPinCode();
+    }
   }
 
   return (

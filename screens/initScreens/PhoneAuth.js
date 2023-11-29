@@ -69,7 +69,7 @@ const registerInitialValues = {
 const PhoneAuth = observer(({ navigation }) => {
   const [client, setClient] = useState(null);
   const [address, setAddress] = useState('');
-  const [phone, setPhone] = useState('08201010002000');
+  const [phone, setPhone] = useState('08201010002050');
   const [requestId, setRequestId] = useState('');
   // const [authNum, setAuthNum] = useState('000102');
   const toast = useToast();
@@ -141,16 +141,16 @@ const PhoneAuth = observer(({ navigation }) => {
     validationSchema: registerSchema,
 
     onSubmit: (values, { resetForm }) => {
-      toast.show({
-        placement: 'bottom right',
-        render: ({ id }) => {
-          return (
-            <Toast nativeID={id} variant='accent' action='success'>
-              <ToastTitle>Signed in successfully</ToastTitle>
-            </Toast>
-          );
-        },
-      });
+      // toast.show({
+      //   placement: 'bottom right',
+      //   render: ({ id }) => {
+      //     return (
+      //       <Toast nativeID={id} variant='accent' action='success'>
+      //         <ToastTitle>Signed in successfully</ToastTitle>
+      //       </Toast>
+      //     );
+      //   },
+      // });
 
       console.log('form values :', values);
       const authNums = values.n1 + values.n2 + values.n3;
