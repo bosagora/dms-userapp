@@ -17,20 +17,21 @@ const Secret = observer(({ navigation }) => {
   const [client, setClient] = useState();
   const [address, setAddress] = useState('');
 
-  useEffect(() => {
-    const fetchHistory = async () => {
-      const { client: client1, address: userAddress } = await getClient();
-      console.log('>>>>>>> userAddress :', userAddress);
-      setClient(client1);
-      setAddress(userAddress);
-      //
-      // const web3Status = await client1.web3.isUp();
-      // console.log('web3Status :', web3Status);
-      // const isUp = await client1.ledger.isRelayUp();
-      // console.log('isUp:', isUp);
-    };
-    fetchHistory();
-  }, []);
+  useEffect(() => {}, []);
+
+  const fetchHistory = async () => {
+    const { client: client1, address: userAddress } = await getClient();
+    console.log('>>>>>>> userAddress :', userAddress);
+    setClient(client1);
+    setAddress(userAddress);
+    //
+    // const web3Status = await client1.web3.isUp();
+    // console.log('web3Status :', web3Status);
+    // const isUp = await client1.ledger.isRelayUp();
+    // console.log('isUp:', isUp);
+    console.log('Secret fetch > client1 :', client1);
+    return client1;
+  };
 
   async function createWallet() {
     const wallet = Wallet.createRandom();
@@ -44,39 +45,41 @@ const Secret = observer(({ navigation }) => {
     await saveSecureValue('mnemonic', JSON.stringify(wallet.mnemonic));
     await saveSecureValue('privateKey', wallet.privateKey);
 
+    const cc = await fetchHistory();
     if (Device.isDevice) {
-      registerPushToken();
+      await registerPushTokenWithClient(cc);
+      resetPinCode();
     } else {
       console.log('Not on device.');
       resetPinCode();
     }
   }
+  //
+  // function registerPushToken() {
+  //   fetch('http://192.168.50.83:8333/api/notification/', {
+  //     method: 'POST',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({
+  //       address: secretStore.address,
+  //       token: userStore.expoPushToken,
+  //       lang: 'kr',
+  //       platform: 'ios',
+  //     }),
+  //   }).then((res) => {
+  //     console.log('response of register token :', JSON.stringify(res));
+  //     resetPinCode();
+  //   });
+  // }
 
-  function registerPushToken() {
-    fetch('http://192.168.50.83:8333/api/notification/', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        address: secretStore.address,
-        token: userStore.expoPushToken,
-        lang: 'kr',
-        platform: 'ios',
-      }),
-    }).then((res) => {
-      console.log('response of register token :', JSON.stringify(res));
-      resetPinCode();
-    });
-  }
-
-  async function registerPushTokenWithClient() {
-    console.log('registerPushTokenWithClient >>>>>>>> ');
+  async function registerPushTokenWithClient(cc) {
+    console.log('registerPushTokenWithClient >>>>>>>> cc:', cc);
     const token = userStore.expoPushToken;
     const language = 'kr';
     const os = 'iOS';
-    await client.ledger.registerMobileToken(token, language, os);
+    await cc.ledger.registerMobileToken(token, language, os);
   }
   function resetPinCode() {
     console.log('registerPushToken >>');
@@ -92,10 +95,10 @@ const Secret = observer(({ navigation }) => {
     secretStore.setAddress(wallet.address);
     await saveSecureValue('address', wallet.address);
     await saveSecureValue('privateKey', privateKey);
-
+    await fetchHistory();
+    const cc = await fetchHistory();
     if (Device.isDevice) {
-      // registerPushToken();
-      await registerPushTokenWithClient();
+      await registerPushTokenWithClient(cc);
       resetPinCode();
     } else {
       console.log('Not on device.');

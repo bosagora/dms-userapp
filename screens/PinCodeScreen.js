@@ -52,9 +52,7 @@ const PinCodeScreen = observer(() => {
     if (pinStore.nextScreen === 'setPincode') {
       pinStore.setMode(PinCodeT.Modes.Set);
     } else {
-      pinStore.setMode(PinCodeT.Modes.Enter);
-      pinStore.setSuccessEnter(false);
-      pinStore.setVisible(false);
+      enterCase();
     }
   };
 

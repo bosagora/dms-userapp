@@ -53,7 +53,7 @@ export const usePushNotification = (userStore) => {
       });
     }
     console.log(' after token');
-
+    userStore.setExpoPushToken(token?.data);
     return token;
   }
 
@@ -68,6 +68,7 @@ export const usePushNotification = (userStore) => {
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
         console.log('response :', response);
+        console.log('response :', response.notification.request.content);
       });
 
     return () => {
