@@ -58,7 +58,7 @@ const Term = observer(({ navigation }) => {
                 <HStack justifyContent='space-between' space='lg' w='85%'>
                   <CheckboxLabel>[필수] 서비스 이용약관 동의</CheckboxLabel>
                   <Button
-                    borderRadius='$5'
+                    borderRadius='$lg'
                     size='xs'
                     px='$1'
                     br='$7'
@@ -80,7 +80,7 @@ const Term = observer(({ navigation }) => {
                     [필수] 개인정보 수집 및 이용 동의
                   </CheckboxLabel>
                   <Button
-                    borderRadius='$5'
+                    borderRadius='$lg'
                     size='xs'
                     px='$1'
                     bg='$indigo600'

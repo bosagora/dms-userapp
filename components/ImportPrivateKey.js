@@ -30,9 +30,7 @@ import {
 } from '@gluestack-ui/themed';
 
 const ImportPrivateKey = ({ saveKey }) => {
-  const [privateKey, setPrivateKey] = useState(
-    '0000000000000000000000000000000000000000000000000000000000000001',
-  );
+  const [privateKey, setPrivateKey] = useState('');
   const [showModal, setShowModal] = useState(false);
   return (
     <Box>

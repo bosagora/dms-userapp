@@ -1,7 +1,7 @@
 import { SafeAreaView } from 'react-native';
 import { trunk, useStores } from '../../stores';
 import { observer } from 'mobx-react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'react-native-get-random-values';
 import '@ethersproject/shims';
 import { getSecureValue, saveSecureValue } from '../../utils/secure.store';
@@ -10,9 +10,27 @@ import { Box, ButtonText, Button, Center, VStack } from '@gluestack-ui/themed';
 import MobileHeader from '../../components/MobileHeader';
 import { Wallet } from 'ethers';
 import * as Device from 'expo-device';
+import { getClient } from '../../utils/client';
 
 const Secret = observer(({ navigation }) => {
   const { pinStore, userStore, secretStore } = useStores();
+  const [client, setClient] = useState();
+  const [address, setAddress] = useState('');
+
+  useEffect(() => {
+    const fetchHistory = async () => {
+      const { client: client1, address: userAddress } = await getClient();
+      console.log('>>>>>>> userAddress :', userAddress);
+      setClient(client1);
+      setAddress(userAddress);
+      //
+      // const web3Status = await client1.web3.isUp();
+      // console.log('web3Status :', web3Status);
+      // const isUp = await client1.ledger.isRelayUp();
+      // console.log('isUp:', isUp);
+    };
+    fetchHistory();
+  }, []);
 
   async function createWallet() {
     const wallet = Wallet.createRandom();
@@ -52,6 +70,14 @@ const Secret = observer(({ navigation }) => {
       resetPinCode();
     });
   }
+
+  async function registerPushTokenWithClient() {
+    console.log('registerPushTokenWithClient >>>>>>>> ');
+    const token = userStore.expoPushToken;
+    const language = 'kr';
+    const os = 'iOS';
+    await client.ledger.registerMobileToken(token, language, os);
+  }
   function resetPinCode() {
     console.log('registerPushToken >>');
     alert('지갑이 생성되었습니다.');
@@ -68,7 +94,9 @@ const Secret = observer(({ navigation }) => {
     await saveSecureValue('privateKey', privateKey);
 
     if (Device.isDevice) {
-      registerPushToken();
+      // registerPushToken();
+      await registerPushTokenWithClient();
+      resetPinCode();
     } else {
       console.log('Not on device.');
       resetPinCode();
