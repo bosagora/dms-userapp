@@ -22,6 +22,12 @@ const PinCodeScreen = observer(() => {
     const hasBiometrics = await LocalAuthentication.hasHardwareAsync();
     const hasEnrolledBiometrics = await LocalAuthentication.isEnrolledAsync();
 
+    console.log(
+      'check bio :',
+      hasBiometrics,
+      hasEnrolledBiometrics,
+      userStore.enableBio,
+    );
     if (hasBiometrics && hasEnrolledBiometrics && userStore.enableBio) {
       await authenticateWithBiometrics();
     } else {

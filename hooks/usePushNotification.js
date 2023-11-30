@@ -42,6 +42,7 @@ export const usePushNotification = (userStore) => {
       alert('Must be using a physical device for Push Notification.');
       return;
     }
+    console.log('t token :', token);
 
     if (Platform.OS === 'android') {
       Notifications.setNotificationChannelAsync('default', {
@@ -51,6 +52,7 @@ export const usePushNotification = (userStore) => {
         lightColor: '#FF231F7C',
       });
     }
+    console.log(' after token');
 
     return token;
   }

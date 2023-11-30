@@ -24,6 +24,7 @@ const Configuration = observer(({ navigation }) => {
     pinStore.setVisible(false);
   }, []);
   const toggleSwitch = (toggleState) => {
+    console.log('bio :', toggleState);
     setIsEnabled(toggleState);
     userStore.setEnableBio(toggleState);
   };

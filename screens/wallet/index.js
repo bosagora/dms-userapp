@@ -133,6 +133,24 @@ const Index = observer(({ navigation }) => {
     }
     await fetchBalances();
 
+    // if (steps.length === 2 && steps[1].key === 'accepted') {
+    //   completeAuth();
+    // }
+    //   switch (step.key) {
+    //     case NormalSteps.PREPARED:
+    //       expect(step.account).toEqual(userAddress);
+    //       break;
+    //     case NormalSteps.SENT:
+    //       expect(typeof step.txHash).toBe("string");
+    //       expect(step.txHash).toMatch(/^0x[A-Fa-f0-9]{64}$/i);
+    //       break;
+    //     case NormalSteps.DONE:
+    //       expect(step.account).toBe(userWallets[0].address);
+    //       break;
+    //     default:
+    //       throw new Error("Unexpected change loyalty step: " + JSON.stringify(step, null, 2));
+    //   }
+    // }
     setShowModal(false);
   };
 
@@ -170,7 +188,7 @@ const Index = observer(({ navigation }) => {
                 나의 KIOS 마일리지
               </Heading>
               <Text _dark={{ color: '$textLight200' }} fontSize='$xs' my='$1.5'>
-                모든 키오스크에서 상품 교환이 가능한 통합 마일리지
+                모든 THE9 키오스크에서 상품 교환이 가능한 통합 마일리지
               </Text>
             </Box>
 
