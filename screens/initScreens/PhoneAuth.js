@@ -89,6 +89,7 @@ const PhoneAuth = observer(({ navigation }) => {
   const [timeLeft, setTimeLeft] = useState({});
   const [validInterval, setValidInterval] = useState();
   let fontRef = useRef(0);
+  let intervalRef = useRef(0);
   useEffect(() => {
     async function fetchClient() {
       console.log('PhoneAuth > fetchClient');
@@ -106,7 +107,7 @@ const PhoneAuth = observer(({ navigation }) => {
   }, []);
 
   const initiateTimer = () => {
-    fontRef.current = 180;
+    fontRef.current = 20;
     let timeLeftObj = secondsToTime(fontRef.current);
     setTimeLeft(timeLeftObj);
     console.log('timeLeftObj :', timeLeftObj);
@@ -115,12 +116,13 @@ const PhoneAuth = observer(({ navigation }) => {
   const startTimer = () => {
     initiateTimer();
     let interval = setInterval(timer, 1000);
-    setValidInterval(interval);
+    intervalRef.current = interval;
   };
 
   const stopTimer = () => {
-    clearInterval(validInterval);
+    clearInterval(intervalRef.current);
     fontRef.current = 0;
+    intervalRef.current = 0;
     setTimeLeft(secondsToTime(0));
   };
 
@@ -130,7 +132,9 @@ const PhoneAuth = observer(({ navigation }) => {
     if (fontRef.current > 0) {
       setTimeLeft(secondsToTime(fontRef.current));
     } else {
-      clearInterval(validInterval);
+      setRequestId('');
+      stopTimer();
+      // clearInterval(intervalRef.current);
     }
   };
 
@@ -305,7 +309,9 @@ const PhoneAuth = observer(({ navigation }) => {
                 sx={{
                   _dark: { color: '$textDark400' },
                 }}>
-                유효시간 : {timeLeft.m}:{timeLeft.s}
+                유효시간 {timeLeft.m < 10 ? '0' : ''}
+                {timeLeft.m}:{timeLeft.s < 10 ? '0' : ''}
+                {timeLeft.s}
               </Text>
             ) : null}
             <FormControl
