@@ -12,7 +12,7 @@ import {
 import BiometricAuthScreen from './BiometricAuthScreen';
 import HandelAuthentication from './HandelAuthentication';
 import ModalScreen from './ModalScreen';
-import { PinCodeT } from '@anhnch/react-native-pincode';
+import { PinCodeT } from 'react-native-pincode-bosagora-ys';
 import { useStores } from '../../stores';
 import { AUTH_STATE } from '../../stores/user.store';
 import { autorun } from 'mobx';

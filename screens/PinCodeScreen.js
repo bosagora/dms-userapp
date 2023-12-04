@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { PinCode, PinCodeT } from '@anhnch/react-native-pincode';
+import { PinCode, PinCodeT } from 'react-native-pincode-bosagora-ys';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Button, StyleSheet, View } from 'react-native';
 import { useStores } from '../stores';
