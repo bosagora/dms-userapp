@@ -1,4 +1,4 @@
-import { SafeAreaView } from 'react-native';
+import { Platform, SafeAreaView } from 'react-native';
 import { trunk, useStores } from '../../stores';
 import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
@@ -82,7 +82,7 @@ const Secret = observer(({ navigation }) => {
     console.log('registerPushTokenWithClient >>>>>>>> cc:', cc);
     const token = userStore.expoPushToken;
     const language = 'kr';
-    const os = 'iOS';
+    const os = Platform.OS === 'android' ? 'android' : 'iOS';
     await cc.ledger.registerMobileToken(token, language, os);
   }
   function resetPinCode() {
