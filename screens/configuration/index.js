@@ -11,7 +11,7 @@ import {
 } from '@gluestack-ui/themed';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useStores } from '../../stores';
-import { PinCodeT } from '@anhnch/react-native-pincode';
+import { PinCodeT } from 'react-native-pincode-bosagora-ys';
 
 const Configuration = observer(({ navigation }) => {
   const { pinStore, userStore } = useStores();
