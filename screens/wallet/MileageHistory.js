@@ -47,11 +47,6 @@ const MileageHistory = observer(({ navigation }) => {
       console.log('>>>>>>> userAddress :', userAddress);
       setClient(client1);
       setAddress(userAddress);
-      //
-      // const web3Status = await client1.web3.isUp();
-      // console.log('web3Status :', web3Status);
-      // const isUp = await client1.ledger.isRelayUp();
-      // console.log('isUp:', isUp);
 
       const res = await client1.ledger.getSaveAndUseHistory(userAddress, {
         limit: 100,
