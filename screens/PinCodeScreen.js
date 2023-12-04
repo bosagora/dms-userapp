@@ -135,7 +135,7 @@ const customStyles = {
   main: {
     ...StyleSheet.absoluteFillObject,
     zIndex: 99,
-    backgroundColor: 'blue',
+    backgroundColor: '#4b5563',
   },
   enter: {
     ...EnterAndSet,

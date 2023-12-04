@@ -15,7 +15,7 @@ import {
 import { SafeAreaView } from 'react-native';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react';
 import { AUTH_STATE } from '../../stores/user.store';
 import { useStores } from '../../stores';
@@ -54,12 +54,41 @@ const registerInitialValues = {
 const PhoneAuth = observer(({ navigation }) => {
   const [client, setClient] = useState(null);
   const [address, setAddress] = useState('');
-  const [phone, setPhone] = useState('08201010002000');
+  const [phoneCode, setPhoneCode] = useState('01010002000');
+  const [countryCode, setCountryCode] = useState('82');
   const [requestId, setRequestId] = useState('');
   // const [authNum, setAuthNum] = useState('000102');
   const toast = useToast();
   const { userStore } = useStores();
 
+  function secondsToTime(secs) {
+    console.log('secs :', secs);
+    let hours = Math.floor(secs / (60 * 60));
+
+    let divisor_for_minutes = secs % (60 * 60);
+    let minutes = Math.floor(divisor_for_minutes / 60);
+
+    let divisor_for_seconds = divisor_for_minutes % 60;
+    let seconds = Math.ceil(divisor_for_seconds);
+    console.log(
+      hours,
+      divisor_for_minutes,
+      minutes,
+      divisor_for_seconds,
+      seconds,
+    );
+
+    let obj = {
+      h: hours,
+      m: minutes,
+      s: seconds,
+      ts: secs,
+    };
+    return obj;
+  }
+  const [timeLeft, setTimeLeft] = useState({});
+  const [validInterval, setValidInterval] = useState();
+  let fontRef = useRef(0);
   useEffect(() => {
     async function fetchClient() {
       console.log('PhoneAuth > fetchClient');
@@ -73,8 +102,40 @@ const PhoneAuth = observer(({ navigation }) => {
       console.log('isUp:', isUp);
     }
     fetchClient().then(() => console.log('end of fetchClient'));
+    // initiateTimer();
   }, []);
+
+  const initiateTimer = () => {
+    fontRef.current = 180;
+    let timeLeftObj = secondsToTime(fontRef.current);
+    setTimeLeft(timeLeftObj);
+    console.log('timeLeftObj :', timeLeftObj);
+  };
+
+  const startTimer = () => {
+    initiateTimer();
+    let interval = setInterval(timer, 1000);
+    setValidInterval(interval);
+  };
+
+  const stopTimer = () => {
+    clearInterval(validInterval);
+    fontRef.current = 0;
+    setTimeLeft(secondsToTime(0));
+  };
+
+  const timer = () => {
+    fontRef.current = fontRef.current - 1;
+    console.log('fontRef :', fontRef);
+    if (fontRef.current > 0) {
+      setTimeLeft(secondsToTime(fontRef.current));
+    } else {
+      clearInterval(validInterval);
+    }
+  };
+
   async function registerPhone() {
+    const phone = countryCode + phoneCode;
     const steps = [];
     for await (const step of client.link.register(phone)) {
       console.log('register step :', step);
@@ -83,7 +144,12 @@ const PhoneAuth = observer(({ navigation }) => {
     if (steps.length === 2 && steps[1].key === 'requested') {
       const requestId = steps[1].requestId;
       setRequestId(requestId);
+      handleValidTime();
     }
+  }
+
+  function handleValidTime() {
+    startTimer();
   }
 
   async function submitPhone(authNum) {
@@ -97,13 +163,15 @@ const PhoneAuth = observer(({ navigation }) => {
     }
   }
   function completeAuth() {
+    stopTimer();
     changeUnpayableToPayable().then(() => {
       alert('성공적으로 인증되었습니다.');
-      userStore.setPhone(phone);
+      userStore.setPhone(countryCode + phoneCode);
       userStore.setAuthState(AUTH_STATE.DONE);
     });
   }
   async function changeUnpayableToPayable() {
+    const phone = countryCode + phoneCode;
     const balance = await client.ledger.getPointBalance(address);
     console.log('Point balance Before changing :', balance);
 
@@ -180,7 +248,7 @@ const PhoneAuth = observer(({ navigation }) => {
             전화번호
           </Text>
           <HStack my='$3' alignItems='center'>
-            <Box flex={4}>
+            <Box flex={1}>
               <Input
                 variant='outline'
                 mr='$2'
@@ -188,10 +256,22 @@ const PhoneAuth = observer(({ navigation }) => {
                 isDisabled={false}
                 isInvalid={false}
                 isReadOnly={false}>
-                <InputField value={phone} onChangeText={setPhone} />
+                <InputField value={countryCode} onChangeText={setCountryCode} />
+              </Input>
+            </Box>
+            <Box flex={2}>
+              <Input
+                variant='outline'
+                mr='$2'
+                size='md'
+                isDisabled={false}
+                isInvalid={false}
+                isReadOnly={false}>
+                <InputField value={phoneCode} onChangeText={setPhoneCode} />
               </Input>
             </Box>
             <Button
+              isDisabled={requestId !== ''}
               onPress={() => {
                 registerPhone();
               }}
@@ -215,17 +295,19 @@ const PhoneAuth = observer(({ navigation }) => {
             sx={{ _dark: { bg: '$backgroundDark700' } }}
           />
           <VStack>
-            <Text
-              fontSize='$sm'
-              fontWeight='normal'
-              color='$primary300'
-              alignSelf='flex-end'
-              mb='$2'
-              sx={{
-                _dark: { color: '$textDark400' },
-              }}>
-              유효시간 : 02:32
-            </Text>
+            {fontRef.current > 0 ? (
+              <Text
+                fontSize='$sm'
+                fontWeight='normal'
+                color='$primary300'
+                alignSelf='flex-end'
+                mb='$2'
+                sx={{
+                  _dark: { color: '$textDark400' },
+                }}>
+                유효시간 : {timeLeft.m}:{timeLeft.s}
+              </Text>
+            ) : null}
             <FormControl
               size='md'
               isRequired={true}
