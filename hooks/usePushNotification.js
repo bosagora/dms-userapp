@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
-
+import * as RootNavigation from '../utils/root.navigation';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 
@@ -69,6 +69,7 @@ export const usePushNotification = (userStore) => {
       Notifications.addNotificationResponseReceivedListener((response) => {
         console.log('response :', response);
         console.log('response :', response.notification.request.content);
+        RootNavigation.navigate('MileageRedeemNotification');
       });
 
     return () => {

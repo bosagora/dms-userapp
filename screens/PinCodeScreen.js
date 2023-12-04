@@ -129,6 +129,7 @@ const EnterAndSet = {
     minHeight: 100,
   },
   title: { fontSize: 24 },
+  pin: { backgroundColor: '#a78bfa' },
 };
 
 const customStyles = {

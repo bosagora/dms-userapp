@@ -77,6 +77,7 @@ const Secret = observer(({ navigation }) => {
   async function registerPushTokenWithClient(cc) {
     console.log('registerPushTokenWithClient >>>>>>>> cc:', cc);
     const token = userStore.expoPushToken;
+    console.log('token :', token);
     const language = 'kr';
     const os = Platform.OS === 'android' ? 'android' : 'iOS';
     await cc.ledger.registerMobileToken(token, language, os);

@@ -61,6 +61,7 @@ const customStyles = {
   enter: {
     ...EnterAndSet,
     buttonTextDisabled: { color: 'gray' },
+    pin: { backgroundColor: '#a78bfa' },
   },
   set: EnterAndSet,
   locked: {
