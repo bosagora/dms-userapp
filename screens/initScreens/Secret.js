@@ -6,7 +6,16 @@ import 'react-native-get-random-values';
 import '@ethersproject/shims';
 import { getSecureValue, saveSecureValue } from '../../utils/secure.store';
 import ImportPrivateKey from '../../components/ImportPrivateKey';
-import { Box, ButtonText, Button, Center, VStack } from '@gluestack-ui/themed';
+import {
+  Box,
+  ButtonText,
+  Button,
+  Center,
+  Text,
+  VStack,
+  Spinner,
+  HStack,
+} from '@gluestack-ui/themed';
 import MobileHeader from '../../components/MobileHeader';
 import { Wallet } from 'ethers';
 import * as Device from 'expo-device';
@@ -16,10 +25,13 @@ const Secret = observer(({ navigation }) => {
   const { pinStore, userStore, secretStore } = useStores();
   const [client, setClient] = useState();
   const [address, setAddress] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    setIsLoading(false);
+  }, []);
 
-  const fetchHistory = async () => {
+  const fetchClient = async () => {
     const { client: client1, address: userAddress } = await getClient();
     console.log('>>>>>>> userAddress :', userAddress);
     setClient(client1);
@@ -34,6 +46,7 @@ const Secret = observer(({ navigation }) => {
   };
 
   async function createWallet() {
+    setIsLoading(true);
     const wallet = Wallet.createRandom();
 
     console.log('address :', wallet.address);
@@ -44,8 +57,9 @@ const Secret = observer(({ navigation }) => {
     await saveSecureValue('address', wallet.address);
     await saveSecureValue('mnemonic', JSON.stringify(wallet.mnemonic));
     await saveSecureValue('privateKey', wallet.privateKey);
+    // setIsLoading(false);
 
-    const cc = await fetchHistory();
+    const cc = await fetchClient();
     if (Device.isDevice) {
       await registerPushTokenWithClient(cc);
       resetPinCode();
@@ -54,25 +68,15 @@ const Secret = observer(({ navigation }) => {
       resetPinCode();
     }
   }
-  //
-  // function registerPushToken() {
-  //   fetch('http://192.168.50.83:8333/api/notification/', {
-  //     method: 'POST',
-  //     headers: {
-  //       Accept: 'application/json',
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       address: secretStore.address,
-  //       token: userStore.expoPushToken,
-  //       lang: 'kr',
-  //       platform: 'ios',
-  //     }),
-  //   }).then((res) => {
-  //     console.log('response of register token :', JSON.stringify(res));
-  //     resetPinCode();
-  //   });
-  // }
+
+  async function tt() {
+    console.log('------>>>>>');
+    setIsLoading(true);
+    setTimeout(async () => {
+      await createWallet();
+      setIsLoading(false);
+    }, 100);
+  }
 
   async function registerPushTokenWithClient(cc) {
     console.log('registerPushTokenWithClient >>>>>>>> cc:', cc);
@@ -88,6 +92,7 @@ const Secret = observer(({ navigation }) => {
   }
 
   async function saveKey(key) {
+    setIsLoading(true);
     console.log('key :', key);
     const privateKey = key.includes('0x') ? key.split('0x')[1] : key;
     console.log('save privateKey :', privateKey);
@@ -95,8 +100,8 @@ const Secret = observer(({ navigation }) => {
     secretStore.setAddress(wallet.address);
     await saveSecureValue('address', wallet.address);
     await saveSecureValue('privateKey', privateKey);
-    await fetchHistory();
-    const cc = await fetchHistory();
+    setIsLoading(false);
+    const cc = await fetchClient();
     if (Device.isDevice) {
       await registerPushTokenWithClient(cc);
       resetPinCode();
@@ -125,8 +130,9 @@ const Secret = observer(({ navigation }) => {
         />
         <VStack space='lg' pt='$4' m='$7'>
           <Box>
-            <Button py='$2.5' px='$3' onPress={() => createWallet()}>
+            <Button py='$2.5' px='$3' onPress={tt}>
               <ButtonText>지갑 생성하기</ButtonText>
+              {isLoading && <Spinner px='$3' color='$amber600' />}
             </Button>
           </Box>
           <ImportPrivateKey saveKey={saveKey} />
