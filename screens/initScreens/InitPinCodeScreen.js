@@ -56,7 +56,7 @@ const customStyles = {
   main: {
     ...StyleSheet.absoluteFillObject,
     zIndex: 99,
-    backgroundColor: 'blue',
+    backgroundColor: '#4b5563',
   },
   enter: {
     ...EnterAndSet,
@@ -68,7 +68,7 @@ const customStyles = {
     countdownText: { color: 'black' },
   },
   reset: {
-    confirmText: { color: 'red' },
+    confirmText: { color: '#a78bfa' },
   },
 };
 
