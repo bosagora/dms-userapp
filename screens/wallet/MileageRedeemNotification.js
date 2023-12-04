@@ -1,7 +1,7 @@
 import { SafeAreaView } from 'react-native';
 import { useStores } from '../../stores';
 import { observer } from 'mobx-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -13,14 +13,69 @@ import {
 } from '@gluestack-ui/themed';
 import { CheckIcon } from 'lucide-react-native';
 import MobileHeader from '../../components/MobileHeader';
+import '@ethersproject/shims';
+import { NormalSteps } from 'dms-sdk-client';
+import { getClient } from '../../utils/client';
 
 const MileageRedeemNotification = observer(({ navigation }) => {
   const { noteStore, userStore } = useStores();
   const [values, setValues] = useState(['T1', 'T2']);
-  function confirmRedeem() {
+
+  const [client, setClient] = useState(null);
+  const [address, setAddress] = useState('');
+
+  useEffect(() => {
+    async function fetchClient() {
+      console.log('MileageRedeemNotification > fetchClient');
+      const { client, address } = await getClient();
+      setClient(client);
+      setAddress(address);
+
+      const web3Status = await client.web3.isUp();
+      console.log('web3Status :', web3Status);
+      const isUp = await client.ledger.isRelayUp();
+      console.log('isUp:', isUp);
+    }
+    fetchClient().then(() => console.log('end of fetchClient'));
+    // initiateTimer();
+  }, []);
+
+  async function confirmRedeem() {
     console.log('confirm Redeem.');
-    navigation.navigate('Wallet');
+    const steps = [];
+    const paymentId =
+      '0xf9f68c7d7e30f3c5f0d9236603aed4a5a591e03e99b3e551126abeacfa3c91f2';
+    let detail = await client.ledger.getPaymentDetail(paymentId);
+
+    // Approve New
+    for await (const step of client.ledger.approveNewPayment(
+      paymentId,
+      detail.purchaseId,
+      detail.amount,
+      detail.currency.toLowerCase(),
+      detail.shopId,
+      true,
+    )) {
+      steps.push(step);
+      console.log('confirmRedeem step :', step);
+      switch (step.key) {
+        case NormalSteps.PREPARED:
+          break;
+        case NormalSteps.SENT:
+          break;
+        case NormalSteps.APPROVED:
+          break;
+        default:
+          throw new Error(
+            'Unexpected pay point step: ' + JSON.stringify(step, null, 2),
+          );
+      }
+    }
+    if (steps.length === 3 && steps[2].key === 'approved') {
+      navigation.navigate('Wallet');
+    }
   }
+
   return (
     <SafeAreaView>
       <Box

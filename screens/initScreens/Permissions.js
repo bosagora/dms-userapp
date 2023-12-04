@@ -55,7 +55,7 @@ const Permissions = observer(({ navigation }) => {
         userStore.setPermissionsCount();
       }
     } else {
-      navigation.navigate('PhoneAuth');
+      navigation.navigate('Term');
     }
   }
   return (

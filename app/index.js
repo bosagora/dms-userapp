@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Button,
+  Platform,
+  StatusBar,
   Text,
   TouchableOpacity,
   View,
@@ -88,7 +90,6 @@ const App = observer(() => {
             <QRActionSheet />
           </GluestackUIProvider>
         </NavigationContainer>
-
         <PinCodeScreen />
       </BottomSheetModalProvider>
     );
@@ -199,7 +200,24 @@ const TabScreens = observer(() => {
   return (
     <Tab.Navigator
       initialRouteName='Wallet'
-      screenOptions={{ headerShown: false, tabBarShowLabel: false }}>
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          backgroundColor: '#171717',
+          height: 50,
+          marginBottom: 2,
+          paddingBottom: 2,
+          borderTopWidth: 0,
+          borderBottomWidth: 0,
+        },
+        tabBarItemStyle: {
+          backgroundColor: '#171717',
+          color: 'white',
+          margin: 2,
+          borderRadius: 10,
+        },
+      }}>
       <Tab.Screen
         name='Wallet'
         component={Wallet}
@@ -208,40 +226,24 @@ const TabScreens = observer(() => {
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons
               name='wallet-outline'
-              size={24}
-              color={focused ? 'red' : 'black'}
+              size={focused ? 34 : 24}
+              color={focused ? '#4ade80' : 'white'}
             />
           ),
         }}
       />
 
-      {/*<Tab.Screen*/}
-      {/*  name='Search'*/}
-      {/*  component={SearchScreen}*/}
-      {/*  options={{*/}
-      {/*    title: '검색',*/}
-      {/*    tabBarIcon: ({ color, size }) => (*/}
-      {/*      <Icon name='search' color={color} size={size} />*/}
-      {/*    ),*/}
-      {/*  }}*/}
-      {/*/>*/}
-      {/*<Tab.Screen*/}
-      {/*  name='Notification'*/}
-      {/*  component={LocalNotification}*/}
-      {/*  options={{*/}
-      {/*    title: '알림',*/}
-      {/*    tabBarIcon: ({ color, size }) => (*/}
-      {/*      <Icon name='notifications' color={color} size={size} />*/}
-      {/*    ),*/}
-      {/*  }}*/}
-      {/*/>*/}
       <Tab.Screen
         name='Message'
         component={MessageScreen}
         options={{
           title: '메시지',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name='qr-code' size={24} color='black' />
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons
+              name='qr-code'
+              size={focused ? 34 : 24}
+              color={focused ? '#064e3b' : 'white'}
+            />
           ),
           tabBarButton: (props) => (
             <TouchableOpacity {...props} onPress={() => handleQRSheet()} />
@@ -256,8 +258,8 @@ const TabScreens = observer(() => {
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons
               name='ios-settings-outline'
-              size={24}
-              color={focused ? 'red' : 'black'}
+              size={focused ? 34 : 24}
+              color={focused ? '#4ade80' : 'white'}
             />
           ),
         }}
@@ -270,8 +272,8 @@ const TabScreens = observer(() => {
           tabBarIcon: ({ color, size, focused }) => (
             <MaterialIcons
               name='kitchen'
-              size={24}
-              color={focused ? 'red' : 'black'}
+              size={focused ? 34 : 24}
+              color={focused ? '#4ade80' : 'white'}
             />
           ),
         }}
