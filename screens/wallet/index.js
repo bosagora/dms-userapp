@@ -168,9 +168,9 @@ const Index = observer(({ navigation }) => {
             // maxWidth='$64'
             w='$full'
             h='$full'
-            borderColor='$orange400'
+            borderColor='$backgroundDark900'
             borderRadius='$xl'
-            borderWidth='$2'
+            borderWidth='$1'
             p='$4'
             overflow='hidden'
             sx={{
@@ -179,7 +179,7 @@ const Index = observer(({ navigation }) => {
               },
               _dark: {
                 bg: '$backgroundDark900',
-                borderColor: '$orange400',
+                borderColor: '$backgroundDark600',
               },
             }}>
             <Box>
@@ -191,7 +191,7 @@ const Index = observer(({ navigation }) => {
               </Text>
             </Box>
 
-            <Divider my='$5' mr='$1' bg='$darkBlue300' />
+            <Divider my='$5' mr='$1' bg='$violet600' />
             {userLoyaltyType === 0 ? (
               <Box>
                 <HStack justifyContent='space-between'>
@@ -208,7 +208,7 @@ const Index = observer(({ navigation }) => {
                   </HStack>
                   <Pressable
                     onPress={() => navigation.navigate('MileageHistory')}>
-                    <Text fontSize='$sm' color='$pink600'>
+                    <Text fontSize='$sm' color='$violet400'>
                       적립/사용 내역
                     </Text>
                   </Pressable>
@@ -229,7 +229,7 @@ const Index = observer(({ navigation }) => {
                 </Button>
                 <Box mt='$4' alignItems='flex-end'>
                   <Pressable onPress={() => convertToToken()}>
-                    <Text fontSize='$sm' color='$pink600'>
+                    <Text fontSize='$sm' color='$violet400'>
                       > 토근으로 전환하기
                     </Text>
                   </Pressable>
