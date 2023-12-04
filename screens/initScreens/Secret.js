@@ -36,11 +36,7 @@ const Secret = observer(({ navigation }) => {
     console.log('>>>>>>> userAddress :', userAddress);
     setClient(client1);
     setAddress(userAddress);
-    //
-    // const web3Status = await client1.web3.isUp();
-    // console.log('web3Status :', web3Status);
-    // const isUp = await client1.ledger.isRelayUp();
-    // console.log('isUp:', isUp);
+
     console.log('Secret fetch > client1 :', client1);
     return client1;
   };
