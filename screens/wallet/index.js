@@ -33,7 +33,6 @@ const Index = observer(({ navigation }) => {
   const [userTokenBalance, setUserTokenBalance] = useState(new BOACoin(0));
   const [userTokenRate, setUserTokenRate] = useState(new BOACoin(0));
   const [oneTokenRate, setOneTokenRate] = useState(new BOACoin(0));
-  // const [unpayablePoint, setUnpayablePoint] = useState(0);
   const [userLoyaltyType, setUserLoyaltyType] = useState(0);
   const [phone, setPhone] = useState('');
 
