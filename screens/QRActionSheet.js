@@ -30,6 +30,7 @@ import { getSecureValue } from '../utils/secure.store';
 import QRCode from 'react-native-qrcode-svg';
 import { useStores } from '../stores';
 import { observer } from 'mobx-react';
+import * as Clipboard from 'expo-clipboard';
 
 // export default function QRActionSheet() {
 const QRActionSheet = observer(() => {
@@ -82,8 +83,18 @@ const QRActionSheet = observer(() => {
                       _dark={{ color: '$textLight200' }}
                       fontSize='$sm'
                       my='$1.5'>
-                      User Address : {walletAddress}
+                      {walletAddress}
                     </Text>
+                    <Button
+                      variant='solid'
+                      action='primary'
+                      onPress={async () => {
+                        await Clipboard.setStringAsync(walletAddress);
+                      }}>
+                      <ButtonText fontSize='$sm' fontWeight='$medium'>
+                        Copy
+                      </ButtonText>
+                    </Button>
                   </VStack>
                 </Box>
               </HStack>
