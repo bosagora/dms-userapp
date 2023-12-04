@@ -10,7 +10,6 @@ import * as RootNavigation from '../utils/root.navigation';
 
 const PinCodeScreen = observer(() => {
   const { pinStore, userStore } = useStores();
-  // show pincode and bio(if enrolled) together
   useEffect(() => {
     console.log('PinCodeScreen > useEffect : ', pinStore);
     // 앱 초기 등록 화면이 아니고
