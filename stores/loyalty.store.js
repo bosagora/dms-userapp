@@ -3,6 +3,7 @@ import { makeAutoObservable } from 'mobx';
 class LoyaltyStore {
   boa = {};
   kios = {};
+  payment = {};
 
   constructor() {
     makeAutoObservable(this);
@@ -14,6 +15,10 @@ class LoyaltyStore {
 
   setKios = (kios) => {
     this.kios = kios;
+  };
+
+  setPayment = (payment) => {
+    this.payment = payment;
   };
 }
 
