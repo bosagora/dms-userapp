@@ -15,7 +15,9 @@ class UserStore {
   name = '';
   email = '';
   phone = '';
-  country = 'KR';
+  country = 'kor';
+  lang = 'kr';
+  currency = 'krw';
   enableBio = false;
 
   permissionsCount = 0;
@@ -44,6 +46,12 @@ class UserStore {
     this.country = country;
   };
 
+  setCurrency = (currency) => {
+    this.currency = currency;
+  };
+  setLand = (lang) => {
+    this.lang = lang;
+  };
   setEnableBio = (enableBio) => {
     this.enableBio = enableBio;
   };
