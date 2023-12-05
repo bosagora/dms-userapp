@@ -18,7 +18,7 @@ import { NormalSteps } from 'dms-sdk-client';
 import { getClient } from '../../utils/client';
 
 const MileageRedeemNotification = observer(({ navigation }) => {
-  const { noteStore, userStore } = useStores();
+  const { loyaltyStore } = useStores();
   const [values, setValues] = useState(['T1', 'T2']);
 
   const [client, setClient] = useState(null);
@@ -37,16 +37,26 @@ const MileageRedeemNotification = observer(({ navigation }) => {
       console.log('isUp:', isUp);
     }
     fetchClient().then(() => console.log('end of fetchClient'));
+
+    console.log('loyaltyStore :', loyaltyStore);
     // initiateTimer();
   }, []);
 
   async function confirmRedeem() {
-    console.log('confirm Redeem.');
+    console.log(
+      'confirm Redeem > loyaltyStore.payment :',
+      loyaltyStore.payment,
+    );
+    if (loyaltyStore.payment.id.length < 0) {
+      alert('Empty payment Id.');
+      return;
+    }
     const steps = [];
-    const paymentId =
-      '0xf9f68c7d7e30f3c5f0d9236603aed4a5a591e03e99b3e551126abeacfa3c91f2';
+    const paymentId = loyaltyStore.payment.id;
     let detail = await client.ledger.getPaymentDetail(paymentId);
 
+    console.log('payment detail : ', detail);
+    // return;
     // Approve New
     for await (const step of client.ledger.approveNewPayment(
       paymentId,

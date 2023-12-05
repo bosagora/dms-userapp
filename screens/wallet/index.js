@@ -37,70 +37,70 @@ const Index = observer(({ navigation }) => {
   const [phone, setPhone] = useState('');
 
   useEffect(() => {
-    console.log('=================');
-    async function fetchClient() {
-      console.log('Wallet > fetchClient');
-      const { client: client1, address: userAddress } = await getClient();
-      console.log('>>>>>>> userAddress :', userAddress);
-      setClient(client1);
-      setAddress(userAddress);
+    console.log('================= userStore', userStore);
 
-      const web3Status = await client1.web3.isUp();
-      console.log('web3Status :', web3Status);
-      const isUp = await client1.ledger.isRelayUp();
-      console.log('isUp:', isUp);
-
-      const phone = userStore.phone;
-      setPhone(phone);
-      console.log('user phone :', phone);
-
-      const loyaltyType = await client1.ledger.getLoyaltyType(userAddress);
-      setUserLoyaltyType(loyaltyType);
-      console.log('userLoyaltyType :', loyaltyType);
-
-      const tokenBalance = await client1.ledger.getTokenBalance(userAddress);
-      console.log('tokenBalance :', tokenBalance.toString());
-      const tokenBalConv = new BOACoin(tokenBalance);
-      console.log('tokenBalConv :', tokenBalConv.toBOAString());
-      setUserTokenBalance(tokenBalConv);
-
-      // const tokenAmount = Amount.make(tokenBalance, 18).value;
-      let userTokenCurrencyRate = await client1.currency.tokenToCurrency(
-        tokenBalance,
-        'krw',
-      );
-      console.log('userTokenCurrencyRate :', userTokenCurrencyRate.toString());
-      const oneConv = new BOACoin(userTokenCurrencyRate);
-      console.log('oneConv :', oneConv.toBOAString());
-      setUserTokenRate(oneConv);
-
-      const oneTokenAmount = BOACoin.make(1, 18).value;
-      let oneTokenCurrencyRate = await client1.currency.tokenToCurrency(
-        oneTokenAmount,
-        'krw',
-      );
-
-      console.log('oneTokenCurrencyRate :', oneTokenCurrencyRate.toString());
-      const boaConv = new BOACoin(oneTokenCurrencyRate);
-      console.log('boaBal :', boaConv.toBOAString());
-      setOneTokenRate(boaConv);
-
-      const userPoint = await client1.ledger.getPointBalance(userAddress);
-      const payableConv = new BOACoin(userPoint);
-      console.log('payableConv :', payableConv.toBOAString());
-      setPayablePoint(payableConv);
-
-      let pointCurrencyRate = await client1.currency.pointToCurrency(
-        userPoint,
-        'krw',
-      );
-      const pointRateConv = new BOACoin(pointCurrencyRate);
-      console.log('pointRateConv :', pointRateConv.toBOAString());
-      setPayablePointRate(pointRateConv);
-    }
     fetchClient().then(() => console.log('end of wallet fetch client'));
   }, []);
+  async function fetchClient() {
+    console.log('Wallet > fetchClient');
+    const { client: client1, address: userAddress } = await getClient();
+    console.log('>>>>>>> userAddress :', userAddress);
+    setClient(client1);
+    setAddress(userAddress);
 
+    const web3Status = await client1.web3.isUp();
+    console.log('web3Status :', web3Status);
+    const isUp = await client1.ledger.isRelayUp();
+    console.log('isUp:', isUp);
+
+    const phone = userStore.phone;
+    setPhone(phone);
+    console.log('user phone :', phone);
+
+    const loyaltyType = await client1.ledger.getLoyaltyType(userAddress);
+    setUserLoyaltyType(loyaltyType);
+    console.log('userLoyaltyType :', loyaltyType);
+
+    const tokenBalance = await client1.ledger.getTokenBalance(userAddress);
+    console.log('tokenBalance :', tokenBalance.toString());
+    const tokenBalConv = new BOACoin(tokenBalance);
+    console.log('tokenBalConv :', tokenBalConv.toBOAString());
+    setUserTokenBalance(tokenBalConv);
+
+    // const tokenAmount = Amount.make(tokenBalance, 18).value;
+    let userTokenCurrencyRate = await client1.currency.tokenToCurrency(
+      tokenBalance,
+      'krw',
+    );
+    console.log('userTokenCurrencyRate :', userTokenCurrencyRate.toString());
+    const oneConv = new BOACoin(userTokenCurrencyRate);
+    console.log('oneConv :', oneConv.toBOAString());
+    setUserTokenRate(oneConv);
+
+    const oneTokenAmount = BOACoin.make(1, 18).value;
+    let oneTokenCurrencyRate = await client1.currency.tokenToCurrency(
+      oneTokenAmount,
+      'krw',
+    );
+
+    console.log('oneTokenCurrencyRate :', oneTokenCurrencyRate.toString());
+    const boaConv = new BOACoin(oneTokenCurrencyRate);
+    console.log('boaBal :', boaConv.toBOAString());
+    setOneTokenRate(boaConv);
+
+    const userPoint = await client1.ledger.getPointBalance(userAddress);
+    const payableConv = new BOACoin(userPoint);
+    console.log('payableConv :', payableConv.toBOAString());
+    setPayablePoint(payableConv);
+
+    let pointCurrencyRate = await client1.currency.pointToCurrency(
+      userPoint,
+      'krw',
+    );
+    const pointRateConv = new BOACoin(pointCurrencyRate);
+    console.log('pointRateConv :', pointRateConv.toBOAString());
+    setPayablePointRate(pointRateConv);
+  }
   async function fetchBalances() {
     const loyaltyType = await client.ledger.getLoyaltyType(address);
     console.log('userLoyaltyType :', loyaltyType);
@@ -130,7 +130,8 @@ const Index = observer(({ navigation }) => {
     if (steps.length === 3 && steps[2].key === 'done') {
       setUserLoyaltyType(1);
     }
-    await fetchBalances();
+    await fetchClient();
+    // await fetchBalances();
 
     // if (steps.length === 2 && steps[1].key === 'accepted') {
     //   completeAuth();

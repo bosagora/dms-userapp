@@ -54,9 +54,9 @@ const Tab = createBottomTabNavigator();
 
 const App = observer(() => {
   const [isStoreLoaded, setIsStoreLoaded] = useState(false);
-  const { pinStore, userStore } = useStores();
+  const { pinStore, userStore, loyaltyStore } = useStores();
 
-  const { expoPushToken } = usePushNotification(userStore);
+  const { expoPushToken } = usePushNotification(userStore, loyaltyStore);
   useEffect(() => {
     const rehydrate = async () => {
       await trunk.init();
