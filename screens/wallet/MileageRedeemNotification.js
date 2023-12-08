@@ -82,6 +82,8 @@ const MileageRedeemNotification = observer(({ navigation }) => {
       }
     }
     if (steps.length === 3 && steps[2].key === 'approved') {
+      const time = Math.round(+new Date() / 1000);
+      loyaltyStore.setLastUpdateTime(time);
       navigation.navigate('Wallet');
     }
   }

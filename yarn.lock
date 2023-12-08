@@ -4814,17 +4814,17 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
-dms-osx-lib@^1.1.13:
-  version "1.1.13"
-  resolved "https://registry.yarnpkg.com/dms-osx-lib/-/dms-osx-lib-1.1.13.tgz#64d44d7619cb7c222bb7ac4566693c93698813b3"
-  integrity sha512-GqlmFIp17X/obk9uzRFiGmkxoRD21wVjuXiinbjB8BgLE1XUQ+2WbdlOH4UCA5gxqRP9dtlSdm+gvI8+ei66Sg==
+dms-osx-lib@^1.1.14:
+  version "1.1.14"
+  resolved "https://registry.yarnpkg.com/dms-osx-lib/-/dms-osx-lib-1.1.14.tgz#a3f5a1486bfdbf5961b8f7dde97bf58b8a2d9614"
+  integrity sha512-WjAj93yfdJEsMKNTPEd6Agw24DYYTvdU3GQCerU1/MRar2HnUvS0g0LOJ9ylI1i4yXmQiZVvGtWgji91yY8fxg==
   dependencies:
     ethers "npm:boa-ethers2@^5.7.9"
 
-dms-sdk-client@^1.0.13:
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/dms-sdk-client/-/dms-sdk-client-1.0.13.tgz#f9b392b6aa3e01a8c85a6b90f320e11b8415f3d7"
-  integrity sha512-lqi6nwKQ4pwCMeo55I+PqMJ+NOHYXmzetcmv9urBd6FNA6jIACUhXzpfvG3p/kx7Sl6c/hX5Dg1FMM/ClANKPg==
+dms-sdk-client@^1.0.16:
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/dms-sdk-client/-/dms-sdk-client-1.0.16.tgz#534ad50f645a8762a860e38bdf4ea3ab533c7f56"
+  integrity sha512-KY9nE94cNxB+FIlkPU1knPr2IBm+g3L5v+xqNvnF95WrULDFmvrmreAKJad+MqEgyIb6EfA942GWTLNvEwFsYQ==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/abstract-signer" "^5.7.0"
@@ -4839,7 +4839,7 @@ dms-sdk-client@^1.0.13:
     "@ethersproject/random" "^5.7.0"
     "@ethersproject/wallet" "^5.7.0"
     del-osx-lib "^1.1.2"
-    dms-osx-lib "^1.1.13"
+    dms-osx-lib "^1.1.14"
     dms-sdk-common "^1.0.3"
     graphql "^16.5.0"
     graphql-request "^4.3.0"
@@ -5517,7 +5517,7 @@ for-each@^0.3.3:
 
 form-data@^3.0.0, form-data@^3.0.1:
   version "3.0.1"
-  resolved "https://registry.npmjs.org/form-data/-/form-data-3.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/form-data/-/form-data-3.0.1.tgz#ebd53791b78356a99af9a300d4282c4d5eb9755f"
   integrity sha512-RHkBKtLWUVwd7SqRIvCZMEvAMoGUp0XU+seQiZejj0COz3RI3hWP4sCv3gZWWLjJTd7rGwcsF5eKZGii0r/hbg==
   dependencies:
     asynckit "^0.4.0"

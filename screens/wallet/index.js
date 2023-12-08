@@ -21,9 +21,10 @@ import {
 import { getClient } from '../../utils/client';
 import { Amount, BOACoin, ContractUtils } from 'dms-sdk-client';
 import { convertProperValue } from '../../utils/convert';
+import loyaltyStore from '../../stores/loyalty.store';
 
 const Index = observer(({ navigation }) => {
-  const { secretStore, userStore } = useStores();
+  const { secretStore, userStore, loyaltyStore } = useStores();
   const [showModal, setShowModal] = useState(false);
   const [client, setClient] = useState();
   const [address, setAddress] = useState('');
@@ -39,8 +40,13 @@ const Index = observer(({ navigation }) => {
   useEffect(() => {
     console.log('================= userStore', userStore);
 
-    fetchClient().then(() => console.log('end of wallet fetch client'));
-  }, []);
+    fetchClient().then(() =>
+      console.log(
+        'end of wallet fetch client > last :',
+        loyaltyStore.lastUpdateTime,
+      ),
+    );
+  }, [loyaltyStore.lastUpdateTime]);
   async function fetchClient() {
     console.log('Wallet > fetchClient');
     const { client: client1, address: userAddress } = await getClient();

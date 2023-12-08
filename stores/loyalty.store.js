@@ -5,6 +5,8 @@ class LoyaltyStore {
   kios = {};
   payment = {};
 
+  lastUpdateTime = 1608854400;
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -19,6 +21,10 @@ class LoyaltyStore {
 
   setPayment = (payment) => {
     this.payment = payment;
+  };
+
+  setLastUpdateTime = (time) => {
+    this.lastUpdateTime = time;
   };
 }
 
