@@ -67,7 +67,7 @@ export const usePushNotification = (userStore, loyaltyStore) => {
       });
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log('response :', response);
+        console.log('response :', response.notification.request.content);
         console.log(
           'response > data :',
           response.notification.request.content.data,

@@ -35,12 +35,12 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-# eas
-app.json
-eas.json
-
 .idea
 
 ios
 android
+
+# eas
+app.json
+eas.json
 google-services.json
