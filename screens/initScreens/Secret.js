@@ -80,7 +80,12 @@ const Secret = observer(({ navigation }) => {
     console.log('token :', token);
     const language = 'kr';
     const os = Platform.OS === 'android' ? 'android' : 'iOS';
-    await cc.ledger.registerMobileToken(token, language, os);
+    try {
+      await cc.ledger.registerMobileToken(token, language, os);
+    } catch (e) {
+      await Clipboard.setStringAsync(JSON.stringify(e));
+      console.log('e :', e);
+    }
   }
   function resetPinCode() {
     console.log('registerPushToken >>');
