@@ -32,7 +32,7 @@ import MobileHeader from '../../components/MobileHeader'; //for ethers.js
 const { Wallet } = ethers;
 
 const WalletManager = observer(({ navigation }) => {
-  const { secretStore } = useStores();
+  const { secretStore, loyaltyStore } = useStores();
   const [privateKey, setPrivateKey] = useState(
     '0000000000000000000000000000000000000000000000000000000000000001',
   );
@@ -49,11 +49,24 @@ const WalletManager = observer(({ navigation }) => {
   }
 
   async function saveKey(key) {
-    const privateKey = key.includes('0x') ? key.split('0x')[0] : key;
-    console.log('save privateKey :', privateKey);
-    const wallet = new Wallet(key);
+    key = key.trim();
+    // const privateKey = key.includes('0x') ? key.split('0x')[0] : key;
+    // console.log('save privateKey :', privateKey);
+    let wallet;
+    try {
+      wallet = new Wallet(key);
+    } catch (e) {
+      console.log('Invalid private key.');
+      alert('유효하지 않은 키 입니다.');
+      return;
+    }
     secretStore.setAddress(wallet.address);
     await saveSecureValue('address', wallet.address);
+    await saveSecureValue('privateKey', key);
+    const time = Math.round(+new Date() / 1000);
+    loyaltyStore.setLastUpdateTime(time);
+    alert('불러온 지갑이 적용 되었습니다.');
+    navigation.navigate('Wallet');
   }
   const [showModal, setShowModal] = useState(false);
   return (

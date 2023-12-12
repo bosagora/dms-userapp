@@ -89,19 +89,29 @@ const Secret = observer(({ navigation }) => {
   }
   function resetPinCode() {
     console.log('registerPushToken >>');
-    alert('지갑이 생성되었습니다.');
+    alert('새로운 지갑이 생성 되었습니다.');
     navigation.navigate('InitPinCodeScreen');
   }
 
   async function saveKey(key) {
     setIsLoading(true);
+    key = key.trim();
     console.log('key :', key);
-    const privateKey = key.includes('0x') ? key.split('0x')[1] : key;
-    console.log('save privateKey :', privateKey);
-    const wallet = new Wallet(key);
+    console.log('key.split :', key.split('0x'));
+    // const privateKey = key.includes('0x') ? key.split('0x')[1] : key;
+    // console.log('save privateKey :', privateKey);
+    let wallet;
+    try {
+      wallet = new Wallet(key);
+    } catch (e) {
+      console.log('Invalid private key.');
+      setIsLoading(false);
+      alert('유효하지 않은 키 입니다.');
+      return;
+    }
     secretStore.setAddress(wallet.address);
     await saveSecureValue('address', wallet.address);
-    await saveSecureValue('privateKey', privateKey);
+    await saveSecureValue('privateKey', key);
     setIsLoading(false);
     const cc = await fetchClient();
     if (Device.isDevice) {
