@@ -43,6 +43,7 @@ const ImportPrivateKey = ({ saveKey }) => {
         <ButtonText>다른 지갑 불러오기</ButtonText>
       </Button>
       <Modal
+        avoidKeyboard={true}
         isOpen={showModal}
         onClose={() => {
           setShowModal(false);
@@ -64,9 +65,11 @@ const ImportPrivateKey = ({ saveKey }) => {
                     여기에 비공개 키 문자열을 붙여넣으세요.
                   </FormControlHelperText>
                 </FormControlHelper>
+
                 <Input>
                   <InputField value={privateKey} onChangeText={setPrivateKey} />
                 </Input>
+
                 {/*<Textarea*/}
                 {/*  size='md'*/}
                 {/*  isReadOnly={false}*/}
