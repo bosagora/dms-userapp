@@ -303,7 +303,7 @@ const MileageHistory = observer(({ navigation }) => {
                         color: '$warmGray200',
                       },
                     }}>
-                    {item.actionName}
+                    {item.actionName === 'SAVED' ? '적립' : '사용'}
                   </Text>
                   <Text
                     fontSize='$sm'
