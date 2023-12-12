@@ -8,7 +8,7 @@ export async function getClient() {
     console.log('getClient > fetchKey');
     let pKey = await getSecureValue('privateKey');
     if (pKey.includes('0x')) {
-      pKey = pKey.split('0x')[1];
+      // pKey = pKey.split('0x')[1];
       console.log('pKey :', pKey);
     }
     const address = await getSecureValue('address');

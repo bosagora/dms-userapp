@@ -110,11 +110,12 @@ const PinCodeScreen = observer(() => {
 
 const customTexts = {
   enter: {
-    subTitle: 'Enter PIN to access.',
-    footerText: 'Cancel',
+    subTitle: '핀 코드를 입력하세요.',
   },
   set: {
-    subTitle: 'Enter {{pinLength}} digits.',
+    title: '핀 코드를 설정합니다.',
+    subTitle: '{{pinLength}} 자리 핀 코드를 읿력하세요.',
+    repeat: '같은 핀 코드를 다시 입력하세요.',
   },
   locked: {
     title: 'Locked',
