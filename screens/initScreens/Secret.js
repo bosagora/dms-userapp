@@ -1,4 +1,9 @@
-import { Platform, SafeAreaView } from 'react-native';
+import {
+  Keyboard,
+  Platform,
+  SafeAreaView,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { trunk, useStores } from '../../stores';
 import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';

@@ -22,6 +22,7 @@ import { useStores } from '../../stores';
 import '@ethersproject/shims';
 import { ContractUtils } from 'dms-sdk-client';
 
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { getClient } from '../../utils/client';
 
 const registerSchema = yup.object().shape({
@@ -107,7 +108,7 @@ const PhoneAuth = observer(({ navigation }) => {
   }, []);
 
   const initiateTimer = () => {
-    fontRef.current = 20;
+    fontRef.current = 30;
     let timeLeftObj = secondsToTime(fontRef.current);
     setTimeLeft(timeLeftObj);
     console.log('timeLeftObj :', timeLeftObj);
@@ -133,6 +134,7 @@ const PhoneAuth = observer(({ navigation }) => {
       setTimeLeft(secondsToTime(fontRef.current));
     } else {
       setRequestId('');
+      // formik.values = { n1: '', n2: '', n3: '' };
       stopTimer();
       // clearInterval(intervalRef.current);
     }
@@ -240,131 +242,145 @@ const PhoneAuth = observer(({ navigation }) => {
         }}
         height='$full'
         bg='$backgroundLight0'>
-        <MobileHeader />
-        <Box
-          p='$4'
-          flex={1}
-          maxWidth='$96'
-          alignSelf='center'
-          // justifyContent='center'
-          w='$full'>
-          <Text fontWeight='$bold' fontSize='$md'>
-            전화번호
-          </Text>
-          <HStack my='$3' alignItems='center'>
-            <Box flex={1}>
-              <Input
-                variant='outline'
-                mr='$2'
+        <KeyboardAwareScrollView
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+          // style={{ marginBottom: 150 }}
+          enableOnAndroid={true}
+          scrollEnabled={true}
+          extraScrollHeight={100}
+          keyboardShouldPersistTaps='handled'
+          scrollToOverflowEnabled={true}
+          enableAutomaticScroll={true}>
+          <MobileHeader />
+          <Box
+            p='$4'
+            flex={1}
+            maxWidth='$96'
+            alignSelf='center'
+            // justifyContent='center'
+            w='$full'>
+            <Text fontWeight='$bold' fontSize='$md'>
+              전화번호
+            </Text>
+            <HStack my='$3' alignItems='center'>
+              <Box flex={1}>
+                <Input
+                  variant='outline'
+                  mr='$2'
+                  size='md'
+                  isDisabled={false}
+                  isInvalid={false}
+                  isReadOnly={false}>
+                  <InputField
+                    value={countryCode}
+                    onChangeText={setCountryCode}
+                  />
+                </Input>
+              </Box>
+              <Box flex={2}>
+                <Input
+                  variant='outline'
+                  mr='$2'
+                  size='md'
+                  isDisabled={false}
+                  isInvalid={false}
+                  isReadOnly={false}>
+                  <InputField value={phoneCode} onChangeText={setPhoneCode} />
+                </Input>
+              </Box>
+              <Button
+                isDisabled={requestId !== ''}
+                onPress={() => {
+                  registerPhone();
+                }}
+                flex={1}>
+                <ButtonText>전송</ButtonText>
+              </Button>
+            </HStack>
+            <Text
+              fontSize='$sm'
+              fontWeight='normal'
+              color='$primary300'
+              sx={{
+                _dark: { color: '$textDark400' },
+              }}>
+              전화번호 전송 후에 문자 메세지의 인증 코드 3개를 문자에 표시된
+              번호(#1, #2, #3)에 맞추어 입력하고 인증을 진행해 주세요.
+            </Text>
+            <Divider
+              my='$6'
+              bg='$backgroundLight200'
+              sx={{ _dark: { bg: '$backgroundDark700' } }}
+            />
+            <VStack>
+              {fontRef.current > 0 ? (
+                <Text
+                  fontSize='$sm'
+                  fontWeight='normal'
+                  color='$primary300'
+                  alignSelf='flex-end'
+                  mb='$2'
+                  sx={{
+                    _dark: { color: '$textDark400' },
+                  }}>
+                  유효시간 {timeLeft.m < 10 ? '0' : ''}
+                  {timeLeft.m}:{timeLeft.s < 10 ? '0' : ''}
+                  {timeLeft.s}
+                </Text>
+              ) : null}
+              <FormControl
                 size='md'
-                isDisabled={false}
-                isInvalid={false}
-                isReadOnly={false}>
-                <InputField value={countryCode} onChangeText={setCountryCode} />
-              </Input>
-            </Box>
-            <Box flex={2}>
-              <Input
-                variant='outline'
-                mr='$2'
+                isRequired={true}
+                isInvalid={!!formik.errors.n1}>
+                <Input>
+                  <InputField
+                    type='text'
+                    placeholder='#1'
+                    onChangeText={formik.handleChange('n1')}
+                    onBlur={formik.handleBlur('n1')}
+                    value={formik.values?.n1}
+                  />
+                </Input>
+              </FormControl>
+              <FormControl
                 size='md'
-                isDisabled={false}
-                isInvalid={false}
-                isReadOnly={false}>
-                <InputField value={phoneCode} onChangeText={setPhoneCode} />
-              </Input>
-            </Box>
-            <Button
-              isDisabled={requestId !== ''}
-              onPress={() => {
-                registerPhone();
-              }}
-              flex={1}>
-              <ButtonText>전송</ButtonText>
-            </Button>
-          </HStack>
-          <Text
-            fontSize='$sm'
-            fontWeight='normal'
-            color='$primary300'
-            sx={{
-              _dark: { color: '$textDark400' },
-            }}>
-            전화번호 전송 후에 문자 메세지의 인증 코드 3개를 문자에 표시된
-            번호(#1, #2, #3)에 맞추어 입력하고 인증을 진행해 주세요.
-          </Text>
-          <Divider
-            my='$6'
-            bg='$backgroundLight200'
-            sx={{ _dark: { bg: '$backgroundDark700' } }}
-          />
-          <VStack>
-            {fontRef.current > 0 ? (
-              <Text
-                fontSize='$sm'
-                fontWeight='normal'
-                color='$primary300'
-                alignSelf='flex-end'
-                mb='$2'
-                sx={{
-                  _dark: { color: '$textDark400' },
-                }}>
-                유효시간 {timeLeft.m < 10 ? '0' : ''}
-                {timeLeft.m}:{timeLeft.s < 10 ? '0' : ''}
-                {timeLeft.s}
-              </Text>
-            ) : null}
-            <FormControl
-              size='md'
-              isRequired={true}
-              isInvalid={!!formik.errors.n1}>
-              <Input>
-                <InputField
-                  type='text'
-                  placeholder='#1'
-                  onChangeText={formik.handleChange('n1')}
-                  onBlur={formik.handleBlur('n1')}
-                  value={formik.values?.n1}
-                />
-              </Input>
-            </FormControl>
-            <FormControl
-              size='md'
-              isRequired={true}
-              isInvalid={!!formik.errors.n2}>
-              <Input>
-                <InputField
-                  placeholder='#2'
-                  onChangeText={formik.handleChange('n2')}
-                  onBlur={formik.handleBlur('n2')}
-                  value={formik.values?.n2}
-                />
-              </Input>
-            </FormControl>
-            <FormControl
-              size='md'
-              isRequired={true}
-              isInvalid={!!formik.errors.n3}>
-              {/*<FormControlLabel>*/}
-              {/*  <FormControlLabelText>#3</FormControlLabelText>*/}
-              {/*</FormControlLabel>*/}
-              <Input>
-                <InputField
-                  placeholder='#3'
-                  onChangeText={formik.handleChange('n3')}
-                  onBlur={formik.handleBlur('n3')}
-                  value={formik.values?.n3}
-                />
-              </Input>
-            </FormControl>
-            <Button
-              isDisabled={requestId === ''}
-              onPress={formik.handleSubmit}
-              my='$4'>
-              <ButtonText>인증</ButtonText>
-            </Button>
-          </VStack>
-        </Box>
+                isRequired={true}
+                isInvalid={!!formik.errors.n2}>
+                <Input>
+                  <InputField
+                    placeholder='#2'
+                    onChangeText={formik.handleChange('n2')}
+                    onBlur={formik.handleBlur('n2')}
+                    value={formik.values?.n2}
+                  />
+                </Input>
+              </FormControl>
+              <FormControl
+                size='md'
+                isRequired={true}
+                isInvalid={!!formik.errors.n3}>
+                {/*<FormControlLabel>*/}
+                {/*  <FormControlLabelText>#3</FormControlLabelText>*/}
+                {/*</FormControlLabel>*/}
+                <Input>
+                  <InputField
+                    placeholder='#3'
+                    onChangeText={formik.handleChange('n3')}
+                    onBlur={formik.handleBlur('n3')}
+                    value={formik.values?.n3}
+                  />
+                </Input>
+              </FormControl>
+              <Button
+                isDisabled={requestId === ''}
+                onPress={formik.handleSubmit}
+                my='$4'>
+                <ButtonText>인증</ButtonText>
+              </Button>
+            </VStack>
+          </Box>
+        </KeyboardAwareScrollView>
       </Box>
     </SafeAreaView>
   );

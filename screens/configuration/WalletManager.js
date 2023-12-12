@@ -25,10 +25,13 @@ import {
   FormControlHelper,
   FormControlHelperText,
   Input,
+  View,
   InputField,
   ButtonGroup,
 } from '@gluestack-ui/themed';
 import MobileHeader from '../../components/MobileHeader'; //for ethers.js
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 const { Wallet } = ethers;
 
 const WalletManager = observer(({ navigation }) => {
@@ -92,67 +95,81 @@ const WalletManager = observer(({ navigation }) => {
           <ImportPrivateKey saveKey={saveKey} />
         </VStack>
         <Box>
-          <Modal
-            isOpen={showModal}
-            onClose={() => {
-              setShowModal(false);
-            }}>
-            <ModalBackdrop />
-            <ModalContent maxWidth='$96'>
-              <ModalBody p='$5'>
-                <VStack space='xs' mb='$4'>
-                  <Heading>지갑 비공개키</Heading>
-                  <Text size='sm'>
-                    이 키를 다른 기기에 설치된 THE9 앱에 붙여 넣으면 현재 지갑을
-                    복구해 사용할 수 있습니다. (다른 기기의 THE9 앱에서 ‘다른
-                    지갑 불러오기’ 선택)
-                  </Text>
-                  <Text size='sm'>
-                    경고 : 이 키를 노출하지 마세요. 비공개 키가 있는 사람이라면
-                    누구든 회원님의 계정에 있는 자산을 훔칠 수 있습니다.
-                  </Text>
-                </VStack>
-                <VStack py='$2' space='xl'>
-                  <FormControl>
-                    <FormControlHelper>
-                      <FormControlHelperText>
-                        여기에 비공개 키 문자열을 붙여넣으세요.
-                      </FormControlHelperText>
-                    </FormControlHelper>
-                    <Input>
-                      <InputField value={privateKey} />
-                    </Input>
-                  </FormControl>
-                </VStack>
+          <KeyboardAwareScrollView
+            bounces={false}
+            showsVerticalScrollIndicator={false}
+            style={{ marginBottom: 150 }}
+            enableOnAndroid={true}
+            scrollEnabled={true}
+            extraScrollHeight={100}
+            keyboardShouldPersistTaps='handled'
+            scrollToOverflowEnabled={true}
+            enableAutomaticScroll={true}>
+            <View>
+              <Modal
+                isOpen={showModal}
+                onClose={() => {
+                  setShowModal(false);
+                }}>
+                <ModalBackdrop />
+                <ModalContent maxWidth='$96'>
+                  <ModalBody p='$5'>
+                    <VStack space='xs' mb='$4'>
+                      <Heading>지갑 비공개키</Heading>
+                      <Text size='sm'>
+                        이 키를 다른 기기에 설치된 THE9 앱에 붙여 넣으면 현재
+                        지갑을 복구해 사용할 수 있습니다. (다른 기기의 THE9
+                        앱에서 ‘다른 지갑 불러오기’ 선택)
+                      </Text>
+                      <Text size='sm'>
+                        경고 : 이 키를 노출하지 마세요. 비공개 키가 있는
+                        사람이라면 누구든 회원님의 계정에 있는 자산을 훔칠 수
+                        있습니다.
+                      </Text>
+                    </VStack>
+                    <VStack py='$2' space='xl'>
+                      <FormControl>
+                        <FormControlHelper>
+                          <FormControlHelperText>
+                            여기에 비공개 키 문자열을 붙여넣으세요.
+                          </FormControlHelperText>
+                        </FormControlHelper>
+                        <Input>
+                          <InputField value={privateKey} />
+                        </Input>
+                      </FormControl>
+                    </VStack>
 
-                <ButtonGroup space='md' alignSelf='center'>
-                  <Button
-                    variant='outline'
-                    py='$2.5'
-                    action='secondary'
-                    onPress={() => {
-                      setShowModal(false);
-                    }}>
-                    <ButtonText fontSize='$sm' fontWeight='$medium'>
-                      Close
-                    </ButtonText>
-                  </Button>
-                  <Button
-                    variant='solid'
-                    bg='$success700'
-                    borderColor='$success700'
-                    onPress={async () => {
-                      await Clipboard.setStringAsync(privateKey);
-                      setShowModal(false);
-                    }}>
-                    <ButtonText fontSize='$sm' fontWeight='$medium'>
-                      Copy
-                    </ButtonText>
-                  </Button>
-                </ButtonGroup>
-              </ModalBody>
-            </ModalContent>
-          </Modal>
+                    <ButtonGroup space='md' alignSelf='center'>
+                      <Button
+                        variant='outline'
+                        py='$2.5'
+                        action='secondary'
+                        onPress={() => {
+                          setShowModal(false);
+                        }}>
+                        <ButtonText fontSize='$sm' fontWeight='$medium'>
+                          Close
+                        </ButtonText>
+                      </Button>
+                      <Button
+                        variant='solid'
+                        bg='$success700'
+                        borderColor='$success700'
+                        onPress={async () => {
+                          await Clipboard.setStringAsync(privateKey);
+                          setShowModal(false);
+                        }}>
+                        <ButtonText fontSize='$sm' fontWeight='$medium'>
+                          Copy
+                        </ButtonText>
+                      </Button>
+                    </ButtonGroup>
+                  </ModalBody>
+                </ModalContent>
+              </Modal>
+            </View>
+          </KeyboardAwareScrollView>
         </Box>
       </Box>
     </SafeAreaView>
