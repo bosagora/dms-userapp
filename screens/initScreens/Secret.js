@@ -89,7 +89,8 @@ const Secret = observer(({ navigation }) => {
       await cc.ledger.registerMobileToken(token, language, os);
     } catch (e) {
       await Clipboard.setStringAsync(JSON.stringify(e));
-      console.log('e :', e);
+      console.log('error : ', e);
+      alert('푸시 토큰 등록에 실패하였습니다.' + JSON.stringify(e));
     }
   }
   function resetPinCode() {

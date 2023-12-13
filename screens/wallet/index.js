@@ -129,12 +129,18 @@ const Index = observer(({ navigation }) => {
   const confirmToToken = async () => {
     console.log('confirm to token');
     let steps = [];
-    for await (const step of client.ledger.changeToLoyaltyToken()) {
-      steps.push(step);
-      console.log('confirm to token step :', step);
-    }
-    if (steps.length === 3 && steps[2].key === 'done') {
-      setUserLoyaltyType(1);
+    try {
+      for await (const step of client.ledger.changeToLoyaltyToken()) {
+        steps.push(step);
+        console.log('confirm to token step :', step);
+      }
+      if (steps.length === 3 && steps[2].key === 'done') {
+        setUserLoyaltyType(1);
+      }
+    } catch (e) {
+      console.log('error : ', e);
+      await Clipboard.setStringAsync(JSON.stringify(e));
+      alert('토큰 전환에 실패하였습니다.' + JSON.stringify(e));
     }
     await fetchClient();
     // await fetchBalances();
