@@ -1,4 +1,4 @@
-import { SafeAreaView } from 'react-native';
+import { Platform, SafeAreaView } from 'react-native';
 import { trunk, useStores } from '../../stores';
 import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
@@ -31,14 +31,46 @@ import {
 } from '@gluestack-ui/themed';
 import MobileHeader from '../../components/MobileHeader'; //for ethers.js
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { getClient } from '../../utils/client';
+import * as Device from 'expo-device';
 
 const { Wallet } = ethers;
 
 const WalletManager = observer(({ navigation }) => {
-  const { secretStore, loyaltyStore } = useStores();
+  const { userStore, secretStore, loyaltyStore } = useStores();
   const [privateKey, setPrivateKey] = useState(
     '0000000000000000000000000000000000000000000000000000000000000001',
   );
+
+  const [client, setClient] = useState();
+  const [address, setAddress] = useState('');
+
+  const fetchClient = async () => {
+    const { client: client1, address: userAddress } = await getClient();
+    console.log('>>>>>>> userAddress :', userAddress);
+    setClient(client1);
+    setAddress(userAddress);
+
+    console.log('Secret fetch > client1 :', client1);
+    return client1;
+  };
+  async function registerPushTokenWithClient(cc) {
+    console.log('registerPushTokenWithClient >>>>>>>> cc:', cc);
+    const token = userStore.expoPushToken;
+    console.log('token :', token);
+    const language = 'kr';
+    const os = Platform.OS === 'android' ? 'android' : 'iOS';
+    try {
+      await cc.ledger.registerMobileToken(token, language, os);
+      return true;
+    } catch (e) {
+      await Clipboard.setStringAsync(JSON.stringify(e));
+      console.log('error : ', e);
+      alert('푸시 토큰 등록에 실패하였습니다.' + JSON.stringify(e));
+      return false;
+    }
+  }
+
   useEffect(() => {
     async function fetchKey() {
       const key = await getSecureValue('privateKey');
@@ -67,9 +99,23 @@ const WalletManager = observer(({ navigation }) => {
     await saveSecureValue('address', wallet.address);
     await saveSecureValue('privateKey', key);
     const time = Math.round(+new Date() / 1000);
-    loyaltyStore.setLastUpdateTime(time);
-    alert('불러온 지갑이 적용 되었습니다.');
-    navigation.navigate('Wallet');
+
+    const cc = await fetchClient();
+    let ret = false;
+    if (Device.isDevice) {
+      ret = await registerPushTokenWithClient(cc);
+    } else {
+      ret = true;
+      console.log('Not on device.');
+    }
+
+    if (ret) {
+      loyaltyStore.setLastUpdateTime(time);
+      alert('불러온 지갑이 적용 되었습니다.');
+      navigation.navigate('Wallet');
+    } else {
+      alert('지갑 불러오기에 실패하였습니다. 다시 시도해 주세요.');
+    }
   }
   const [showModal, setShowModal] = useState(false);
   return (
