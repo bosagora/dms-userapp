@@ -143,14 +143,20 @@ const PhoneAuth = observer(({ navigation }) => {
   async function registerPhone() {
     const phone = countryCode + phoneCode;
     const steps = [];
-    for await (const step of client.link.register(phone)) {
-      console.log('register step :', step);
-      steps.push(step);
-    }
-    if (steps.length === 2 && steps[1].key === 'requested') {
-      const requestId = steps[1].requestId;
-      setRequestId(requestId);
-      handleValidTime();
+    try {
+      for await (const step of client.link.register(phone)) {
+        console.log('register step :', step);
+        steps.push(step);
+      }
+      if (steps.length === 2 && steps[1].key === 'requested') {
+        const requestId = steps[1].requestId;
+        setRequestId(requestId);
+        handleValidTime();
+      }
+    } catch (e) {
+      await Clipboard.setStringAsync(JSON.stringify(e));
+      console.log('error : ', e);
+      alert('전화번호 등록에 실패하였습니다.' + JSON.stringify(e));
     }
   }
 
@@ -160,12 +166,18 @@ const PhoneAuth = observer(({ navigation }) => {
 
   async function submitPhone(authNum) {
     const steps = [];
-    for await (const step of client.link.submit(requestId, authNum)) {
-      steps.push(step);
-      console.log('submit step :', step);
-    }
-    if (steps.length === 2 && steps[1].key === 'accepted') {
-      completeAuth();
+    try {
+      for await (const step of client.link.submit(requestId, authNum)) {
+        steps.push(step);
+        console.log('submit step :', step);
+      }
+      if (steps.length === 2 && steps[1].key === 'accepted') {
+        completeAuth();
+      }
+    } catch (e) {
+      await Clipboard.setStringAsync(JSON.stringify(e));
+      console.log('error : ', e);
+      alert('전화번호 인증에 실패하였습니다.' + JSON.stringify(e));
     }
   }
   function completeAuth() {

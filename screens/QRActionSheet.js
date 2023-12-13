@@ -50,7 +50,7 @@ const QRActionSheet = observer(() => {
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <Actionsheet isOpen={secretStore.showQRSheet} onClose={handleClose}>
-          <ActionsheetBackdrop />
+          <ActionsheetBackdrop bg='$borderLight200' />
           <ActionsheetContent maxHeight='75%'>
             <ActionsheetDragIndicatorWrapper>
               <ActionsheetDragIndicator />
@@ -90,6 +90,7 @@ const QRActionSheet = observer(() => {
                       action='primary'
                       onPress={async () => {
                         await Clipboard.setStringAsync(walletAddress);
+                        handleClose();
                       }}>
                       <ButtonText fontSize='$sm' fontWeight='$medium'>
                         Copy
