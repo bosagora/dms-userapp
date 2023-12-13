@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
+  AppState,
   Button,
   Platform,
   StatusBar,
@@ -51,23 +52,67 @@ import Permissions from '../screens/initScreens/Permissions';
 const InitStack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+const routeNameRef = React.createRef();
 
 const App = observer(() => {
   const [isStoreLoaded, setIsStoreLoaded] = useState(false);
   const { pinStore, userStore, loyaltyStore } = useStores();
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
   const { expoPushToken } = usePushNotification(userStore, loyaltyStore);
   useEffect(() => {
     const rehydrate = async () => {
       await trunk.init();
       setIsStoreLoaded(true);
-      pinStore.setVisible(false);
+      // pinStore.setVisible(false);
       console.log('push token :', expoPushToken);
       if (expoPushToken !== undefined && expoPushToken?.data?.length > 10) {
         userStore.setExpoPushToken(expoPushToken.data);
       }
     };
     rehydrate();
+  }, []);
+  let init = false;
+  useEffect(() => {
+    // 앱 초기 등록 화면이 아니고
+    // 핀 코드 화면이 활성 상태 이고
+    const tt = async () => {
+      console.log('userStore.state  :', userStore);
+      if (userStore.state === 'DONE' && init === false) {
+        init = true;
+        pinStore.setSuccessEnter(false);
+        pinStore.setVisible(true);
+        console.log('user state > visible:', pinStore.visible);
+      }
+    };
+    tt();
+  }, [userStore.state]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      console.log('Before AppState', appState.current);
+
+      const screen = getCurrentRouteName();
+      console.log('getCurrentRouteName :', screen);
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === 'active'
+      ) {
+        console.log('App has come to the foreground!');
+        pinStore.setNextScreen(screen.current);
+        pinStore.setSuccessEnter(false);
+        pinStore.setVisible(true);
+      }
+
+      appState.current = nextAppState;
+      setAppStateVisible(appState.current);
+      console.log('After AppState', appState.current);
+    });
+
+    return () => {
+      subscription.remove();
+    };
   }, []);
 
   if (!isStoreLoaded) {
@@ -79,7 +124,26 @@ const App = observer(() => {
   } else {
     return (
       <BottomSheetModalProvider>
-        <NavigationContainer independent={true} ref={navigationRef}>
+        <NavigationContainer
+          independent={true}
+          ref={navigationRef}
+          onReady={() =>
+            (routeNameRef.current =
+              navigationRef.current.getCurrentRoute().name)
+          }
+          onStateChange={() => {
+            const previousRouteName = routeNameRef.current;
+            const currentRouteName =
+              navigationRef.current.getCurrentRoute().name;
+
+            if (previousRouteName !== currentRouteName) {
+              // Do something here with it
+            }
+            console.log('currentRouteName :', currentRouteName);
+
+            // Save the current route name for later comparision
+            routeNameRef.current = currentRouteName;
+          }}>
           <GluestackUIProvider config={config} colorMode='dark'>
             {userStore.state !== AUTH_STATE.DONE ? (
               <InitStackScreen />
@@ -281,5 +345,7 @@ const TabScreens = observer(() => {
     </Tab.Navigator>
   );
 });
-
+export function getCurrentRouteName(action) {
+  return routeNameRef;
+}
 export default App;
