@@ -197,7 +197,7 @@ const Index = observer(({ navigation }) => {
             }}>
             <Box>
               <Heading _dark={{ color: '$textLight200' }} size='lg'>
-                나의 KIOS 마일리지 v0.11
+                나의 KIOS 마일리지 v0.12
               </Heading>
               <Text _dark={{ color: '$textLight200' }} fontSize='$xs' my='$1.5'>
                 모든 THE9 키오스크에서 상품 교환이 가능한 통합 마일리지
