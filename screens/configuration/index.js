@@ -12,6 +12,7 @@ import {
 import { MaterialIcons } from '@expo/vector-icons';
 import { useStores } from '../../stores';
 import { PinCodeT } from 'react-native-pincode-bosagora-ys';
+import { Pressable } from 'react-native';
 
 const Configuration = observer(({ navigation }) => {
   const { pinStore, userStore } = useStores();
@@ -47,6 +48,8 @@ const Configuration = observer(({ navigation }) => {
       setPincode();
     } else if (id === '58694a0f') {
       goWalletManager();
+    } else if (id === '3ac68afc') {
+      console.log('bio ');
     }
   };
 
@@ -84,53 +87,58 @@ const Configuration = observer(({ navigation }) => {
         data={data}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <Box
-            borderBottomWidth='$1'
-            borderColor='$trueGray800'
-            sx={{
-              _dark: {
-                borderColor: '$trueGray100',
-              },
-              '@base': {
-                pl: 0,
-                pr: 0,
-              },
-              '@sm': {
-                pl: '$4',
-                pr: '$5',
-              },
-            }}
-            py='$2'>
-            <HStack
-              space='md'
-              alignItems='center'
-              justifyContent='space-between'>
-              <VStack>
-                <Text
-                  fontSize='$sm'
-                  color='$coolGray600'
-                  sx={{
-                    _dark: {
-                      color: '$warmGray200',
-                    },
-                  }}>
-                  {item.name}
-                </Text>
-              </VStack>
-              <Box>
-                {item.id !== '3ac68afc' ? (
-                  <MaterialIcons
-                    name='arrow-forward-ios'
-                    size={20}
-                    color='white'
-                    onPress={() => goProperScreen(item.id)}
-                  />
-                ) : (
-                  <Switch size='sm' onToggle={toggleSwitch} value={isEnabled} />
-                )}
-              </Box>
-            </HStack>
-          </Box>
+          <Pressable onPress={() => goProperScreen(item.id)}>
+            <Box
+              borderBottomWidth='$1'
+              borderColor='$trueGray800'
+              sx={{
+                _dark: {
+                  borderColor: '$trueGray100',
+                },
+                '@base': {
+                  pl: 0,
+                  pr: 0,
+                },
+                '@sm': {
+                  pl: '$4',
+                  pr: '$5',
+                },
+              }}
+              py='$2'>
+              <HStack
+                space='md'
+                alignItems='center'
+                justifyContent='space-between'>
+                <VStack>
+                  <Text
+                    fontSize='$sm'
+                    color='$coolGray600'
+                    sx={{
+                      _dark: {
+                        color: '$warmGray200',
+                      },
+                    }}>
+                    {item.name}
+                  </Text>
+                </VStack>
+                <Box>
+                  {item.id !== '3ac68afc' ? (
+                    <MaterialIcons
+                      name='arrow-forward-ios'
+                      size={20}
+                      color='white'
+                    />
+                  ) : (
+                    <Switch
+                      size='sm'
+                      onToggle={toggleSwitch}
+                      value={isEnabled}
+                    />
+                  )}
+                </Box>
+              </HStack>
+            </Box>
+          </Pressable>
         )}
       />
     </Box>
