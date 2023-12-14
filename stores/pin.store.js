@@ -8,6 +8,8 @@ class PinStore {
   needPinCode = false;
   successEnter = false;
 
+  backgrounAt = 0;
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -32,6 +34,10 @@ class PinStore {
   };
   setSuccessEnter = (success) => {
     this.successEnter = success;
+  };
+
+  setBackgroundAt = (time) => {
+    this.backgrounAt = time;
   };
 }
 

@@ -197,7 +197,7 @@ const Index = observer(({ navigation }) => {
             }}>
             <Box>
               <Heading _dark={{ color: '$textLight200' }} size='lg'>
-                나의 KIOS 마일리지 v0.12
+                나의 KIOS 마일리지 v0.22
               </Heading>
               <Text _dark={{ color: '$textLight200' }} fontSize='$xs' my='$1.5'>
                 모든 THE9 키오스크에서 상품 교환이 가능한 통합 마일리지
@@ -238,12 +238,12 @@ const Index = observer(({ navigation }) => {
                   </Text>
                 </HStack>
                 <Button mt='$12' onPress={() => handleQRSheet()}>
-                  <ButtonText>키오스트에서 사용하기(QR)</ButtonText>
+                  <ButtonText>키오스크에서 사용하기(QR)</ButtonText>
                 </Button>
                 <Box mt='$4' alignItems='flex-end'>
                   <Pressable onPress={() => convertToToken()}>
                     <Text fontSize='$sm' color='$violet400'>
-                      > 토근으로 전환하기
+                      > 토큰으로 전환하기
                     </Text>
                   </Pressable>
                 </Box>
@@ -282,7 +282,7 @@ const Index = observer(({ navigation }) => {
                   </Text>
                 </HStack>
                 <Button mt='$12' onPress={() => handleQRSheet()}>
-                  <ButtonText>키오스트에서 사용하기(QR)</ButtonText>
+                  <ButtonText>키오스크에서 사용하기(QR)</ButtonText>
                 </Button>
               </Box>
             )}

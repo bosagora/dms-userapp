@@ -40,18 +40,18 @@ const PinCodeScreen = observer(() => {
     const result = await LocalAuthentication.authenticateAsync({
       promptMessage: 'Authenticate with biometrics',
     });
-
+    console.log('bio ret :', result);
     if (result.success) {
       // Biometric authentication successful
       console.log('Biometric authentication successful');
+      if (pinStore.nextScreen === 'setPincode') {
+        pinStore.setMode(PinCodeT.Modes.Set);
+      } else {
+        enterCase();
+      }
     } else {
       // Biometric authentication failed
       console.log('Biometric authentication failed');
-    }
-    if (pinStore.nextScreen === 'setPincode') {
-      pinStore.setMode(PinCodeT.Modes.Set);
-    } else {
-      enterCase();
     }
   };
 
