@@ -81,6 +81,7 @@ const App = observer(() => {
       console.log('userStore.state  :', userStore);
       if (userStore.state === 'DONE' && init === false) {
         init = true;
+        pinStore.setNextScreen('Wallet');
         pinStore.setSuccessEnter(false);
         pinStore.setVisible(true);
         console.log('user state > visible:', pinStore.visible);
@@ -90,25 +91,72 @@ const App = observer(() => {
   }, [userStore.state]);
 
   useEffect(() => {
-    const subscription = AppState.addEventListener('change', (nextAppState) => {
-      console.log('Before AppState', appState.current);
+    const focusEvent = Platform.OS === 'android' ? 'change' : 'change';
+    const subscription = AppState.addEventListener(
+      focusEvent,
+      (nextAppState) => {
+        console.log('Before AppState', appState.current);
+        console.log(' nextAppState :', nextAppState);
+        console.log(' appState :', appState);
+        // alert(
+        //   ' appState :' + appState.current + ', nextAppState:' + nextAppState,
+        // );
+        const screen = getCurrentRouteName();
+        console.log('getCurrentRouteName :', screen);
+        if (
+          appState.current &&
+          appState.current.match(/background/) &&
+          nextAppState === 'active'
+        ) {
+          console.log(
+            'App has come to the foreground! > backgroundAt :',
+            pinStore.backgrounAt,
+          );
+          const time = Math.round(+new Date() / 1000);
+          console.log('now :', time);
 
-      const screen = getCurrentRouteName();
-      console.log('getCurrentRouteName :', screen);
-      if (
-        appState.current.match(/inactive|background/) &&
-        nextAppState === 'active'
-      ) {
-        console.log('App has come to the foreground!');
-        pinStore.setNextScreen(screen.current);
-        pinStore.setSuccessEnter(false);
-        pinStore.setVisible(true);
-      }
+          const diff = time - pinStore.backgrounAt;
 
-      appState.current = nextAppState;
-      setAppStateVisible(appState.current);
-      console.log('After AppState', appState.current);
-    });
+          if (userStore.state === 'DONE' && diff > 10) {
+            if (pinStore.nextScreen !== 'MileageRedeemNotification')
+              pinStore.setNextScreen('Wallet');
+            pinStore.setSuccessEnter(false);
+            pinStore.setVisible(true);
+          }
+        }
+        if (
+          appState.current &&
+          appState.current.match(/active/) &&
+          nextAppState === 'background'
+        ) {
+          console.log('App has come to the background!');
+          // if (userStore.state === 'DONE') {
+          //   pinStore.setNextScreen('Wallet');
+          //   pinStore.setSuccessEnter(false);
+          //   pinStore.setVisible(true);
+          // }
+          const time = Math.round(+new Date() / 1000);
+          pinStore.setBackgroundAt(time);
+        }
+
+        // appState.current = !nextAppState ? nextAppState : appState.current;
+        appState.current = nextAppState;
+        setAppStateVisible(appState.current);
+        console.log('After AppState', appState.current);
+      },
+    );
+
+    // const subscription2 = AppState.addEventListener('blur', (nextAppState) => {
+    //   console.log('blur Before AppState', appState.current);
+    //   console.log('blur nextAppState :', nextAppState);
+    //   console.log('blur appState :', appState);
+    //   const screen = getCurrentRouteName();
+    //   console.log('blur getCurrentRouteName :', screen);
+    //
+    //   // appState.current = nextAppState;
+    //   setAppStateVisible(appState.current);
+    //   console.log('blur After AppState', appState.current);
+    // });
 
     return () => {
       subscription.remove();

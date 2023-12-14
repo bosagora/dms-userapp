@@ -39,7 +39,7 @@ export const usePushNotification = (userStore, loyaltyStore) => {
         projectId: Constants.expoConfig?.extra?.eas.projectId,
       });
     } else {
-      alert('Must be using a physical device for Push Notification.');
+      console.log('Must be using a physical device for Push Notification.');
       return;
     }
     console.log('t token :', token);
