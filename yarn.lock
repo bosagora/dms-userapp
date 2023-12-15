@@ -7825,10 +7825,10 @@ react-native-keyboard-aware-scroll-view@^0.9.5:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
 
-react-native-pincode-bosagora-ys@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-pincode-bosagora-ys/-/react-native-pincode-bosagora-ys-1.0.0.tgz#5787990ade8dcb1d550d0725037f7f26482c0907"
-  integrity sha512-JE8qoRdTM+49UWUDVHP12meVKvXEeMtVXOEHKSixLi/isupX5k2i08dP1IWjO7GSTe3foesEE841iPi7Wy1hbA==
+react-native-pincode-bosagora-ys@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-pincode-bosagora-ys/-/react-native-pincode-bosagora-ys-1.0.1.tgz#95aba473044e388c8010e1017970f25670fa9359"
+  integrity sha512-TBrygV7U42x8iwnj4lpFVsXU3hOrC78vYlgdDMxMmw53beW8YR3KHSw05g+1lY0VLqRC8jdxuDVso+sNXJmNgg==
 
 react-native-qrcode-svg@^6.2.0:
   version "6.2.0"

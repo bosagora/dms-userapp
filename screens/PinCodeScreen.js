@@ -75,6 +75,7 @@ const PinCodeScreen = observer(() => {
         lockIcon: <Icon name='lock' size={24} color='white' />,
         retryLockDuration: 1000,
         maxAttempt: 5,
+        useFooter: pinStore.useFooter,
       }}
       textOptions={customTexts}
       styles={customStyles}

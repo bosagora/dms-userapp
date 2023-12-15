@@ -34,12 +34,14 @@ const Configuration = observer(({ navigation }) => {
     pinStore.setNextScreen('setPincode');
     pinStore.setSuccessEnter(false);
     pinStore.setVisible(true);
+    pinStore.setUseFooter(true);
   };
 
   const goWalletManager = () => {
     pinStore.setNextScreen('WalletManager');
     pinStore.setSuccessEnter(false);
     pinStore.setVisible(true);
+    pinStore.setUseFooter(true);
   };
 
   const goProperScreen = (id) => {
