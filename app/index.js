@@ -6,6 +6,7 @@ import {
   Platform,
   StatusBar,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -53,7 +54,13 @@ const InitStack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const routeNameRef = React.createRef();
+// Text 적용
+Text.defaultProps = Text.defaultProps || {};
+Text.defaultProps.allowFontScaling = false;
 
+// TextInput 적용
+TextInput.defaultProps = TextInput.defaultProps || {};
+TextInput.defaultProps.allowFontScaling = false;
 const App = observer(() => {
   const [isStoreLoaded, setIsStoreLoaded] = useState(false);
   const { pinStore, userStore, loyaltyStore } = useStores();
