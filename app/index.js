@@ -77,7 +77,7 @@ const App = observer(() => {
   useEffect(() => {
     // 앱 초기 등록 화면이 아니고
     // 핀 코드 화면이 활성 상태 이고
-    const tt = async () => {
+    const initPincode = async () => {
       console.log('userStore.state  :', userStore);
       if (userStore.state === 'DONE' && init === false) {
         init = true;
@@ -87,20 +87,15 @@ const App = observer(() => {
         console.log('user state > visible:', pinStore.visible);
       }
     };
-    tt();
+    initPincode();
   }, [userStore.state]);
 
   useEffect(() => {
-    const focusEvent = Platform.OS === 'android' ? 'change' : 'change';
+    const focusEvent = 'change';
     const subscription = AppState.addEventListener(
       focusEvent,
       (nextAppState) => {
         console.log('Before AppState', appState.current);
-        console.log(' nextAppState :', nextAppState);
-        console.log(' appState :', appState);
-        // alert(
-        //   ' appState :' + appState.current + ', nextAppState:' + nextAppState,
-        // );
         const screen = getCurrentRouteName();
         console.log('getCurrentRouteName :', screen);
         if (
@@ -130,33 +125,16 @@ const App = observer(() => {
           nextAppState === 'background'
         ) {
           console.log('App has come to the background!');
-          // if (userStore.state === 'DONE') {
-          //   pinStore.setNextScreen('Wallet');
-          //   pinStore.setSuccessEnter(false);
-          //   pinStore.setVisible(true);
-          // }
+
           const time = Math.round(+new Date() / 1000);
           pinStore.setBackgroundAt(time);
         }
 
-        // appState.current = !nextAppState ? nextAppState : appState.current;
         appState.current = nextAppState;
         setAppStateVisible(appState.current);
         console.log('After AppState', appState.current);
       },
     );
-
-    // const subscription2 = AppState.addEventListener('blur', (nextAppState) => {
-    //   console.log('blur Before AppState', appState.current);
-    //   console.log('blur nextAppState :', nextAppState);
-    //   console.log('blur appState :', appState);
-    //   const screen = getCurrentRouteName();
-    //   console.log('blur getCurrentRouteName :', screen);
-    //
-    //   // appState.current = nextAppState;
-    //   setAppStateVisible(appState.current);
-    //   console.log('blur After AppState', appState.current);
-    // });
 
     return () => {
       subscription.remove();

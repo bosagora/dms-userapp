@@ -200,7 +200,7 @@ const Index = observer(({ navigation }) => {
                 나의 KIOS 마일리지 v0.22
               </Heading>
               <Text _dark={{ color: '$textLight200' }} fontSize='$xs' my='$1.5'>
-                모든 THE9 키오스크에서 상품 교환이 가능한 통합 마일리지
+                모든 KIOS 키오스크에서 상품 교환이 가능한 통합 마일리지
               </Text>
             </Box>
 
@@ -259,7 +259,7 @@ const Index = observer(({ navigation }) => {
                       {convertProperValue(userTokenBalance.toBOAString())}
                     </Text>
                     <Text _dark={{ color: '$textLight200' }} fontSize='$sm'>
-                      THE9
+                      KIOS
                     </Text>
                   </HStack>
                   <Pressable
@@ -277,7 +277,7 @@ const Index = observer(({ navigation }) => {
                     ≒ {convertProperValue(userTokenRate.toBOAString())} KRW
                   </Text>
                   <Text _dark={{ color: '$textLight200' }} fontSize='$sm'>
-                    (1 THE9 ≒{' '}
+                    (1 KIOS ≒{' '}
                     {convertProperValue(oneTokenRate.toBOAString(), 2, 10)} KRW)
                   </Text>
                 </HStack>
