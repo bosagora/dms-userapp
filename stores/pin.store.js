@@ -9,6 +9,7 @@ class PinStore {
   successEnter = false;
 
   backgrounAt = 0;
+  useFooter = true;
 
   constructor() {
     makeAutoObservable(this);
@@ -38,6 +39,10 @@ class PinStore {
 
   setBackgroundAt = (time) => {
     this.backgrounAt = time;
+  };
+
+  setUseFooter = (use) => {
+    this.useFooter = use;
   };
 }
 

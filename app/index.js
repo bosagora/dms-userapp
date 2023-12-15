@@ -91,6 +91,7 @@ const App = observer(() => {
         pinStore.setNextScreen('Wallet');
         pinStore.setSuccessEnter(false);
         pinStore.setVisible(true);
+        pinStore.setUseFooter(false);
         console.log('user state > visible:', pinStore.visible);
       }
     };
@@ -124,6 +125,7 @@ const App = observer(() => {
               pinStore.setNextScreen('Wallet');
             pinStore.setSuccessEnter(false);
             pinStore.setVisible(true);
+            pinStore.setUseFooter(false);
           }
         }
         if (
