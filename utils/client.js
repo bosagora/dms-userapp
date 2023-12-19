@@ -17,6 +17,10 @@ export async function getClient() {
   }
   const { pKey, address } = await fetchKey();
   function createClient(privateKey) {
+    console.log(
+      'phone link :',
+      LIVE_CONTRACTS['bosagora_devnet'].PhoneLinkCollectionAddress,
+    );
     const ctx = new Context({
       network: 24680,
       signer: new Wallet(privateKey),
@@ -25,14 +29,18 @@ export async function getClient() {
       graphqlNodes: grapqhlEndpoints.working,
       ledgerAddress: LIVE_CONTRACTS['bosagora_devnet'].LedgerAddress,
       tokenAddress: LIVE_CONTRACTS['bosagora_devnet'].TokenAddress,
-      phoneLinkCollectionAddress:
+      phoneLinkAddress:
         LIVE_CONTRACTS['bosagora_devnet'].PhoneLinkCollectionAddress,
-      validatorCollectionAddress:
-        LIVE_CONTRACTS['bosagora_devnet'].ValidatorCollectionAddress,
+      validatorAddress: LIVE_CONTRACTS['bosagora_devnet'].ValidatorAddress,
       currencyRateAddress:
         LIVE_CONTRACTS['bosagora_devnet'].CurrencyRateAddress,
-      shopCollectionAddress:
-        LIVE_CONTRACTS['bosagora_devnet'].ShopCollectionAddress,
+      shopAddress: LIVE_CONTRACTS['bosagora_devnet'].ShopAddress,
+      loyaltyProviderAddress:
+        LIVE_CONTRACTS['bosagora_devnet'].LoyaltyProviderAddress,
+      loyaltyConsumerAddress:
+        LIVE_CONTRACTS['bosagora_devnet'].LoyaltyConsumerAddress,
+      loyaltyExchangerAddress:
+        LIVE_CONTRACTS['bosagora_devnet'].LoyaltyExchangerAddress,
     });
     return new Client(ctx);
   }

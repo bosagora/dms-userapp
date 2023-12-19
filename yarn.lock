@@ -1304,6 +1304,15 @@
     "@ethersproject/properties" "^5.7.0"
     "@ethersproject/transactions" "^5.7.0"
 
+"@ethersproject/experimental@^5.7.0":
+  version "5.7.0"
+  resolved "https://registry.yarnpkg.com/@ethersproject/experimental/-/experimental-5.7.0.tgz#9759639434d37beaedfd8acab6f3af7db246b92d"
+  integrity sha512-DWvhuw7Dg8JPyhMbh/CNYOwsTLjXRx/HGkacIL5rBocG8jJC0kmixwoK/J3YblO4vtcyBLMa+sV74RJZK2iyHg==
+  dependencies:
+    "@ethersproject/web" "^5.7.0"
+    ethers "^5.7.0"
+    scrypt-js "3.0.1"
+
 "@ethersproject/hash@5.7.0", "@ethersproject/hash@^5.7.0":
   version "5.7.0"
   resolved "https://registry.yarnpkg.com/@ethersproject/hash/-/hash-5.7.0.tgz#eb7aca84a588508369562e16e514b539ba5240a7"
@@ -1369,7 +1378,7 @@
   resolved "https://registry.yarnpkg.com/@ethersproject/logger/-/logger-5.7.0.tgz#6ce9ae168e74fecf287be17062b590852c311892"
   integrity sha512-0odtFdXu/XHtjQXJYA3u9G0G8btm0ND5Cu8M7i5vhEcE8/HmF4Lbdqanwyv4uQTr2tx6b7fQRmgLrsnpQlmnig==
 
-"@ethersproject/networks@^5.7.0":
+"@ethersproject/networks@5.7.1", "@ethersproject/networks@^5.7.0":
   version "5.7.1"
   resolved "https://registry.yarnpkg.com/@ethersproject/networks/-/networks-5.7.1.tgz#118e1a981d757d45ccea6bb58d9fd3d9db14ead6"
   integrity sha512-n/MufjFYv3yFcUyfhnXotyDlNdFb7onmkSy8aQERi2PjNcnWQ66xXxa3XlS8nCcA8aJKJjIIMNJTC7tu80GwpQ==
@@ -4747,10 +4756,10 @@ define-properties@^1.1.3, define-properties@^1.1.4:
     has-property-descriptors "^1.0.0"
     object-keys "^1.1.1"
 
-del-osx-lib@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/del-osx-lib/-/del-osx-lib-1.1.2.tgz#c8f8abe04fa5ad4870f11691b0587f85a29204ea"
-  integrity sha512-1Dlk39K+ohn5ptnNTHCb7FO39Lzeo9sI+ZxMgALhN0rbIws6TCfWbz0ioMMI+wtIDfrR6IMvpP3r+Y9k1pEeiQ==
+del-osx-lib@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/del-osx-lib/-/del-osx-lib-2.0.0.tgz#781e34424c94936960a3690d92a89c9843c8127b"
+  integrity sha512-nQOCnnpCXS13m9R21jJIvBvZmdzOhOqwbvFMnWm1aTbxd2bZCD9fQSA0KiQxqYaZRD7Sx1t2ts1mvL7/CRI03w==
   dependencies:
     ethers "npm:boa-ethers2@^5.7.9"
 
@@ -4814,17 +4823,17 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
-dms-osx-lib@^1.1.14:
-  version "1.1.14"
-  resolved "https://registry.yarnpkg.com/dms-osx-lib/-/dms-osx-lib-1.1.14.tgz#a3f5a1486bfdbf5961b8f7dde97bf58b8a2d9614"
-  integrity sha512-WjAj93yfdJEsMKNTPEd6Agw24DYYTvdU3GQCerU1/MRar2HnUvS0g0LOJ9ylI1i4yXmQiZVvGtWgji91yY8fxg==
+dms-osx-lib@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/dms-osx-lib/-/dms-osx-lib-2.0.1.tgz#2228c0555c9fbf3c6089c5ca9075d62c3c7839b2"
+  integrity sha512-q8kIUE1wBfTq1Ha2+3n0pQti2pxDcinwgE+aGjwJ7ZYxnKtJnXdGfBCL0p9kKghS4jvui3ptemh5GL7LSrTDHg==
   dependencies:
     ethers "npm:boa-ethers2@^5.7.9"
 
-dms-sdk-client@^1.0.16:
-  version "1.0.16"
-  resolved "https://registry.yarnpkg.com/dms-sdk-client/-/dms-sdk-client-1.0.16.tgz#534ad50f645a8762a860e38bdf4ea3ab533c7f56"
-  integrity sha512-KY9nE94cNxB+FIlkPU1knPr2IBm+g3L5v+xqNvnF95WrULDFmvrmreAKJad+MqEgyIb6EfA942GWTLNvEwFsYQ==
+dms-sdk-client@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/dms-sdk-client/-/dms-sdk-client-2.0.1.tgz#49bfd7a16ad7894aa05f92915ba57e4c1e1e8b2f"
+  integrity sha512-uAAsL/LgJHEbYKBfjGhva0jRLpTgK+cXKSvwtZWJYCcsfVq4xRH5ERqWI10uBpJe25jYUg6Vqo3nylREjtVHRg==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/abstract-signer" "^5.7.0"
@@ -4832,14 +4841,15 @@ dms-sdk-client@^1.0.16:
     "@ethersproject/bytes" "^5.7.0"
     "@ethersproject/constants" "^5.7.0"
     "@ethersproject/contracts" "^5.7.0"
+    "@ethersproject/experimental" "^5.7.0"
     "@ethersproject/hash" "^5.7.0"
     "@ethersproject/keccak256" "^5.7.0"
     "@ethersproject/networks" "npm:boa-networks@^5.7.2"
     "@ethersproject/providers" "^5.7.0"
     "@ethersproject/random" "^5.7.0"
     "@ethersproject/wallet" "^5.7.0"
-    del-osx-lib "^1.1.2"
-    dms-osx-lib "^1.1.14"
+    del-osx-lib "^2.0.0"
+    dms-osx-lib "^2.0.1"
     dms-sdk-common "^1.0.3"
     graphql "^16.5.0"
     graphql-request "^4.3.0"
@@ -5027,6 +5037,42 @@ etag@~1.8.1:
   resolved "https://registry.npmjs.org/etag/-/etag-1.8.1.tgz"
   integrity sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==
 
+ethers@^5.7.0:
+  version "5.7.2"
+  resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.7.2.tgz#3a7deeabbb8c030d4126b24f84e525466145872e"
+  integrity sha512-wswUsmWo1aOK8rR7DIKiWSw9DbLWe6x98Jrn8wcTflTVvaXhAMaB5zGAXy0GYQEQp9iO1iSHWVyARQm11zUtyg==
+  dependencies:
+    "@ethersproject/abi" "5.7.0"
+    "@ethersproject/abstract-provider" "5.7.0"
+    "@ethersproject/abstract-signer" "5.7.0"
+    "@ethersproject/address" "5.7.0"
+    "@ethersproject/base64" "5.7.0"
+    "@ethersproject/basex" "5.7.0"
+    "@ethersproject/bignumber" "5.7.0"
+    "@ethersproject/bytes" "5.7.0"
+    "@ethersproject/constants" "5.7.0"
+    "@ethersproject/contracts" "5.7.0"
+    "@ethersproject/hash" "5.7.0"
+    "@ethersproject/hdnode" "5.7.0"
+    "@ethersproject/json-wallets" "5.7.0"
+    "@ethersproject/keccak256" "5.7.0"
+    "@ethersproject/logger" "5.7.0"
+    "@ethersproject/networks" "5.7.1"
+    "@ethersproject/pbkdf2" "5.7.0"
+    "@ethersproject/properties" "5.7.0"
+    "@ethersproject/providers" "5.7.2"
+    "@ethersproject/random" "5.7.0"
+    "@ethersproject/rlp" "5.7.0"
+    "@ethersproject/sha2" "5.7.0"
+    "@ethersproject/signing-key" "5.7.0"
+    "@ethersproject/solidity" "5.7.0"
+    "@ethersproject/strings" "5.7.0"
+    "@ethersproject/transactions" "5.7.0"
+    "@ethersproject/units" "5.7.0"
+    "@ethersproject/wallet" "5.7.0"
+    "@ethersproject/web" "5.7.1"
+    "@ethersproject/wordlists" "5.7.0"
+
 "ethers@npm:boa-ethers2@^5.7.9":
   version "5.7.9"
   resolved "https://registry.yarnpkg.com/boa-ethers2/-/boa-ethers2-5.7.9.tgz#b84ecd2d9370918a700d16dea35533740ca96d71"
@@ -5067,6 +5113,11 @@ event-target-shim@^5.0.0, event-target-shim@^5.0.1:
   version "5.0.1"
   resolved "https://registry.npmjs.org/event-target-shim/-/event-target-shim-5.0.1.tgz"
   integrity sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==
+
+events@^3.0.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/events/-/events-3.3.0.tgz#31a95ad0a924e2d2c419a813aeb2c4e878ea7400"
+  integrity sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==
 
 exec-async@^2.2.0:
   version "2.2.0"
@@ -7793,6 +7844,13 @@ react-is@^18.0.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react-is/-/react-is-18.2.0.tgz"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
+
+react-native-events@^1.0.21:
+  version "1.0.21"
+  resolved "https://registry.yarnpkg.com/react-native-events/-/react-native-events-1.0.21.tgz#d1fbe492a3321d09c630da5132dad10a5312b823"
+  integrity sha512-qBolATOf+xzUkYOlOK3I4Nm/l6Y5vtng8dAM9TPHy170NSKKpsgirAnaCO82+nEkniEanm+Nb/cP4pFVPQAeaQ==
+  dependencies:
+    events "^3.0.0"
 
 react-native-gesture-handler@~2.12.0:
   version "2.12.1"
