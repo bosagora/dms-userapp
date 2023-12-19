@@ -21,6 +21,7 @@ import { AUTH_STATE } from '../../stores/user.store';
 import { useStores } from '../../stores';
 import '@ethersproject/shims';
 import { ContractUtils } from 'dms-sdk-client';
+import * as Clipboard from 'expo-clipboard';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { getClient } from '../../utils/client';
