@@ -200,7 +200,7 @@ const Index = observer(({ navigation }) => {
               }}>
               <Box>
                 <Heading _dark={{ color: '$textLight200' }} size='lg'>
-                  나의 KIOS 마일리지 v0.26
+                  나의 KIOS 마일리지 v0.27
                 </Heading>
                 <Text
                   _dark={{ color: '$textLight200' }}

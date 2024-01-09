@@ -149,6 +149,7 @@ const PhoneAuth = observer(({ navigation }) => {
 
   async function registerPhone() {
     console.log('userStore :', userStore);
+    userStore.setLoading(true);
     const phone = userStore.countryPhoneCode + phoneCode;
     const steps = [];
     try {
@@ -161,9 +162,11 @@ const PhoneAuth = observer(({ navigation }) => {
         setRequestId(requestId);
         handleValidTime();
       }
+      userStore.setLoading(false);
     } catch (e) {
       await Clipboard.setStringAsync(JSON.stringify(e));
       console.log('error : ', e);
+      userStore.setLoading(false);
       alert('전화번호 등록에 실패하였습니다.' + JSON.stringify(e));
     }
   }
@@ -173,6 +176,7 @@ const PhoneAuth = observer(({ navigation }) => {
   }
 
   async function submitPhone(authNum) {
+    userStore.setLoading(true);
     const steps = [];
     try {
       for await (const step of client.link.submit(requestId, authNum)) {
@@ -182,9 +186,11 @@ const PhoneAuth = observer(({ navigation }) => {
       if (steps.length === 2 && steps[1].key === 'accepted') {
         completeAuth();
       }
+      userStore.setLoading(false);
     } catch (e) {
       await Clipboard.setStringAsync(JSON.stringify(e));
       console.log('error : ', e);
+      userStore.setLoading(false);
       alert('전화번호 인증에 실패하였습니다.' + JSON.stringify(e));
     }
   }
@@ -273,6 +279,7 @@ const PhoneAuth = observer(({ navigation }) => {
           scrollToOverflowEnabled={true}
           enableAutomaticScroll={true}>
           <MobileHeader />
+
           <Box
             p='$4'
             flex={1}

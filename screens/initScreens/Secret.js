@@ -30,11 +30,6 @@ const Secret = observer(({ navigation }) => {
   const { pinStore, userStore, secretStore } = useStores();
   const [client, setClient] = useState();
   const [address, setAddress] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setIsLoading(false);
-  }, []);
 
   const fetchClient = async () => {
     const { client: client1, address: userAddress } = await getClient();
@@ -47,7 +42,6 @@ const Secret = observer(({ navigation }) => {
   };
 
   async function createWallet() {
-    setIsLoading(true);
     const wallet = Wallet.createRandom();
 
     console.log('address :', wallet.address);
@@ -71,11 +65,10 @@ const Secret = observer(({ navigation }) => {
   }
 
   async function tt() {
+    userStore.setLoading(true);
     console.log('------>>>>>');
-    setIsLoading(true);
     setTimeout(async () => {
       await createWallet();
-      setIsLoading(false);
     }, 100);
   }
 
@@ -94,13 +87,13 @@ const Secret = observer(({ navigation }) => {
     }
   }
   function resetPinCode() {
+    userStore.setLoading(false);
     console.log('registerPushToken >>');
     alert('새로운 지갑이 생성 되었습니다.');
     navigation.navigate('InitPinCodeScreen');
   }
 
   async function saveKey(key) {
-    setIsLoading(true);
     key = key.trim();
     console.log('key :', key);
     console.log('key.split :', key.split('0x'));
@@ -111,14 +104,12 @@ const Secret = observer(({ navigation }) => {
       wallet = new Wallet(key);
     } catch (e) {
       console.log('Invalid private key.');
-      setIsLoading(false);
       alert('유효하지 않은 키 입니다.');
       return;
     }
     secretStore.setAddress(wallet.address);
     await saveSecureValue('address', wallet.address);
     await saveSecureValue('privateKey', key);
-    setIsLoading(false);
     const cc = await fetchClient();
     if (Device.isDevice) {
       await registerPushTokenWithClient(cc);
@@ -150,7 +141,6 @@ const Secret = observer(({ navigation }) => {
           <Box>
             <Button py='$2.5' px='$3' onPress={tt}>
               <ButtonText>지갑 생성하기</ButtonText>
-              {isLoading && <Spinner px='$3' color='$amber600' />}
             </Button>
           </Box>
           <ImportPrivateKey saveKey={saveKey} />

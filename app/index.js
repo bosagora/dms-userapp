@@ -66,10 +66,12 @@ import ko from '../langs/ko.json';
 
 import i18n from 'i18next';
 import { useTranslation, initReactI18next } from 'react-i18next';
+import ModalActivityIndicator from 'react-native-modal-activityindicator';
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
+    compatibilityJSON: 'v3',
     resources: {
       en: {
         translation: {
@@ -215,6 +217,11 @@ const App = observer(() => {
           </GluestackUIProvider>
         </NavigationContainer>
         <PinCodeScreen />
+        <ModalActivityIndicator
+          visible={userStore.loading}
+          size='large'
+          color='white'
+        />
       </BottomSheetModalProvider>
     );
   }
