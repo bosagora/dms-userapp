@@ -26,6 +26,8 @@ class UserStore {
   permissionsCount = 0;
   expoPushToken = '';
 
+  loading = false;
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -70,6 +72,9 @@ class UserStore {
 
   setExpoPushToken = (token) => {
     this.expoPushToken = token;
+  };
+  setLoading = (loading) => {
+    this.loading = loading;
   };
 }
 

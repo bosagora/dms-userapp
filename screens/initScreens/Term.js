@@ -1,4 +1,4 @@
-import { SafeAreaView } from 'react-native';
+import { ActivityIndicator, SafeAreaView, View } from 'react-native';
 import { useStores } from '../../stores';
 import { observer } from 'mobx-react';
 import React, { useState } from 'react';
@@ -18,7 +18,6 @@ import {
 } from '@gluestack-ui/themed';
 import { CheckIcon } from 'lucide-react-native';
 import MobileHeader from '../../components/MobileHeader';
-
 const Term = observer(({ navigation }) => {
   const { noteStore, userStore } = useStores();
   const [values, setValues] = useState(['T1', 'T2']);
