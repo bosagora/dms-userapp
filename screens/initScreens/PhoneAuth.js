@@ -22,7 +22,7 @@ import { useStores } from '../../stores';
 import '@ethersproject/shims';
 import { ContractUtils } from 'dms-sdk-client';
 import * as Clipboard from 'expo-clipboard';
-
+import { getLocales, getCalendars } from 'expo-localization';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { getClient } from '../../utils/client';
 
@@ -57,7 +57,6 @@ const PhoneAuth = observer(({ navigation }) => {
   const [client, setClient] = useState(null);
   const [address, setAddress] = useState('');
   const [phoneCode, setPhoneCode] = useState('01010002000');
-  const [countryCode, setCountryCode] = useState('82');
   const [requestId, setRequestId] = useState('');
   // const [authNum, setAuthNum] = useState('000102');
   const toast = useToast();
@@ -105,7 +104,14 @@ const PhoneAuth = observer(({ navigation }) => {
       console.log('isUp:', isUp);
     }
     fetchClient().then(() => console.log('end of fetchClient'));
+    const deviceLocales = getLocales()[0];
+    console.log('deviceLocales :', deviceLocales);
     // initiateTimer();
+    userStore.setCurrency(deviceLocales.currencyCode);
+    userStore.setLang(deviceLocales.languageCode);
+    userStore.setCountry(deviceLocales.regionCode);
+    userStore.setLangTag(deviceLocales.languageTag);
+    userStore.setCountryPhoneCode(deviceLocales.regionCode == 'KR' ? '82' : '');
   }, []);
 
   const initiateTimer = () => {
@@ -142,7 +148,8 @@ const PhoneAuth = observer(({ navigation }) => {
   };
 
   async function registerPhone() {
-    const phone = countryCode + phoneCode;
+    console.log('userStore :', userStore);
+    const phone = userStore.countryPhoneCode + phoneCode;
     const steps = [];
     try {
       for await (const step of client.link.register(phone)) {
@@ -185,12 +192,12 @@ const PhoneAuth = observer(({ navigation }) => {
     stopTimer();
     changeUnpayableToPayable().then(() => {
       alert('성공적으로 인증되었습니다.');
-      userStore.setPhone(countryCode + phoneCode);
+      userStore.setPhone(userStore.countryPhoneCode + phoneCode);
       userStore.setAuthState(AUTH_STATE.DONE);
     });
   }
   async function changeUnpayableToPayable() {
-    const phone = countryCode + phoneCode;
+    const phone = userStore.countryPhoneCode + phoneCode;
     const balance = await client.ledger.getPointBalance(address);
     console.log('Point balance Before changing :', balance);
 
@@ -286,8 +293,8 @@ const PhoneAuth = observer(({ navigation }) => {
                   isInvalid={false}
                   isReadOnly={false}>
                   <InputField
-                    value={countryCode}
-                    onChangeText={setCountryCode}
+                    value={userStore.countryPhoneCode}
+                    onChangeText={userStore.setCountryPhoneCode}
                   />
                 </Input>
               </Box>

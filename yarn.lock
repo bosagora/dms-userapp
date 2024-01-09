@@ -1154,6 +1154,13 @@
   dependencies:
     regenerator-runtime "^0.14.0"
 
+"@babel/runtime@^7.22.5", "@babel/runtime@^7.23.2":
+  version "7.23.8"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.23.8.tgz#8ee6fe1ac47add7122902f257b8ddf55c898f650"
+  integrity sha512-Y7KbAP984rn1VGMbGqKmBLio9V7y5Je9GvU4rQPCPinCyNfUcToxIXl06d59URp/F3LwinvODxab5N/G6qggkw==
+  dependencies:
+    regenerator-runtime "^0.14.0"
+
 "@babel/template@^7.0.0", "@babel/template@^7.22.15", "@babel/template@^7.22.5":
   version "7.22.15"
   resolved "https://registry.npmjs.org/@babel/template/-/template-7.22.15.tgz"
@@ -4083,6 +4090,11 @@ big-integer@1.6.x:
   resolved "https://registry.npmjs.org/big-integer/-/big-integer-1.6.51.tgz"
   integrity sha512-GPEid2Y9QU1Exl1rpO9B2IPJGHPSupF5GnVIP0blYvNOMer2bTvSWs1jGOUg04hTmu67nmLsQ9TBo1puaotBHg==
 
+bignumber.js@*:
+  version "9.1.2"
+  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.1.2.tgz#b7c4242259c008903b13707983b5f4bbd31eda0c"
+  integrity sha512-2/mKyZH9K85bzOEfhXDBFZTGd1CTs+5IHpeFQo9luiBG7hghdC851Pj2WAhb6E3R6b9tZj/XKhbg4fum+Kepug==
+
 bl@^4.1.0:
   version "4.1.0"
   resolved "https://registry.npmjs.org/bl/-/bl-4.1.0.tgz"
@@ -4823,17 +4835,17 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
-dms-osx-lib@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/dms-osx-lib/-/dms-osx-lib-2.0.1.tgz#2228c0555c9fbf3c6089c5ca9075d62c3c7839b2"
-  integrity sha512-q8kIUE1wBfTq1Ha2+3n0pQti2pxDcinwgE+aGjwJ7ZYxnKtJnXdGfBCL0p9kKghS4jvui3ptemh5GL7LSrTDHg==
+dms-osx-lib@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/dms-osx-lib/-/dms-osx-lib-2.2.0.tgz#bf2d4f99b585ee6cb71aa9676972691f6d84278d"
+  integrity sha512-OuH+BvqEet3fBnMsGYFsFLp9ye68lz2++ygC90PzjwKWJWtV7HgszJ81SHlr5QJ6iAdGzj2ScAWizoe8t6+wuQ==
   dependencies:
     ethers "npm:boa-ethers2@^5.7.9"
 
-dms-sdk-client@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/dms-sdk-client/-/dms-sdk-client-2.0.1.tgz#49bfd7a16ad7894aa05f92915ba57e4c1e1e8b2f"
-  integrity sha512-uAAsL/LgJHEbYKBfjGhva0jRLpTgK+cXKSvwtZWJYCcsfVq4xRH5ERqWI10uBpJe25jYUg6Vqo3nylREjtVHRg==
+dms-sdk-client@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/dms-sdk-client/-/dms-sdk-client-2.2.0.tgz#f5f51ddf4cc72e166cfc55aafe410fc1355d1cab"
+  integrity sha512-A3UFEOuqWYDYP3cBuGYHU07uLmhR1j2u/BD3R688/C6TGbgZYN9/gKXxabJKoNdm465/hE/OUlQkBtoH3GfrLg==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/abstract-signer" "^5.7.0"
@@ -4849,7 +4861,7 @@ dms-sdk-client@^2.0.1:
     "@ethersproject/random" "^5.7.0"
     "@ethersproject/wallet" "^5.7.0"
     del-osx-lib "^2.0.0"
-    dms-osx-lib "^2.0.1"
+    dms-osx-lib "^2.2.0"
     dms-sdk-common "^1.0.3"
     graphql "^16.5.0"
     graphql-request "^4.3.0"
@@ -5290,6 +5302,13 @@ expo-local-authentication@~13.4.1:
   dependencies:
     invariant "^2.2.4"
 
+expo-localization@~14.3.0:
+  version "14.3.0"
+  resolved "https://registry.yarnpkg.com/expo-localization/-/expo-localization-14.3.0.tgz#a7614114079658000f46c7e3029703c8508e0678"
+  integrity sha512-TML3TeVtwpfuSNwbhBspC9XsGJaa0TWJNh+UaR/35YP9fQiaJfVWUMSrAq84ba6rY1Pm3kti07LV8UUa505oqg==
+  dependencies:
+    rtl-detect "^1.0.2"
+
 expo-manifests@~0.7.0:
   version "0.7.2"
   resolved "https://registry.yarnpkg.com/expo-manifests/-/expo-manifests-0.7.2.tgz#77c2d9476e8130fc9ca6d4274fa1a5495d34358e"
@@ -5382,10 +5401,10 @@ expo-updates-interface@~0.10.0:
   resolved "https://registry.yarnpkg.com/expo-updates-interface/-/expo-updates-interface-0.10.1.tgz#cab075641cd381718ccd9264bf133dc393430a44"
   integrity sha512-I6JMR7EgjXwckrydDmrkBEX/iw750dcqpzQVsjznYWfi0HTEOxajLHB90fBFqQkUV5i5s4Fd3hYQ1Cn0oMzUbA==
 
-expo-updates@^0.18.17:
-  version "0.18.17"
-  resolved "https://registry.yarnpkg.com/expo-updates/-/expo-updates-0.18.17.tgz#11ce03ee95ee19e1a1e253b2a98dd9b3dc019c71"
-  integrity sha512-oyBDR94nYEtVw+iBod3N9LFqTfpLHofmUjh0lP12YZINUI89hvoAyqRe56eSnlpWkzziG6g1y4NGva0D0ViK6w==
+expo-updates@~0.18.19:
+  version "0.18.19"
+  resolved "https://registry.yarnpkg.com/expo-updates/-/expo-updates-0.18.19.tgz#40a69ac25f6fcdde7d9ee76b5a5e4e73eb6cd25d"
+  integrity sha512-dakYQ7XhZtBKMLcim08wum108ZUQcNigurijb/6PKdg3QHn21IzOr/27n6x54DctcoW8w1B8w8y1Xw2svVsx4w==
   dependencies:
     "@expo/code-signing-certificates" "0.0.5"
     "@expo/config" "~8.1.0"
@@ -5914,6 +5933,13 @@ hosted-git-info@^3.0.2:
   dependencies:
     lru-cache "^6.0.0"
 
+html-parse-stringify@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/html-parse-stringify/-/html-parse-stringify-3.0.1.tgz#dfc1017347ce9f77c8141a507f233040c59c55d2"
+  integrity sha512-KknJ50kTInJ7qIScF3jeaFRpMpE8/lfiTdzf/twXyPBLAGrLRTmkz3AdTnKeh40X8k9L2fdYwEp/42WGXIRGcg==
+  dependencies:
+    void-elements "3.1.0"
+
 http-errors@2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/http-errors/-/http-errors-2.0.0.tgz"
@@ -5942,6 +5968,22 @@ hyphenate-style-name@^1.0.3:
   version "1.0.4"
   resolved "https://registry.npmjs.org/hyphenate-style-name/-/hyphenate-style-name-1.0.4.tgz"
   integrity sha512-ygGZLjmXfPHj+ZWh6LwbC37l43MhfztxetbFCoYTM2VjkIUpeHgSNn7QIyVFj7YQ1Wl9Cbw5sholVJPzWvC2MQ==
+
+i18n-js@^4.3.2:
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/i18n-js/-/i18n-js-4.3.2.tgz#ec5391f23c76f5374b53645c83d272914eb81291"
+  integrity sha512-n8gbEbQEueym2/q2yrZk5/xKWjFcKtg3/Escw4JHSVWa8qtKqP8j7se3UjkRbHlO/REqFA0V/MG1q8tEfyHeOA==
+  dependencies:
+    bignumber.js "*"
+    lodash "*"
+    make-plural "*"
+
+i18next@^23.7.16:
+  version "23.7.16"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-23.7.16.tgz#7026d18b7a3ac9e2ecfeb78da5e4da5ca33312ef"
+  integrity sha512-SrqFkMn9W6Wb43ZJ9qrO6U2U4S80RsFMA7VYFSqp7oc7RllQOYDCdRfsse6A7Cq/V8MnpxKvJCYgM8++27n4Fw==
+  dependencies:
+    "@babel/runtime" "^7.23.2"
 
 iconv-lite@0.4.24:
   version "0.4.24"
@@ -6592,7 +6634,7 @@ lodash.throttle@^4.1.1:
   resolved "https://registry.npmjs.org/lodash.throttle/-/lodash.throttle-4.1.1.tgz"
   integrity sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==
 
-lodash@^4.17.13, lodash@^4.17.21, lodash@^4.17.4:
+lodash@*, lodash@^4.17.13, lodash@^4.17.21, lodash@^4.17.4:
   version "4.17.21"
   resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -6654,6 +6696,11 @@ make-dir@^2.0.0, make-dir@^2.1.0:
   dependencies:
     pify "^4.0.1"
     semver "^5.6.0"
+
+make-plural@*:
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/make-plural/-/make-plural-7.3.0.tgz#2889dbafca2fb097037c47967d3e3afa7e48a52c"
+  integrity sha512-/K3BC0KIsO+WK2i94LkMPv3wslMrazrQhfi5We9fMbLlLjzoOSJWr7TAdupLlDWaJcWxwoNosBkhFDejiu5VDw==
 
 makeerror@1.0.12:
   version "1.0.12"
@@ -7830,6 +7877,14 @@ react-helmet-async@^1.3.0:
     react-fast-compare "^3.2.0"
     shallowequal "^1.1.0"
 
+react-i18next@^14.0.0:
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-14.0.0.tgz#eb39d2245fd1024237828c955f770e409a1ccb12"
+  integrity sha512-OCrS8rHNAmnr8ggGRDxjakzihrMW7HCbsplduTm3EuuQ6fyvWGT41ksZpqbduYoqJurBmEsEVZ1pILSUWkHZng==
+  dependencies:
+    "@babel/runtime" "^7.22.5"
+    html-parse-stringify "^3.0.1"
+
 "react-is@^16.12.0 || ^17.0.0 || ^18.0.0", react-is@^17.0.1:
   version "17.0.2"
   resolved "https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz"
@@ -8231,6 +8286,11 @@ rimraf@~2.6.2:
   integrity sha512-mwqeW5XsA2qAejG46gYdENaxXjx9onRNCfn7L0duuP4hCuTIi/QO7PDK07KJfp1d+izWPrzEJDcSqBa0OZQriA==
   dependencies:
     glob "^7.1.3"
+
+rtl-detect@^1.0.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/rtl-detect/-/rtl-detect-1.1.2.tgz#ca7f0330af5c6bb626c15675c642ba85ad6273c6"
+  integrity sha512-PGMBq03+TTG/p/cRB7HCLKJ1MgDIi07+QU1faSjiYRfmY5UsAttV9Hs08jDAHVwcOwmVLcSJkpwyfXszVjWfIQ==
 
 run-parallel@^1.1.9:
   version "1.2.0"
@@ -9112,6 +9172,11 @@ vlq@^1.0.0:
   version "1.0.1"
   resolved "https://registry.npmjs.org/vlq/-/vlq-1.0.1.tgz"
   integrity sha512-gQpnTgkubC6hQgdIcRdYGDSDc+SaujOdyesZQMv6JlfQee/9Mp0Qhnys6WxDWvQnL5WZdT7o2Ul187aSt0Rq+w==
+
+void-elements@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-3.1.0.tgz#614f7fbf8d801f0bb5f0661f5b2f5785750e4f09"
+  integrity sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==
 
 walker@^1.0.7:
   version "1.0.8"
