@@ -15,9 +15,12 @@ class UserStore {
   name = '';
   email = '';
   phone = '';
-  country = 'kor';
-  lang = 'kr';
-  currency = 'krw';
+  countryPhoneCode = '82';
+  country = 'KR';
+  lang = 'ko';
+  langTag = 'ko-KR';
+  currency = 'KRW';
+
   enableBio = false;
 
   permissionsCount = 0;
@@ -41,7 +44,9 @@ class UserStore {
   setPhone = (phone) => {
     this.phone = phone;
   };
-
+  setCountryPhoneCode = (code) => {
+    this.countryPhoneCode = code;
+  };
   setCountry = (country) => {
     this.country = country;
   };
@@ -49,8 +54,11 @@ class UserStore {
   setCurrency = (currency) => {
     this.currency = currency;
   };
-  setLand = (lang) => {
+  setLang = (lang) => {
     this.lang = lang;
+  };
+  setLangTag = (langTag) => {
+    this.langTag = langTag;
   };
   setEnableBio = (enableBio) => {
     this.enableBio = enableBio;

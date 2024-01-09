@@ -23,6 +23,7 @@ import { Amount, BOACoin, ContractUtils } from 'dms-sdk-client';
 import { convertProperValue } from '../../utils/convert';
 import loyaltyStore from '../../stores/loyalty.store';
 import { SafeAreaView } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const Index = observer(({ navigation }) => {
   const { secretStore, userStore, loyaltyStore } = useStores();
@@ -37,7 +38,7 @@ const Index = observer(({ navigation }) => {
   const [oneTokenRate, setOneTokenRate] = useState(new BOACoin(0));
   const [userLoyaltyType, setUserLoyaltyType] = useState(0);
   const [phone, setPhone] = useState('');
-
+  const { t } = useTranslation();
   useEffect(() => {
     console.log('================= userStore', userStore);
 
@@ -102,7 +103,7 @@ const Index = observer(({ navigation }) => {
 
     let pointCurrencyRate = await client1.currency.pointToCurrency(
       userPoint,
-      'krw',
+      userStore.currency,
     );
     const pointRateConv = new BOACoin(pointCurrencyRate);
     console.log('pointRateConv :', pointRateConv.toBOAString());
@@ -199,13 +200,13 @@ const Index = observer(({ navigation }) => {
               }}>
               <Box>
                 <Heading _dark={{ color: '$textLight200' }} size='lg'>
-                  나의 KIOS 마일리지 v0.24
+                  나의 KIOS 마일리지 v0.26
                 </Heading>
                 <Text
                   _dark={{ color: '$textLight200' }}
                   fontSize='$xs'
                   my='$1.5'>
-                  모든 KIOS 키오스크에서 상품 교환이 가능한 통합 마일리지
+                  모든 KIOS 키오스크에서 상품 교환이 가능한 통합 {t('mileage')}
                 </Text>
               </Box>
 
@@ -239,7 +240,7 @@ const Index = observer(({ navigation }) => {
                       ≒ {convertProperValue(payablePointRate.toBOAString())} KRW
                     </Text>
                     <Text _dark={{ color: '$textLight200' }} fontSize='$sm'>
-                      (1 point ≒ 1 KRW)
+                      (1 point ≒ 1 {userStore.currency})
                     </Text>
                   </HStack>
                   <Button mt='$12' onPress={() => handleQRSheet()}>
