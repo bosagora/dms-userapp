@@ -5,7 +5,7 @@ import { observer } from 'mobx-react';
 import { Box, FlatList, HStack, Text, VStack } from '@gluestack-ui/themed';
 import MobileHeader from '../../components/MobileHeader';
 import { getClient } from '../../utils/client';
-import { convertProperValue } from '../../utils/convert';
+import { convertProperValue, timePadding } from '../../utils/convert';
 import { Amount, BOACoin } from 'dms-sdk-client';
 import { BigNumber } from '@ethersproject/bignumber';
 
@@ -17,18 +17,18 @@ const MileageHistory = observer(({ navigation }) => {
   function timeConverter(UNIX_timestamp) {
     var a = new Date(UNIX_timestamp * 1000);
     var months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
+      '01',
+      '02',
+      '03',
+      '04',
+      '05',
+      '06',
+      '07',
+      '08',
+      '09',
+      '10',
+      '11',
+      '12',
     ];
     var year = a.getFullYear();
     var month = months[a.getMonth()];
@@ -37,7 +37,17 @@ const MileageHistory = observer(({ navigation }) => {
     var min = a.getMinutes();
     var sec = a.getSeconds();
     var time =
-      date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
+      year +
+      '/' +
+      month +
+      '/' +
+      timePadding(date) +
+      ' ' +
+      timePadding(hour) +
+      ':' +
+      timePadding(min) +
+      ':' +
+      timePadding(sec);
     return time;
   }
   console.log(timeConverter(0));
@@ -95,73 +105,79 @@ const MileageHistory = observer(({ navigation }) => {
         bg='$backgroundLight0'>
         <MobileHeader
           title='마일리지 적립/사용 내역'
-          subTitle='최근 100개 내역'
+          subTitle={
+            historyData && historyData.length > 0
+              ? '최근 ' + historyData.length + '개 내역'
+              : '조회된 내역이 없습니다.'
+          }
         />
-        <FlatList
-          m='$3'
-          data={historyData}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <Box
-              borderBottomWidth='$1'
-              borderColor='$trueGray800'
-              sx={{
-                _dark: {
-                  borderColor: '$trueGray100',
-                },
-                '@base': {
-                  pl: 0,
-                  pr: 0,
-                },
-                '@sm': {
-                  pl: '$4',
-                  pr: '$5',
-                },
-              }}
-              py='$2'>
-              <HStack
-                space='md'
-                alignItems='center'
-                justifyContent='space-between'>
-                <VStack>
-                  <Text
-                    fontSize='$sm'
-                    color='$coolGray600'
-                    sx={{
-                      _dark: {
-                        color: '$warmGray200',
-                      },
-                    }}>
-                    {item.actionName === 'SAVED' ? '적립' : '사용'}
-                  </Text>
-                  <Text
-                    fontSize='$sm'
-                    color='$coolGray600'
-                    sx={{
-                      _dark: {
-                        color: '$warmGray200',
-                      },
-                    }}>
-                    {timeConverter(item.blockTimestamp)}
-                  </Text>
-                </VStack>
-                <Box>
-                  <Text>
-                    {convertProperValue(
-                      item.loyaltyType === 1
-                        ? new Amount(
-                            BigNumber.from(item.amountToken),
-                            9,
-                          ).toBOAString()
-                        : item.amountPoint,
-                    )}{' '}
-                    {item.loyaltyTypeName}
-                  </Text>
-                </Box>
-              </HStack>
-            </Box>
-          )}
-        />
+        {historyData && historyData.length > 0 ? (
+          <FlatList
+            m='$3'
+            data={historyData}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <Box
+                borderBottomWidth='$1'
+                borderColor='$trueGray800'
+                sx={{
+                  _dark: {
+                    borderColor: '$trueGray100',
+                  },
+                  '@base': {
+                    pl: 0,
+                    pr: 0,
+                  },
+                  '@sm': {
+                    pl: '$4',
+                    pr: '$5',
+                  },
+                }}
+                py='$2'>
+                <HStack
+                  space='md'
+                  alignItems='center'
+                  justifyContent='space-between'>
+                  <VStack>
+                    <Text
+                      fontSize='$sm'
+                      color='$coolGray600'
+                      sx={{
+                        _dark: {
+                          color: '$warmGray200',
+                        },
+                      }}>
+                      {item.actionName === 'SAVED' ? '적립' : '사용'}
+                    </Text>
+                    <Text
+                      fontSize='$sm'
+                      color='$coolGray600'
+                      sx={{
+                        _dark: {
+                          color: '$warmGray200',
+                        },
+                      }}>
+                      {timeConverter(item.blockTimestamp)}
+                    </Text>
+                  </VStack>
+                  <Box>
+                    <Text>
+                      {convertProperValue(
+                        item.loyaltyType === 1
+                          ? new Amount(
+                              BigNumber.from(item.amountToken),
+                              9,
+                            ).toBOAString()
+                          : item.amountPoint,
+                      )}{' '}
+                      {item.loyaltyTypeName}
+                    </Text>
+                  </Box>
+                </HStack>
+              </Box>
+            )}
+          />
+        ) : null}
       </Box>
     </SafeAreaView>
   );
