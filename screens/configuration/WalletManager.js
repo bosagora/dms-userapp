@@ -47,7 +47,12 @@ const WalletManager = observer(({ navigation }) => {
 
   const fetchClient = async () => {
     const { client: client1, address: userAddress } = await getClient();
-    console.log('>>>>>>> userAddress :', userAddress);
+    console.log(
+      '>>>>>>> userAddress :',
+      userAddress,
+      'EXAMPLE_ENV',
+      process.env.EXAMPLE_ENV,
+    );
     setClient(client1);
     setAddress(userAddress);
 
