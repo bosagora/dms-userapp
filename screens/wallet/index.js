@@ -50,7 +50,11 @@ const Index = observer(({ navigation }) => {
     );
   }, [loyaltyStore.lastUpdateTime]);
   async function fetchClient() {
-    console.log('Wallet > fetchClient');
+    console.log(
+      'Wallet > fetchClient',
+      'EXAMPLE_ENV',
+      process.env.EXPO_PUBLIC_EXAMPLE_ENV,
+    );
     const { client: client1, address: userAddress } = await getClient();
     console.log('>>>>>>> userAddress :', userAddress);
     setClient(client1);
@@ -200,7 +204,8 @@ const Index = observer(({ navigation }) => {
               }}>
               <Box>
                 <Heading _dark={{ color: '$textLight200' }} size='lg'>
-                  나의 KIOS 마일리지 v0.28
+                  나의 KIOS 마일리지 v0.31 - {process.env.EXPO_PUBLIC_ENV} -{' '}
+                  {process.env.EXPO_PUBLIC_ENVIRONMENT}
                 </Heading>
                 <Text
                   _dark={{ color: '$textLight200' }}
