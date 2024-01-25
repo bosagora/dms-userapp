@@ -48,15 +48,15 @@ const registerSchema = yup.object().shape({
 });
 
 const registerInitialValues = {
-  n1: '00',
-  n2: '01',
-  n3: '02',
+  n1: '',
+  n2: '',
+  n3: '',
 };
 
 const PhoneAuth = observer(({ navigation }) => {
   const [client, setClient] = useState(null);
   const [address, setAddress] = useState('');
-  const [phoneCode, setPhoneCode] = useState('01010002000');
+  const [phoneCode, setPhoneCode] = useState('');
   const [requestId, setRequestId] = useState('');
   // const [authNum, setAuthNum] = useState('000102');
   const toast = useToast();

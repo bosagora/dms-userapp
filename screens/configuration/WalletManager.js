@@ -33,6 +33,7 @@ import MobileHeader from '../../components/MobileHeader'; //for ethers.js
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { getClient } from '../../utils/client';
 import * as Device from 'expo-device';
+import { MobileType } from 'dms-sdk-client';
 
 const { Wallet } = ethers;
 
@@ -66,7 +67,12 @@ const WalletManager = observer(({ navigation }) => {
     const language = 'kr';
     const os = Platform.OS === 'android' ? 'android' : 'iOS';
     try {
-      await cc.ledger.registerMobileToken(token, language, os);
+      await cc.ledger.registerMobileToken(
+        token,
+        language,
+        os,
+        MobileType.USER_APP,
+      );
       return true;
     } catch (e) {
       await Clipboard.setStringAsync(JSON.stringify(e));
