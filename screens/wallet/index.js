@@ -38,6 +38,8 @@ const Index = observer(({ navigation }) => {
   const [oneTokenRate, setOneTokenRate] = useState(new BOACoin(0));
   const [userLoyaltyType, setUserLoyaltyType] = useState(0);
   const [phone, setPhone] = useState('');
+  const [intervalId, setIntervalId] = useState(0);
+
   const { t } = useTranslation();
   useEffect(() => {
     console.log('================= userStore', userStore);
@@ -50,77 +52,76 @@ const Index = observer(({ navigation }) => {
     );
   }, [loyaltyStore.lastUpdateTime]);
   async function fetchClient() {
-    console.log(
-      'Wallet > fetchClient',
-      'EXAMPLE_ENV',
-      process.env.EXPO_PUBLIC_EXAMPLE_ENV,
-    );
     const { client: client1, address: userAddress } = await getClient();
-    console.log('>>>>>>> userAddress :', userAddress);
     setClient(client1);
     setAddress(userAddress);
 
-    const web3Status = await client1.web3.isUp();
-    console.log('web3Status :', web3Status);
-    const isUp = await client1.ledger.isRelayUp();
-    console.log('isUp:', isUp);
-
-    const phone = userStore.phone;
-    setPhone(phone);
-    console.log('user phone :', phone);
-
-    const loyaltyType = await client1.ledger.getLoyaltyType(userAddress);
-    setUserLoyaltyType(loyaltyType);
-    console.log('userLoyaltyType :', loyaltyType);
-
-    const tokenBalance = await client1.ledger.getTokenBalance(userAddress);
-    console.log('tokenBalance :', tokenBalance.toString());
-    const tokenBalConv = new BOACoin(tokenBalance);
-    console.log('tokenBalConv :', tokenBalConv.toBOAString());
-    setUserTokenBalance(tokenBalConv);
-
-    // const tokenAmount = Amount.make(tokenBalance, 18).value;
-    let userTokenCurrencyRate = await client1.currency.tokenToCurrency(
-      tokenBalance,
-      'krw',
-    );
-    console.log('userTokenCurrencyRate :', userTokenCurrencyRate.toString());
-    const oneConv = new BOACoin(userTokenCurrencyRate);
-    console.log('oneConv :', oneConv.toBOAString());
-    setUserTokenRate(oneConv);
-
-    const oneTokenAmount = BOACoin.make(1, 18).value;
-    let oneTokenCurrencyRate = await client1.currency.tokenToCurrency(
-      oneTokenAmount,
-      'krw',
-    );
-
-    console.log('oneTokenCurrencyRate :', oneTokenCurrencyRate.toString());
-    const boaConv = new BOACoin(oneTokenCurrencyRate);
-    console.log('boaBal :', boaConv.toBOAString());
-    setOneTokenRate(boaConv);
-
-    const userPoint = await client1.ledger.getPointBalance(userAddress);
-    const payableConv = new BOACoin(userPoint);
-    console.log('payableConv :', payableConv.toBOAString());
-    setPayablePoint(payableConv);
-
-    let pointCurrencyRate = await client1.currency.pointToCurrency(
-      userPoint,
-      userStore.currency,
-    );
-    const pointRateConv = new BOACoin(pointCurrencyRate);
-    console.log('pointRateConv :', pointRateConv.toBOAString());
-    setPayablePointRate(pointRateConv);
+    await fetchBalances(client1, userAddress);
   }
-  async function fetchBalances() {
-    const loyaltyType = await client.ledger.getLoyaltyType(address);
-    console.log('userLoyaltyType :', loyaltyType);
-    const point = await client.ledger.getPointBalance(address);
-    console.log('pointBalance :', point.toString());
-    const tokenBalance = await client.ledger.getTokenBalance(address);
-    console.log('tokenBalance :', tokenBalance.toString());
+
+  async function fetchBalances(cc, userAddress) {
+    if (intervalId > 0) clearInterval(intervalId);
+
+    const id = setInterval(async () => {
+      const phone = userStore.phone;
+      setPhone(phone);
+      console.log('user phone :', phone);
+
+      const loyaltyType = await cc.ledger.getLoyaltyType(userAddress);
+      setUserLoyaltyType(loyaltyType);
+      console.log('userLoyaltyType :', loyaltyType);
+
+      const tokenBalance = await cc.ledger.getTokenBalance(userAddress);
+      console.log('tokenBalance :', tokenBalance.toString());
+      const tokenBalConv = new BOACoin(tokenBalance);
+      console.log('tokenBalConv :', tokenBalConv.toBOAString());
+      setUserTokenBalance(tokenBalConv);
+
+      // const tokenAmount = Amount.make(tokenBalance, 18).value;
+      let userTokenCurrencyRate = await cc.currency.tokenToCurrency(
+        tokenBalance,
+        'krw',
+      );
+      console.log('userTokenCurrencyRate :', userTokenCurrencyRate.toString());
+      const oneConv = new BOACoin(userTokenCurrencyRate);
+      console.log('oneConv :', oneConv.toBOAString());
+      setUserTokenRate(oneConv);
+
+      const oneTokenAmount = BOACoin.make(1, 18).value;
+      let oneTokenCurrencyRate = await cc.currency.tokenToCurrency(
+        oneTokenAmount,
+        'krw',
+      );
+
+      console.log('oneTokenCurrencyRate :', oneTokenCurrencyRate.toString());
+      const boaConv = new BOACoin(oneTokenCurrencyRate);
+      console.log('boaBal :', boaConv.toBOAString());
+      setOneTokenRate(boaConv);
+
+      const userPoint = await cc.ledger.getPointBalance(userAddress);
+      const payableConv = new BOACoin(userPoint);
+      console.log('payableConv :', payableConv.toBOAString());
+      setPayablePoint(payableConv);
+
+      let pointCurrencyRate = await cc.currency.pointToCurrency(
+        userPoint,
+        userStore.currency,
+      );
+      const pointRateConv = new BOACoin(pointCurrencyRate);
+      console.log('pointRateConv :', pointRateConv.toBOAString());
+      setPayablePointRate(pointRateConv);
+    }, 5000);
+    setIntervalId(id);
   }
+
+  // async function fetchBalances() {
+  //   const loyaltyType = await client.ledger.getLoyaltyType(address);
+  //   console.log('userLoyaltyType :', loyaltyType);
+  //   const point = await client.ledger.getPointBalance(address);
+  //   console.log('pointBalance :', point.toString());
+  //   const tokenBalance = await client.ledger.getTokenBalance(address);
+  //   console.log('tokenBalance :', tokenBalance.toString());
+  // }
   const handleQRSheet = async () => {
     // await fetchPoints();
     secretStore.setShowQRSheet(!secretStore.showQRSheet);
@@ -149,26 +150,7 @@ const Index = observer(({ navigation }) => {
       alert('토큰 전환에 실패하였습니다.' + JSON.stringify(e));
     }
     await fetchClient();
-    // await fetchBalances();
 
-    // if (steps.length === 2 && steps[1].key === 'accepted') {
-    //   completeAuth();
-    // }
-    //   switch (step.key) {
-    //     case NormalSteps.PREPARED:
-    //       expect(step.account).toEqual(userAddress);
-    //       break;
-    //     case NormalSteps.SENT:
-    //       expect(typeof step.txHash).toBe("string");
-    //       expect(step.txHash).toMatch(/^0x[A-Fa-f0-9]{64}$/i);
-    //       break;
-    //     case NormalSteps.DONE:
-    //       expect(step.account).toBe(userWallets[0].address);
-    //       break;
-    //     default:
-    //       throw new Error("Unexpected change loyalty step: " + JSON.stringify(step, null, 2));
-    //   }
-    // }
     setShowModal(false);
   };
 
@@ -204,8 +186,7 @@ const Index = observer(({ navigation }) => {
               }}>
               <Box>
                 <Heading _dark={{ color: '$textLight200' }} size='lg'>
-                  나의 KIOS 마일리지 v0.31 - {process.env.EXPO_PUBLIC_ENV} -{' '}
-                  {process.env.EXPO_PUBLIC_ENVIRONMENT}
+                  나의 KIOS 마일리지 v0.4.9 - {process.env.EXPO_PUBLIC_ENV}
                 </Heading>
                 <Text
                   _dark={{ color: '$textLight200' }}

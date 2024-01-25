@@ -107,21 +107,16 @@ export async function getClient() {
     Networks[process.env.EXPO_PUBLIC_ENV || process.env.ENVIRONMENT];
 
   async function fetchKey() {
-    console.log('getClient > fetchKey');
     let pKey = await getSecureValue('privateKey');
-    if (pKey.includes('0x')) {
-      // pKey = pKey.split('0x')[1];
-      console.log('pKey :', pKey);
-    }
     const address = await getSecureValue('address');
-
     return { pKey, address };
   }
   const { pKey, address } = await fetchKey();
-  function createClient(privateKey) {
+  const wallet = new Wallet(pKey);
+  function createClient() {
     const ctx = new Context({
       network: network,
-      signer: new Wallet(privateKey),
+      signer: wallet,
       web3Providers: web3EndPoint.working,
       relayEndpoint: relayEndPoint.working,
       graphqlNodes: graphqlEndPoint.working,
@@ -137,8 +132,7 @@ export async function getClient() {
     });
     return new Client(ctx);
   }
-  const client = createClient(pKey);
-  console.log('client :', client);
-  console.log('>> address :', address);
+
+  const client = createClient();
   return { client, address };
 }

@@ -25,6 +25,8 @@ import MobileHeader from '../../components/MobileHeader';
 import { Wallet } from 'ethers';
 import * as Device from 'expo-device';
 import { getClient } from '../../utils/client';
+import { MobileType } from 'dms-sdk-client';
+import * as Clipboard from 'expo-clipboard';
 
 const Secret = observer(({ navigation }) => {
   const { pinStore, userStore, secretStore } = useStores();
@@ -33,53 +35,53 @@ const Secret = observer(({ navigation }) => {
 
   const fetchClient = async () => {
     const { client: client1, address: userAddress } = await getClient();
-    console.log('>>>>>>> userAddress :', userAddress);
     setClient(client1);
     setAddress(userAddress);
 
-    console.log('Secret fetch > client1 :', client1);
     return client1;
   };
 
   async function createWallet() {
-    const wallet = Wallet.createRandom();
+    try {
+      userStore.setLoading(true);
+      await Clipboard.setStringAsync('11111');
+      const wallet = Wallet.createRandom();
+      console.log('address :', wallet.address);
+      console.log('mnemonic :', wallet.mnemonic);
+      console.log('privateKey :', wallet.privateKey);
 
-    console.log('address :', wallet.address);
-    console.log('mnemonic :', wallet.mnemonic);
-    console.log('privateKey :', wallet.privateKey);
+      secretStore.setAddress(wallet.address);
+      await saveSecureValue('address', wallet.address);
+      await saveSecureValue('mnemonic', JSON.stringify(wallet.mnemonic));
+      await saveSecureValue('privateKey', wallet.privateKey);
+      // setIsLoading(false);
 
-    secretStore.setAddress(wallet.address);
-    await saveSecureValue('address', wallet.address);
-    await saveSecureValue('mnemonic', JSON.stringify(wallet.mnemonic));
-    await saveSecureValue('privateKey', wallet.privateKey);
-    // setIsLoading(false);
-
-    const cc = await fetchClient();
-    if (Device.isDevice) {
-      await registerPushTokenWithClient(cc);
-      resetPinCode();
-    } else {
-      console.log('Not on device.');
-      resetPinCode();
+      const cc = await fetchClient();
+      if (Device.isDevice) {
+        await registerPushTokenWithClient(cc);
+        resetPinCode();
+      } else {
+        console.log('Not on device.');
+        resetPinCode();
+      }
+    } catch (e) {
+      userStore.setLoading(false);
+      alert('e:' + JSON.stringify(e));
     }
   }
 
-  async function tt() {
-    userStore.setLoading(true);
-    console.log('------>>>>>');
-    setTimeout(async () => {
-      await createWallet();
-    }, 100);
-  }
-
   async function registerPushTokenWithClient(cc) {
-    console.log('registerPushTokenWithClient >>>>>>>> cc:', cc);
     const token = userStore.expoPushToken;
     console.log('token :', token);
     const language = 'kr';
     const os = Platform.OS === 'android' ? 'android' : 'iOS';
     try {
-      await cc.ledger.registerMobileToken(token, language, os);
+      await cc.ledger.registerMobileToken(
+        token,
+        language,
+        os,
+        MobileType.USER_APP,
+      );
     } catch (e) {
       await Clipboard.setStringAsync(JSON.stringify(e));
       console.log('error : ', e);
@@ -88,17 +90,12 @@ const Secret = observer(({ navigation }) => {
   }
   function resetPinCode() {
     userStore.setLoading(false);
-    console.log('registerPushToken >>');
     alert('새로운 지갑이 생성 되었습니다.');
     navigation.navigate('InitPinCodeScreen');
   }
 
   async function saveKey(key) {
     key = key.trim();
-    console.log('key :', key);
-    console.log('key.split :', key.split('0x'));
-    // const privateKey = key.includes('0x') ? key.split('0x')[1] : key;
-    // console.log('save privateKey :', privateKey);
     let wallet;
     try {
       wallet = new Wallet(key);
@@ -139,7 +136,7 @@ const Secret = observer(({ navigation }) => {
         />
         <VStack space='lg' pt='$4' m='$7'>
           <Box>
-            <Button py='$2.5' px='$3' onPress={tt}>
+            <Button py='$2.5' px='$3' onPress={createWallet}>
               <ButtonText>지갑 생성하기</ButtonText>
             </Button>
           </Box>

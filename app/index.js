@@ -103,6 +103,8 @@ const App = observer(() => {
       if (expoPushToken !== undefined && expoPushToken?.data?.length > 10) {
         userStore.setExpoPushToken(expoPushToken.data);
       }
+
+      userStore.setLoading(false);
     };
     rehydrate();
     i18n.changeLanguage(userStore.languageTag);
