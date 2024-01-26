@@ -152,7 +152,7 @@ const Index = observer(({ navigation }) => {
     } catch (e) {
       console.log('error : ', e);
       await Clipboard.setStringAsync(JSON.stringify(e));
-      alert('토큰 전환에 실패하였습니다.' + JSON.stringify(e));
+      alert('토큰 전환에 실패하였습니다.' + JSON.stringify(e.message));
     }
     await fetchClient();
 
