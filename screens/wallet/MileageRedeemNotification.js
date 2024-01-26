@@ -44,7 +44,7 @@ const MileageRedeemNotification = observer(({ navigation }) => {
       console.log('web3Status :', web3Status);
       const isUp = await client1.ledger.isRelayUp();
       console.log('isUp:', isUp);
-      alert('payment :' + JSON.stringify(loyaltyStore.payment));
+      // alert('payment :' + JSON.stringify(loyaltyStore.payment));
       await savePaymnentInfo(client1, loyaltyStore.payment.id);
     }
     fetchClient().then(() => console.log('end of fetchClient'));
