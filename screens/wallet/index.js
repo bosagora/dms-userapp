@@ -72,16 +72,16 @@ const Index = observer(({ navigation }) => {
   async function setData(cc, userAddress) {
     const phone = userStore.phone;
     setPhone(phone);
-    console.log('user phone :', phone);
+    // console.log('user phone :', phone);
 
     const loyaltyType = await cc.ledger.getLoyaltyType(userAddress);
     setUserLoyaltyType(loyaltyType);
-    console.log('userLoyaltyType :', loyaltyType);
+    // console.log('userLoyaltyType :', loyaltyType);
 
     const tokenBalance = await cc.ledger.getTokenBalance(userAddress);
-    console.log('tokenBalance :', tokenBalance.toString());
+    // console.log('tokenBalance :', tokenBalance.toString());
     const tokenBalConv = new BOACoin(tokenBalance);
-    console.log('tokenBalConv :', tokenBalConv.toBOAString());
+    // console.log('tokenBalConv :', tokenBalConv.toBOAString());
     setUserTokenBalance(tokenBalConv);
 
     // const tokenAmount = Amount.make(tokenBalance, 18).value;
@@ -89,9 +89,9 @@ const Index = observer(({ navigation }) => {
       tokenBalance,
       'krw',
     );
-    console.log('userTokenCurrencyRate :', userTokenCurrencyRate.toString());
+    // console.log('userTokenCurrencyRate :', userTokenCurrencyRate.toString());
     const oneConv = new BOACoin(userTokenCurrencyRate);
-    console.log('oneConv :', oneConv.toBOAString());
+    // console.log('oneConv :', oneConv.toBOAString());
     setUserTokenRate(oneConv);
 
     const oneTokenAmount = BOACoin.make(1, 18).value;
@@ -100,14 +100,14 @@ const Index = observer(({ navigation }) => {
       'krw',
     );
 
-    console.log('oneTokenCurrencyRate :', oneTokenCurrencyRate.toString());
+    // console.log('oneTokenCurrencyRate :', oneTokenCurrencyRate.toString());
     const boaConv = new BOACoin(oneTokenCurrencyRate);
-    console.log('boaBal :', boaConv.toBOAString());
+    // console.log('boaBal :', boaConv.toBOAString());
     setOneTokenRate(boaConv);
 
     const userPoint = await cc.ledger.getPointBalance(userAddress);
     const payableConv = new BOACoin(userPoint);
-    console.log('payableConv :', payableConv.toBOAString());
+    // console.log('payableConv :', payableConv.toBOAString());
     setPayablePoint(payableConv);
 
     let pointCurrencyRate = await cc.currency.pointToCurrency(
@@ -115,7 +115,7 @@ const Index = observer(({ navigation }) => {
       userStore.currency,
     );
     const pointRateConv = new BOACoin(pointCurrencyRate);
-    console.log('pointRateConv :', pointRateConv.toBOAString());
+    // console.log('pointRateConv :', pointRateConv.toBOAString());
     setPayablePointRate(pointRateConv);
   }
 
@@ -191,7 +191,7 @@ const Index = observer(({ navigation }) => {
               }}>
               <Box>
                 <Heading _dark={{ color: '$textLight200' }} size='lg'>
-                  나의 KIOS 마일리지 v0.4.19 - {process.env.EXPO_PUBLIC_ENV}
+                  나의 KIOS 마일리지 v0.5.1 - {process.env.EXPO_PUBLIC_ENV}
                 </Heading>
                 <Text
                   _dark={{ color: '$textLight200' }}
