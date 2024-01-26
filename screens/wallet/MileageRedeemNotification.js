@@ -105,6 +105,7 @@ const MileageRedeemNotification = observer(({ navigation }) => {
       if (steps.length === 3 && steps[2].key === 'approved') {
         const time = Math.round(+new Date() / 1000);
         loyaltyStore.setLastUpdateTime(time);
+        alert('마일리지 사용이 성공적으로 승인되었습니다.');
         navigation.navigate('Wallet');
       }
     } catch (e) {
