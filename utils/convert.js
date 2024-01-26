@@ -1,4 +1,5 @@
 function truncateString(str, num = 10) {
+  if (!str) str = '';
   if (str.length > num) {
     return str.slice(0, num) + '...';
   } else {
@@ -6,6 +7,7 @@ function truncateString(str, num = 10) {
   }
 }
 export function truncateMiddleString(str, num = 10) {
+  if (!str) str = '';
   if (str.length > num) {
     return str.slice(0, num / 2 + 2) + ' ... ' + str.slice(-num / 2);
   } else {
@@ -14,10 +16,14 @@ export function truncateMiddleString(str, num = 10) {
 }
 function toFix(str, dec = 2) {
   const index = str.indexOf('.');
-  return str.slice(0, index + (dec + 1));
+  const v = str.slice(0, index + (dec + 1));
+  console.log('toFix :', v);
+  return v;
 }
 
-export function convertProperValue(str, dec = 2, trunc = 10) {
+export function convertProperValue(str, type, dec = 2, trunc = 10) {
+  console.log('convertProperValue > str:', str);
+  if (type === 0) dec = -1;
   return numberWithCommas(truncateString(toFix(str, dec), trunc));
 }
 
