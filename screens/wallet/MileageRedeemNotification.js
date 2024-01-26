@@ -14,9 +14,10 @@ import {
 import { CheckIcon } from 'lucide-react-native';
 import MobileHeader from '../../components/MobileHeader';
 import '@ethersproject/shims';
-import { Amount, NormalSteps } from 'dms-sdk-client';
+import { Amount, LoyaltyType, NormalSteps } from 'dms-sdk-client';
 import { getClient } from '../../utils/client';
 import { convertProperValue } from '../../utils/convert';
+import * as Clipboard from 'expo-clipboard';
 
 const MileageRedeemNotification = observer(({ navigation }) => {
   const { loyaltyStore } = useStores();
@@ -26,8 +27,11 @@ const MileageRedeemNotification = observer(({ navigation }) => {
   const [address, setAddress] = useState('');
 
   const [shopName, setShopName] = useState('');
+  const [shopId, setShopId] = useState('');
   const [purchaseId, setPurchaseId] = useState('');
   const [amount, setAmount] = useState(new Amount(0, 18));
+  const [useAmount, setUseAmount] = useState(new Amount(0, 18));
+  const [loyaltyType, setLoyaltyType] = useState(0);
   const [currency, setCurrency] = useState('');
 
   useEffect(() => {
@@ -52,61 +56,62 @@ const MileageRedeemNotification = observer(({ navigation }) => {
     // get shop info
     const info = await cc.shop.getShopInfo(shopId);
     console.log('shop info : ', info);
+    setShopId(shopId);
     setShopName(info.name);
   };
 
   const savePaymnentInfo = async (cc, paymentId) => {
     const info = await cc.ledger.getPaymentDetail(paymentId);
     console.log('payment info:', info);
+    await Clipboard.setStringAsync(JSON.stringify(info));
     setPurchaseId(info.purchaseId);
     setAmount(new Amount(info.amount, 18));
     setCurrency(info.currency);
+    const mm = info.loyaltyType === 0 ? info.paidPoint : info.paidToken;
+    setUseAmount(new Amount(mm, 18));
+    setLoyaltyType(info.loyaltyType);
     await saveShopInfo(cc, info.shopId);
   };
 
   async function confirmRedeem() {
-    console.log(
-      'confirm Redeem > loyaltyStore.payment :',
-      loyaltyStore.payment,
-    );
-    if (loyaltyStore.payment.id.length < 0) {
-      alert('Empty payment Id.');
-      return;
-    }
-    const steps = [];
-    const paymentId = loyaltyStore.payment.id;
-    let detail = await client.ledger.getPaymentDetail(paymentId);
+    try {
+      const steps = [];
 
-    console.log('payment detail : ', detail);
-    // return;
-    // Approve New
-    for await (const step of client.ledger.approveNewPayment(
-      paymentId,
-      detail.purchaseId,
-      detail.amount,
-      detail.currency.toLowerCase(),
-      detail.shopId,
-      true,
-    )) {
-      steps.push(step);
-      console.log('confirmRedeem step :', step);
-      switch (step.key) {
-        case NormalSteps.PREPARED:
-          break;
-        case NormalSteps.SENT:
-          break;
-        case NormalSteps.APPROVED:
-          break;
-        default:
-          throw new Error(
-            'Unexpected pay point step: ' + JSON.stringify(step, null, 2),
-          );
+      // return;
+
+      for await (const step of client.ledger.approveNewPayment(
+        loyaltyStore.payment.id,
+        purchaseId,
+        amount.value,
+        currency.toLowerCase(),
+        shopId,
+        true,
+      )) {
+        steps.push(step);
+        console.log('confirmRedeem step :', step);
+        switch (step.key) {
+          case NormalSteps.PREPARED:
+            break;
+          case NormalSteps.SENT:
+            break;
+          case NormalSteps.APPROVED:
+            break;
+          default:
+            throw new Error(
+              'Unexpected pay point step: ' + JSON.stringify(step, null, 2),
+            );
+        }
       }
-    }
-    if (steps.length === 3 && steps[2].key === 'approved') {
-      const time = Math.round(+new Date() / 1000);
-      loyaltyStore.setLastUpdateTime(time);
-      navigation.navigate('Wallet');
+      if (steps.length === 3 && steps[2].key === 'approved') {
+        const time = Math.round(+new Date() / 1000);
+        loyaltyStore.setLastUpdateTime(time);
+        navigation.navigate('Wallet');
+      }
+    } catch (e) {
+      console.log('e :', e);
+      alert(
+        '사용 승인에 실패하였습니다. 관리자에게 문의하세요.' + 'e:' + e.message,
+      );
     }
   }
 
@@ -130,7 +135,7 @@ const MileageRedeemNotification = observer(({ navigation }) => {
 
         <VStack space='lg' pt='$4' m='$7'>
           <HStack>
-            <Text w='40%'>구매 상점 :</Text>
+            <Text w='40%'>상점 :</Text>
             <Text>{shopName}</Text>
           </HStack>
           <HStack>
@@ -138,10 +143,17 @@ const MileageRedeemNotification = observer(({ navigation }) => {
             <Text>{purchaseId}</Text>
           </HStack>
           <HStack>
-            <Text w='40%'>구매 금액 :</Text>
+            <Text w='40%'>상품 금액 :</Text>
             <Text>
               {convertProperValue(amount.toBOAString())}{' '}
               {currency.toUpperCase()}
+            </Text>
+          </HStack>
+          <HStack>
+            <Text w='40%'>사용 마일리지 :</Text>
+            <Text>
+              {convertProperValue(useAmount.toBOAString())}{' '}
+              {loyaltyType === LoyaltyType.POINT ? 'POINT' : 'TOKEN'}
             </Text>
           </HStack>
           <Box py='$10'>
