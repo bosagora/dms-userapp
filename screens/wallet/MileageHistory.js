@@ -168,7 +168,11 @@ const MileageHistory = observer(({ navigation }) => {
                               BigNumber.from(item.amountToken),
                               9,
                             ).toBOAString()
-                          : item.amountPoint,
+                          : new Amount(
+                              BigNumber.from(item.amountPoint),
+                              9,
+                            ).toBOAString(),
+                        item.loyaltyType,
                       )}{' '}
                       {item.loyaltyTypeName}
                     </Text>
