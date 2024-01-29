@@ -191,7 +191,7 @@ const Index = observer(({ navigation }) => {
               }}>
               <Box>
                 <Heading _dark={{ color: '$textLight200' }} size='lg'>
-                  나의 KIOS 마일리지 v0.5.1 - {process.env.EXPO_PUBLIC_ENV}
+                  나의 KIOS 마일리지 v0.5.3 - {process.env.EXPO_PUBLIC_ENV}
                 </Heading>
                 <Text
                   _dark={{ color: '$textLight200' }}
@@ -271,11 +271,11 @@ const Index = observer(({ navigation }) => {
                       _dark={{ color: '$textLight200' }}
                       fontSize='$sm'
                       mr='$1'>
-                      ≒ {convertProperValue(userTokenRate.toBOAString())} KRW
+                      ≒ {convertProperValue(userTokenRate.toBOAString(), 0)} KRW
                     </Text>
                     <Text _dark={{ color: '$textLight200' }} fontSize='$sm'>
                       (1 KIOS ≒{' '}
-                      {convertProperValue(oneTokenRate.toBOAString(), 2, 10)}{' '}
+                      {convertProperValue(oneTokenRate.toBOAString(), 0, 2)}{' '}
                       KRW)
                     </Text>
                   </HStack>

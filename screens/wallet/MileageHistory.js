@@ -74,7 +74,12 @@ const MileageHistory = observer(({ navigation }) => {
           return {
             id: it.id,
             action: it.action,
-            actionName: it.action === 1 ? 'SAVED' : 'USED',
+            actionName:
+              it.cancel === true
+                ? 'CANCEL'
+                : it.action === 1
+                ? 'SAVED'
+                : 'USED',
             loyaltyType: it.loyaltyType,
             loyaltyTypeName: it.loyaltyType === 0 ? 'POINT' : 'TOKEN',
             amountPoint: it.amountPoint,
@@ -83,7 +88,7 @@ const MileageHistory = observer(({ navigation }) => {
             blockTimestamp: it.blockTimestamp,
           };
         });
-      console.log('history :', history.slice(0, 3));
+      console.log('history :', res.userTradeHistories.slice(0, 3));
 
       setHistoryData(history);
     };
@@ -147,7 +152,11 @@ const MileageHistory = observer(({ navigation }) => {
                           color: '$warmGray200',
                         },
                       }}>
-                      {item.actionName === 'SAVED' ? '적립' : '사용'}
+                      {item.actionName === 'CANCEL'
+                        ? '취소'
+                        : item.actionName === 'SAVED'
+                        ? '적립'
+                        : '사용'}
                     </Text>
                     <Text
                       fontSize='$sm'
@@ -162,6 +171,7 @@ const MileageHistory = observer(({ navigation }) => {
                   </VStack>
                   <Box>
                     <Text>
+                      {item.actionName === 'CANCEL' ? '-' : ''}
                       {convertProperValue(
                         item.loyaltyType === 1
                           ? new Amount(
