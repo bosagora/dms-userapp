@@ -25,6 +25,10 @@ import * as Clipboard from 'expo-clipboard';
 import { getLocales, getCalendars } from 'expo-localization';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { getClient } from '../../utils/client';
+import {
+  PhoneNumberUtil,
+  PhoneNumberFormat as PNF
+} from 'google-libphonenumber';
 
 const registerSchema = yup.object().shape({
   n1: yup
@@ -115,7 +119,7 @@ const PhoneAuth = observer(({ navigation }) => {
   }, []);
 
   const initiateTimer = () => {
-    fontRef.current = 30;
+    fontRef.current = 60;
     let timeLeftObj = secondsToTime(fontRef.current);
     setTimeLeft(timeLeftObj);
     console.log('timeLeftObj :', timeLeftObj);
@@ -148,12 +152,22 @@ const PhoneAuth = observer(({ navigation }) => {
   };
 
   async function registerPhone() {
+
     console.log('userStore :', userStore);
     userStore.setLoading(true);
-    const phone = userStore.countryPhoneCode + phoneCode;
+
     const steps = [];
     try {
-      for await (const step of client.link.register(phone)) {
+      const phone = "+" +userStore.countryPhoneCode + phoneCode;
+      console.log('phone :', phone)
+      const phoneUtil = PhoneNumberUtil.getInstance();
+      const number = phoneUtil.parseAndKeepRawInput(phone);
+      const pf = phoneUtil.format(number, PNF.INTERNATIONAL)
+      console.log(phoneUtil.getRegionCodeForNumber(number));
+      console.log('pf :', pf);
+
+      userStore.setPhoneFormatted(pf);
+      for await (const step of client.link.register(pf)) {
         console.log('register step :', step);
         steps.push(step);
       }

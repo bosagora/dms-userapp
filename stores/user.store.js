@@ -21,6 +21,8 @@ class UserStore {
   langTag = 'ko-KR';
   currency = 'KRW';
 
+  phoneFormatted = '';
+
   enableBio = false;
 
   permissionsCount = 0;
@@ -76,6 +78,10 @@ class UserStore {
   setLoading = (loading) => {
     this.loading = loading;
   };
+
+  setPhoneFormatted = (pf) => {
+    this.phoneFormatted = pf;
+  }
 }
 
 export default UserStore;
