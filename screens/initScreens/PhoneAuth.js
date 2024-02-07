@@ -217,7 +217,7 @@ const PhoneAuth = observer(({ navigation }) => {
     });
   }
   async function changeUnpayableToPayable() {
-    const phone = userStore.countryPhoneCode + phoneCode;
+    const phone = userStore.phoneFormatted;
     const balance = await client.ledger.getPointBalance(address);
     console.log('Point balance Before changing :', balance);
 
