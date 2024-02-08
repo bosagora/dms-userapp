@@ -32,9 +32,11 @@ import { useStores } from '../stores';
 import { observer } from 'mobx-react';
 import * as Clipboard from 'expo-clipboard';
 import { truncateMiddleString } from '../utils/convert';
+import {useTranslation} from "react-i18next";
 
 // export default function QRActionSheet() {
 const QRActionSheet = observer(() => {
+  const { t } = useTranslation();
   const { secretStore } = useStores();
   const [walletAddress, SetWalletAddress] = useState('');
   useEffect(() => {
@@ -95,7 +97,7 @@ const QRActionSheet = observer(() => {
                         handleClose();
                       }}>
                       <ButtonText fontSize='$sm' fontWeight='$medium'>
-                        Copy
+                        {t('copy')}
                       </ButtonText>
                     </Button>
                   </VStack>

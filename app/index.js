@@ -50,6 +50,7 @@ import 'react-native-url-polyfill/auto';
 import { usePushNotification } from '../hooks/usePushNotification';
 import Permissions from '../screens/initScreens/Permissions';
 
+
 const InitStack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -63,6 +64,7 @@ TextInput.defaultProps = TextInput.defaultProps || {};
 TextInput.defaultProps.allowFontScaling = false;
 
 import ko from '../langs/ko.json';
+import en from '../langs/en.json';
 
 import i18n from 'i18next';
 import { useTranslation, initReactI18next } from 'react-i18next';
@@ -73,11 +75,7 @@ i18n
   .init({
     compatibilityJSON: 'v3',
     resources: {
-      en: {
-        translation: {
-          welcome: 'Welcome to React and react-i18next',
-        },
-      },
+      en: { translation: en },
       ko: { translation: ko },
     },
     lng: 'ko', // if you're using a language detector, do not define the lng option
@@ -214,7 +212,6 @@ const App = observer(() => {
             ) : (
               <MainStackScreen />
             )}
-
             <QRActionSheet />
           </GluestackUIProvider>
         </NavigationContainer>
@@ -302,6 +299,7 @@ function MainStackScreen() {
         name='BiometricAuthScreen'
         component={BiometricAuthScreen}
       />
+
     </MainStack.Navigator>
   );
 }

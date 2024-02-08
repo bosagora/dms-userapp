@@ -28,8 +28,10 @@ import {
   ButtonGroup,
   Box,
 } from '@gluestack-ui/themed';
+import {useTranslation} from "react-i18next";
 
 const ImportPrivateKey = ({ saveKey }) => {
+  const { t } = useTranslation();
   const [privateKey, setPrivateKey] = useState('');
   const [showModal, setShowModal] = useState(false);
   return (
@@ -40,7 +42,7 @@ const ImportPrivateKey = ({ saveKey }) => {
         onPress={() => {
           setShowModal(true);
         }}>
-        <ButtonText>다른 지갑 불러오기</ButtonText>
+        <ButtonText>{t('wallet.import')}</ButtonText>
       </Button>
       <Modal
         avoidKeyboard={true}
@@ -52,17 +54,16 @@ const ImportPrivateKey = ({ saveKey }) => {
         <ModalContent maxWidth='$96'>
           <ModalBody p='$5'>
             <VStack space='xs' mb='$4'>
-              <Heading>지갑 가져오기</Heading>
+              <Heading>{t('wallet.import')}</Heading>
               <Text size='sm'>
-                사용하던 기기에서 복사한 비공개 키를 아래 빈 칸에 입력해주세요.
-                사용하시던 지갑을 이 기기에서도 그대로 사용이 가능합니다.
+                {t('import.body.text.a')}
               </Text>
             </VStack>
             <VStack py='$2' space='xl'>
               <FormControl>
                 <FormControlHelper>
                   <FormControlHelperText>
-                    여기에 비공개 키 문자열을 붙여넣으세요.
+                    {t('import.body.text.b')}
                   </FormControlHelperText>
                 </FormControlHelper>
 
@@ -95,7 +96,7 @@ const ImportPrivateKey = ({ saveKey }) => {
                   setPrivateKey('');
                 }}>
                 <ButtonText fontSize='$sm' fontWeight='$medium'>
-                  No
+                  {t('button.press.b')}
                 </ButtonText>
               </Button>
               <Button
@@ -108,7 +109,7 @@ const ImportPrivateKey = ({ saveKey }) => {
                   setPrivateKey('');
                 }}>
                 <ButtonText fontSize='$sm' fontWeight='$medium'>
-                  Yes
+                  {t('button.press.a')}
                 </ButtonText>
               </Button>
             </ButtonGroup>

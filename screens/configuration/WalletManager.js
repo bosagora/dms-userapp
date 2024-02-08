@@ -77,7 +77,7 @@ const WalletManager = observer(({ navigation }) => {
     } catch (e) {
       await Clipboard.setStringAsync(JSON.stringify(e));
       console.log('error : ', e);
-      alert('푸시 토큰 등록에 실패하였습니다.' + JSON.stringify(e.message));
+      alert(t('secret.alert.push.fail') + JSON.stringify(e.message));
       return false;
     }
   }
@@ -103,7 +103,7 @@ const WalletManager = observer(({ navigation }) => {
       wallet = new Wallet(key);
     } catch (e) {
       console.log('Invalid private key.');
-      alert('유효하지 않은 키 입니다.');
+      alert(t('secret.alert.wallet.invalid'));
       return;
     }
     secretStore.setAddress(wallet.address);
@@ -122,10 +122,10 @@ const WalletManager = observer(({ navigation }) => {
 
     if (ret) {
       loyaltyStore.setLastUpdateTime(time);
-      alert('불러온 지갑이 적용 되었습니다.');
+      alert(t('config.wallet.alert.import.done'));
       navigation.navigate('Wallet');
     } else {
-      alert('지갑 불러오기에 실패하였습니다. 다시 시도해 주세요.');
+      alert(t('config.wallet.alert.import.fail'));
     }
   }
   const [showModal, setShowModal] = useState(false);
@@ -142,11 +142,11 @@ const WalletManager = observer(({ navigation }) => {
         }}
         height='$full'
         bg='$backgroundLight0'>
-        <MobileHeader title='지갑 관리' subTitle='지갑을 보관하거나 불러오기' />
+        <MobileHeader title='지갑 관리' subTitle='지갑을 외부에 저장하거나 불러오기' />
         <VStack space='lg' pt='$4' m='$7'>
           <Box>
             <Button py='$2.5' px='$3' onPress={() => exportWallet()}>
-              <ButtonText>지갑 내보내기</ButtonText>
+              <ButtonText>{t('wallet.export')}</ButtonText>
             </Button>
           </Box>
           <ImportPrivateKey saveKey={saveKey} />
@@ -172,23 +172,19 @@ const WalletManager = observer(({ navigation }) => {
                 <ModalContent maxWidth='$96'>
                   <ModalBody p='$5'>
                     <VStack space='xs' mb='$4'>
-                      <Heading>지갑 비공개키</Heading>
+                      <Heading>{t('config.wallet.modal.heading')}</Heading>
                       <Text size='sm'>
-                        이 키를 다른 기기에 설치된 THE9 앱에 붙여 넣으면 현재
-                        지갑을 복구해 사용할 수 있습니다. (다른 기기의 THE9
-                        앱에서 ‘다른 지갑 불러오기’ 선택)
+                        {t('config.wallet.modal.body.text.a')}
                       </Text>
                       <Text size='sm'>
-                        경고 : 이 키를 노출하지 마세요. 비공개 키가 있는
-                        사람이라면 누구든 회원님의 계정에 있는 자산을 훔칠 수
-                        있습니다.
+                        {t('config.wallet.modal.body.text.b')}
                       </Text>
                     </VStack>
                     <VStack py='$2' space='xl'>
                       <FormControl>
                         <FormControlHelper>
                           <FormControlHelperText>
-                            여기에 비공개 키 문자열을 붙여넣으세요.
+                            {t('import.body.text.b')}
                           </FormControlHelperText>
                         </FormControlHelper>
                         <Input>
@@ -206,7 +202,7 @@ const WalletManager = observer(({ navigation }) => {
                           setShowModal(false);
                         }}>
                         <ButtonText fontSize='$sm' fontWeight='$medium'>
-                          Close
+                          {t('button.press.c')}
                         </ButtonText>
                       </Button>
                       <Button
@@ -218,7 +214,7 @@ const WalletManager = observer(({ navigation }) => {
                           setShowModal(false);
                         }}>
                         <ButtonText fontSize='$sm' fontWeight='$medium'>
-                          Copy
+                          {t('copy')}
                         </ButtonText>
                       </Button>
                     </ButtonGroup>
