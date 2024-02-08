@@ -29,6 +29,8 @@ import {
   PhoneNumberUtil,
   PhoneNumberFormat as PNF
 } from 'google-libphonenumber';
+import {useTranslation} from "react-i18next";
+import MobileHeader from "../../components/MobileHeader";
 
 const registerSchema = yup.object().shape({
   n1: yup
@@ -58,6 +60,7 @@ const registerInitialValues = {
 };
 
 const PhoneAuth = observer(({ navigation }) => {
+  const { t } = useTranslation();
   const [client, setClient] = useState(null);
   const [address, setAddress] = useState('');
   const [phoneCode, setPhoneCode] = useState('');
@@ -181,7 +184,7 @@ const PhoneAuth = observer(({ navigation }) => {
       await Clipboard.setStringAsync(JSON.stringify(e));
       console.log('error : ', e);
       userStore.setLoading(false);
-      alert('전화번호 등록에 실패하였습니다.' + JSON.stringify(e.message));
+      alert(t('phone.alert.reg.fail') + JSON.stringify(e.message));
     }
   }
 
@@ -205,13 +208,13 @@ const PhoneAuth = observer(({ navigation }) => {
       await Clipboard.setStringAsync(JSON.stringify(e));
       console.log('error : ', e);
       userStore.setLoading(false);
-      alert('전화번호 인증에 실패하였습니다.' + JSON.stringify(e.message));
+      alert(t('phone.alert.auth.fail') + JSON.stringify(e.message));
     }
   }
   function completeAuth() {
     stopTimer();
     changeUnpayableToPayable().then(() => {
-      alert('성공적으로 인증되었습니다.');
+      alert(t('phone.alert.auth.done'));
       userStore.setPhone(userStore.countryPhoneCode + phoneCode);
       userStore.setAuthState(AUTH_STATE.DONE);
     });
@@ -292,7 +295,10 @@ const PhoneAuth = observer(({ navigation }) => {
           keyboardShouldPersistTaps='handled'
           scrollToOverflowEnabled={true}
           enableAutomaticScroll={true}>
-          <MobileHeader />
+          <MobileHeader
+              title={t('phone.header.title')}
+              subTitle={t('phone.header.subtitle')}
+          />
 
           <Box
             p='$4'
@@ -302,7 +308,7 @@ const PhoneAuth = observer(({ navigation }) => {
             // justifyContent='center'
             w='$full'>
             <Text fontWeight='$bold' fontSize='$md'>
-              전화번호
+              {t('phone.number')}
             </Text>
             <HStack my='$3' alignItems='center'>
               <Box flex={1}>
@@ -346,8 +352,7 @@ const PhoneAuth = observer(({ navigation }) => {
               sx={{
                 _dark: { color: '$textDark400' },
               }}>
-              전화번호 전송 후에 문자 메세지의 인증 코드 3개를 문자에 표시된
-              번호(#1, #2, #3)에 맞추어 입력하고 인증을 진행해 주세요.
+              {t('phone.body.text.a')}
             </Text>
             <Divider
               my='$6'
@@ -365,7 +370,7 @@ const PhoneAuth = observer(({ navigation }) => {
                   sx={{
                     _dark: { color: '$textDark400' },
                   }}>
-                  유효시간 {timeLeft.m < 10 ? '0' : ''}
+                  {t('phone.body.text.b')} {timeLeft.m < 10 ? '0' : ''}
                   {timeLeft.m}:{timeLeft.s < 10 ? '0' : ''}
                   {timeLeft.s}
                 </Text>
@@ -401,9 +406,6 @@ const PhoneAuth = observer(({ navigation }) => {
                 size='md'
                 isRequired={true}
                 isInvalid={!!formik.errors.n3}>
-                {/*<FormControlLabel>*/}
-                {/*  <FormControlLabelText>#3</FormControlLabelText>*/}
-                {/*</FormControlLabel>*/}
                 <Input>
                   <InputField
                     placeholder='#3'
@@ -417,7 +419,7 @@ const PhoneAuth = observer(({ navigation }) => {
                 isDisabled={requestId === ''}
                 onPress={formik.handleSubmit}
                 my='$4'>
-                <ButtonText>인증</ButtonText>
+                <ButtonText>{t('authenticate')}</ButtonText>
               </Button>
             </VStack>
           </Box>
@@ -427,40 +429,5 @@ const PhoneAuth = observer(({ navigation }) => {
   );
 });
 
-function MobileHeader() {
-  return (
-    <VStack px='$3' mt='$4.5' space='md'>
-      {/*<HStack space='md' alignItems='center'>*/}
-      {/*  <StyledExpoRouterLink href='..'>*/}
-      {/*    <Icon*/}
-      {/*      as={ArrowLeftIcon}*/}
-      {/*      color='$textLight50'*/}
-      {/*      sx={{ _dark: { color: '$textDark50' } }}*/}
-      {/*    />*/}
-      {/*  </StyledExpoRouterLink>*/}
-      {/*  <Text*/}
-      {/*    color='$textLight50'*/}
-      {/*    sx={{ _dark: { color: '$textDark50' } }}*/}
-      {/*    fontSize='$lg'>*/}
-      {/*    Sign In*/}
-      {/*  </Text>*/}
-      {/*</HStack>*/}
-      <VStack space='xs' ml='$1' my='$4'>
-        <Heading color='$textLight50' sx={{ _dark: { color: '$textDark50' } }}>
-          전화번호 인증
-        </Heading>
-        <Text
-          fontSize='$md'
-          fontWeight='normal'
-          color='$primary300'
-          sx={{
-            _dark: { color: '$textDark400' },
-          }}>
-          마일리지 사용을 위한 본인 인증
-        </Text>
-      </VStack>
-    </VStack>
-  );
-}
 
 export default PhoneAuth;

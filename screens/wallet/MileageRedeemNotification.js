@@ -18,8 +18,10 @@ import { Amount, LoyaltyType, NormalSteps } from 'dms-sdk-client';
 import { getClient } from '../../utils/client';
 import { convertProperValue } from '../../utils/convert';
 import * as Clipboard from 'expo-clipboard';
+import {useTranslation} from "react-i18next";
 
 const MileageRedeemNotification = observer(({ navigation }) => {
+  const { t } = useTranslation();
   const { loyaltyStore } = useStores();
   const [values, setValues] = useState(['T1', 'T2']);
 
@@ -105,13 +107,13 @@ const MileageRedeemNotification = observer(({ navigation }) => {
       if (steps.length === 3 && steps[2].key === 'approved') {
         const time = Math.round(+new Date() / 1000);
         loyaltyStore.setLastUpdateTime(time);
-        alert('마일리지 사용이 성공적으로 승인되었습니다.');
+        alert(t('wallet.redeem.use.done'));
         navigation.navigate('Wallet');
       }
     } catch (e) {
       console.log('e :', e);
       alert(
-        '사용 승인에 실패하였습니다. 관리자에게 문의하세요.' + 'e:' + e.message,
+          t('wallet.redeem.use.fail') + 'e:' + e.message,
       );
     }
   }
@@ -130,28 +132,28 @@ const MileageRedeemNotification = observer(({ navigation }) => {
         height='$full'
         bg='$backgroundLight0'>
         <MobileHeader
-          title='마일리지 사용 알림'
-          subTitle='마일리지로 상품 구매'
+          title={t('wallet.redeem.header.title')}
+          subTitle={t('wallet.redeem.header.subtitle')}
         />
 
         <VStack space='lg' pt='$4' m='$7'>
           <HStack>
-            <Text w='40%'>상점 :</Text>
+            <Text w='40%'>{t('shop')} :</Text>
             <Text>{shopName}</Text>
           </HStack>
           <HStack>
-            <Text w='40%'>구매 ID :</Text>
+            <Text w='40%'>{t('purchase')} ID :</Text>
             <Text>{purchaseId}</Text>
           </HStack>
           <HStack>
-            <Text w='40%'>상품 금액 :</Text>
+            <Text w='40%'>{t('purchase')} {t('amount')} :</Text>
             <Text>
               {convertProperValue(amount.toBOAString())}{' '}
               {currency.toUpperCase()}
             </Text>
           </HStack>
           <HStack>
-            <Text w='40%'>사용 마일리지 :</Text>
+            <Text w='40%'>{t('wallet.redeem.header.body.a')} :</Text>
             <Text>
               {convertProperValue(useAmount.toBOAString())}{' '}
               {loyaltyType === LoyaltyType.POINT ? 'POINT' : 'TOKEN'}
@@ -159,7 +161,7 @@ const MileageRedeemNotification = observer(({ navigation }) => {
           </HStack>
           <Box py='$10'>
             <Button py='$2.5' px='$3' onPress={() => confirmRedeem()}>
-              <ButtonText>확인</ButtonText>
+              <ButtonText>{t('button.press.a')}</ButtonText>
             </Button>
           </Box>
         </VStack>

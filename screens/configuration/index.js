@@ -13,8 +13,10 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useStores } from '../../stores';
 import { PinCodeT } from 'react-native-pincode-bosagora-ys';
 import { Pressable } from 'react-native';
+import {useTranslation} from "react-i18next";
 
 const Configuration = observer(({ navigation }) => {
+  const { t } = useTranslation();
   const { pinStore, userStore } = useStores();
   const [isEnabled, setIsEnabled] = useState(false);
 
@@ -58,15 +60,15 @@ const Configuration = observer(({ navigation }) => {
   const data = [
     {
       id: 'bd7acbea',
-      name: 'PIN 번호 변경',
+      name: t('config.menu.a')
     },
     {
       id: '3ac68afc',
-      name: '바이오 인증 사용',
+      name: t('config.menu.b'),
     },
     {
       id: '58694a0f',
-      name: '월렛 설정',
+      name: t('config.menu.c'),
     },
   ];
   return (

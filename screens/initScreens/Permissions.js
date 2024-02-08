@@ -23,8 +23,10 @@ import {
 import { CheckIcon } from 'lucide-react-native';
 import MobileHeader from '../../components/MobileHeader';
 import { Link } from 'expo-router';
+import {useTranslation} from "react-i18next";
 
 const Permissions = observer(({ navigation }) => {
+  const { t } = useTranslation();
   const { noteStore, userStore } = useStores();
   const [values, setValues] = useState(['T1', 'T2']);
   useEffect(() => {
@@ -45,13 +47,14 @@ const Permissions = observer(({ navigation }) => {
     console.log('3');
     return true;
   }
+
   function agreePermissions() {
     console.log('agreePermissions >');
     if (Device.isDevice) {
       if (checkPushToken()) {
         navigation.navigate('Term');
       } else {
-        alert('알림 허용이 필요합니다.');
+        alert(t('permission.agree.alert'));
         userStore.setPermissionsCount();
       }
     } else {
@@ -72,28 +75,25 @@ const Permissions = observer(({ navigation }) => {
         height='$full'
         bg='$backgroundLight0'>
         <MobileHeader
-          title='앱 권한 동의'
-          subTitle='서비스 이용을 위한 권한 요청'></MobileHeader>
+          title={t('permission.header.title')}
+          subTitle={t('permission.header.subtitle')}></MobileHeader>
 
         <VStack space='lg' pt='$4' m='$7'>
           <VStack px='$6' pt='$4' pb='$6'>
             <Heading _dark={{ color: '$textLight200' }} size='sm'>
-              푸시 알림 권한
+              {t('permission.body.heading')}
             </Heading>
             <Text my='$1.5' _dark={{ color: '$textLight200' }} fontSize='$xs'>
-              통합 마일리지 사용 중에 사용을 확인, 취소 하는 등의 알림을
-              사용자에게 통보하기 위해 모바일 푸시 알림 권한을 승인해야만
-              정상적인 서비스 이용이 가능합니다.
+              {t('permission.body.text.a')}
             </Text>
             <Text my='$1.5' _dark={{ color: '$textLight200' }} fontSize='$xs'>
-              알림 설정이 되어있지 않은 경우, 설정 > KIOS > 알림 에서 '알림
-              허용' 을 선택해 주세요.
+              {t('permission.body.text.b')}
             </Text>
           </VStack>
 
           <Box py='$10'>
             <Button py='$2.5' px='$3' onPress={() => agreePermissions()}>
-              <ButtonText>확인</ButtonText>
+              <ButtonText>{t('button.press.a')}</ButtonText>
             </Button>
           </Box>
         </VStack>

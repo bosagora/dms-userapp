@@ -22,10 +22,12 @@ import { getClient } from '../../utils/client';
 import { Amount, BOACoin, ContractUtils } from 'dms-sdk-client';
 import { convertProperValue } from '../../utils/convert';
 import loyaltyStore from '../../stores/loyalty.store';
-import { SafeAreaView } from 'react-native';
+import {SafeAreaView, StatusBar} from 'react-native';
 import { useTranslation } from 'react-i18next';
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 const Index = observer(({ navigation }) => {
+  const { t } = useTranslation();
   const { secretStore, userStore, loyaltyStore } = useStores();
   const [showModal, setShowModal] = useState(false);
   const [client, setClient] = useState();
@@ -40,7 +42,6 @@ const Index = observer(({ navigation }) => {
   const [phone, setPhone] = useState('');
   const [intervalId, setIntervalId] = useState(0);
 
-  const { t } = useTranslation();
   useEffect(() => {
     console.log('================= userStore', userStore);
 
@@ -149,20 +150,23 @@ const Index = observer(({ navigation }) => {
       if (steps.length === 3 && steps[2].key === 'done') {
         setUserLoyaltyType(1);
       }
+
+      alert(t('wallet.alert.convert.done'));
     } catch (e) {
       console.log('error : ', e);
       await Clipboard.setStringAsync(JSON.stringify(e));
-      alert('토큰 전환에 실패하였습니다.' + JSON.stringify(e.message));
+      alert(t('wallet.alert.convert.fail') + JSON.stringify(e.message));
     }
     await fetchClient();
 
     setShowModal(false);
   };
 
+
   return (
-    <SafeAreaView>
+    <SafeAreaView >
       <View
-        h='$full'
+          h='$full'
         sx={{
           _dark: {
             bg: '$backgroundDark800',
@@ -191,13 +195,13 @@ const Index = observer(({ navigation }) => {
               }}>
               <Box>
                 <Heading _dark={{ color: '$textLight200' }} size='lg'>
-                  나의 KIOS 마일리지 v0.5.7 - {process.env.EXPO_PUBLIC_ENV}
+                  {t('wallet.heading')} v0.5.7 - {process.env.EXPO_PUBLIC_ENV}
                 </Heading>
                 <Text
                   _dark={{ color: '$textLight200' }}
                   fontSize='$xs'
                   my='$1.5'>
-                  모든 KIOS 키오스크에서 상품 교환이 가능한 통합 {t('mileage')}
+                  {t('wallet.heading.description')}
                 </Text>
               </Box>
 
@@ -219,7 +223,7 @@ const Index = observer(({ navigation }) => {
                     <Pressable
                       onPress={() => navigation.navigate('MileageHistory')}>
                       <Text fontSize='$sm' color='$violet400'>
-                        적립/사용 내역
+                        {t('wallet.link.history')}
                       </Text>
                     </Pressable>
                   </HStack>
@@ -235,12 +239,12 @@ const Index = observer(({ navigation }) => {
                     </Text>
                   </HStack>
                   <Button mt='$12' onPress={() => handleQRSheet()}>
-                    <ButtonText>키오스크에서 사용하기(QR)</ButtonText>
+                      <ButtonText>{t('wallet.use.qr')}</ButtonText>
                   </Button>
                   <Box mt='$4' alignItems='flex-end'>
                     <Pressable onPress={() => convertToToken()}>
                       <Text fontSize='$sm' color='$violet400'>
-                        > 토큰으로 전환하기
+                        {t('wallet.link.convert')}
                       </Text>
                     </Pressable>
                   </Box>
@@ -262,7 +266,7 @@ const Index = observer(({ navigation }) => {
                     <Pressable
                       onPress={() => navigation.navigate('MileageHistory')}>
                       <Text fontSize='$sm' color='$pink600'>
-                        적립/사용 내역
+                        {t('wallet.link.history')}
                       </Text>
                     </Pressable>
                   </HStack>
@@ -280,7 +284,8 @@ const Index = observer(({ navigation }) => {
                     </Text>
                   </HStack>
                   <Button mt='$12' onPress={() => handleQRSheet()}>
-                    <ButtonText>키오스크에서 사용하기(QR)</ButtonText>
+                    <ButtonText>
+                      {t('wallet.use.qr')}</ButtonText>
                   </Button>
                 </Box>
               )}
@@ -299,12 +304,13 @@ const Index = observer(({ navigation }) => {
             <ModalContent maxWidth='$96'>
               <ModalBody p='$5'>
                 <VStack space='lg' mb='$4'>
-                  <Heading>토큰으로 전환하기</Heading>
+                  <Heading>
+                    {t('wallet.link.convert')}</Heading>
                   <Text size='sm'>
-                    포인트를 토큰으로 전환한 후에는 다시 포인트로 전환할 수
-                    없으며, 향후 마일리지는 토큰으로 지급됩니다.
+                    {t('wallet.modal.heading.description')}
                   </Text>
-                  <Text size='sm'>계속 진행하려면 확인을 클릭하세요.</Text>
+                  <Text size='sm'>
+                    {t('wallet.modal.body.a')}</Text>
                 </VStack>
 
                 <ButtonGroup space='md' alignSelf='center'>
@@ -316,7 +322,7 @@ const Index = observer(({ navigation }) => {
                       setShowModal(false);
                     }}>
                     <ButtonText fontSize='$sm' fontWeight='$medium'>
-                      취소
+                      {t('button.press.b')}
                     </ButtonText>
                   </Button>
                   <Button
@@ -327,7 +333,7 @@ const Index = observer(({ navigation }) => {
                       confirmToToken();
                     }}>
                     <ButtonText fontSize='$sm' fontWeight='$medium'>
-                      확인
+                      {t('button.press.a')}
                     </ButtonText>
                   </Button>
                 </ButtonGroup>
@@ -335,6 +341,7 @@ const Index = observer(({ navigation }) => {
             </ModalContent>
           </Modal>
         </Box>
+        <StatusBar style="dark-content" backgroundColor="black" />
       </View>
     </SafeAreaView>
   );

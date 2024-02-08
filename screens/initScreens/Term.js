@@ -18,7 +18,9 @@ import {
 } from '@gluestack-ui/themed';
 import { CheckIcon } from 'lucide-react-native';
 import MobileHeader from '../../components/MobileHeader';
+import {useTranslation} from "react-i18next";
 const Term = observer(({ navigation }) => {
+  const { t } = useTranslation();
   const { noteStore, userStore } = useStores();
   const [values, setValues] = useState(['T1', 'T2']);
   function agreeTerm() {
@@ -39,7 +41,7 @@ const Term = observer(({ navigation }) => {
         }}
         height='$full'
         bg='$backgroundLight0'>
-        <MobileHeader title='약관 동의' subTitle='서비스 이용을 위한 약관' />
+        <MobileHeader title={t('term.header.title')} subTitle={t('term.header.subtitle')} />
 
         <VStack space='lg' pt='$4' m='$7'>
           <CheckboxGroup
@@ -55,7 +57,7 @@ const Term = observer(({ navigation }) => {
                 value='T1'
                 aria-label='rating1'>
                 <HStack justifyContent='space-between' space='lg' w='85%'>
-                  <CheckboxLabel>[필수] 서비스 이용약관 동의</CheckboxLabel>
+                  <CheckboxLabel>{t('term.body.text.a')}</CheckboxLabel>
                   <Button
                     borderRadius='$lg'
                     size='xs'
@@ -63,7 +65,7 @@ const Term = observer(({ navigation }) => {
                     br='$7'
                     bg='$indigo600'
                     borderColor='$indigo600'>
-                    <ButtonText>보기</ButtonText>
+                    <ButtonText>{t('view')}</ButtonText>
                   </Button>
                 </HStack>
                 <CheckboxIndicator>
@@ -76,7 +78,7 @@ const Term = observer(({ navigation }) => {
                 aria-label='rating2'>
                 <HStack justifyContent='space-between' space='lg' w='85%'>
                   <CheckboxLabel>
-                    [필수] 개인정보 수집 및 이용 동의
+                    {t('term.body.text.b')}
                   </CheckboxLabel>
                   <Button
                     borderRadius='$lg'
@@ -84,7 +86,7 @@ const Term = observer(({ navigation }) => {
                     px='$1'
                     bg='$indigo600'
                     borderColor='$indigo600'>
-                    <ButtonText>보기</ButtonText>
+                    <ButtonText>{t('view')}</ButtonText>
                   </Button>
                 </HStack>
                 <CheckboxIndicator>
@@ -95,7 +97,7 @@ const Term = observer(({ navigation }) => {
           </CheckboxGroup>
           <Box py='$10'>
             <Button py='$2.5' px='$3' onPress={() => agreeTerm()}>
-              <ButtonText>동의</ButtonText>
+              <ButtonText>{t('button.press.d')}</ButtonText>
             </Button>
           </Box>
         </VStack>
