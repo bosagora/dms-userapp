@@ -60,7 +60,7 @@ export const usePushNotification = (userStore, loyaltyStore) => {
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
       setExpoPushToken(token);
-    });
+    }).catch(error => {console.log(error)});
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         setNotification(notification);

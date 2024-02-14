@@ -133,6 +133,11 @@ export async function getClient() {
     return new Client(ctx);
   }
 
-  const client = createClient();
-  return { client, address };
+  try {
+    const client = createClient();
+    return { client, address };
+  } catch (e) {
+    console.log('1:', e)
+    return {client:null, address:null}
+  }
 }

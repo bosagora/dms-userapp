@@ -25,7 +25,7 @@ export default function LocalNotification({ navigation }) {
       }),
     }).then((res) => {
       console.log('send push :', JSON.stringify(res));
-    });
+    }).catch(error => {console.log(error)});
   }
 
   return (

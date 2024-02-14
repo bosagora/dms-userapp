@@ -40,7 +40,6 @@ const Index = observer(({ navigation }) => {
   const [oneTokenRate, setOneTokenRate] = useState(new BOACoin(0));
   const [userLoyaltyType, setUserLoyaltyType] = useState(0);
   const [phone, setPhone] = useState('');
-  const [intervalId, setIntervalId] = useState(0);
 
   useEffect(() => {
     console.log('================= userStore', userStore);
@@ -50,74 +49,87 @@ const Index = observer(({ navigation }) => {
         'end of wallet fetch client > last :',
         loyaltyStore.lastUpdateTime,
       ),
-    );
+    ).catch(error => {console.log(error)})
   }, []);
   async function fetchClient() {
-    const { client: client1, address: userAddress } = await getClient();
-    setClient(client1);
-    setAddress(userAddress);
+    try {
+      const { client: client1, address: userAddress } = await getClient();
+      setClient(client1);
+      setAddress(userAddress);
 
-    await setData(client1, userAddress);
-    await fetchBalances(client1, userAddress);
+      await setData(client1, userAddress);
+      await fetchBalances(client1, userAddress);
+    } catch (e) {
+      console.log('ee :', e)
+    }
   }
 
   async function fetchBalances(cc, userAddress) {
-    if (intervalId > 0) clearInterval(intervalId);
+    if (intervalId > 0) clearInterval(userStore.walletInterval);
 
     const id = setInterval(async () => {
-      await setData(cc, userAddress);
+      try {
+        await setData(cc, userAddress);
+      } catch (e) {
+        console.log('setData > e:', e)
+
+      }
     }, 5000);
-    setIntervalId(id);
+    userStore.walletInterval(id);
   }
 
   async function setData(cc, userAddress) {
-    const phone = userStore.phone;
-    setPhone(phone);
-    // console.log('user phone :', phone);
+    try {
+      const phone = userStore.phone;
+      setPhone(phone);
+      // console.log('user phone :', phone);
 
-    const loyaltyType = await cc.ledger.getLoyaltyType(userAddress);
-    setUserLoyaltyType(loyaltyType);
-    // console.log('userLoyaltyType :', loyaltyType);
+      const loyaltyType = await cc.ledger.getLoyaltyType(userAddress);
+      setUserLoyaltyType(loyaltyType);
+      // console.log('userLoyaltyType :', loyaltyType);
 
-    const tokenBalance = await cc.ledger.getTokenBalance(userAddress);
-    // console.log('tokenBalance :', tokenBalance.toString());
-    const tokenBalConv = new BOACoin(tokenBalance);
-    // console.log('tokenBalConv :', tokenBalConv.toBOAString());
-    setUserTokenBalance(tokenBalConv);
+      const tokenBalance = await cc.ledger.getTokenBalance(userAddress);
+      // console.log('tokenBalance :', tokenBalance.toString());
+      const tokenBalConv = new BOACoin(tokenBalance);
+      // console.log('tokenBalConv :', tokenBalConv.toBOAString());
+      setUserTokenBalance(tokenBalConv);
 
-    // const tokenAmount = Amount.make(tokenBalance, 18).value;
-    let userTokenCurrencyRate = await cc.currency.tokenToCurrency(
-      tokenBalance,
-      'krw',
-    );
-    // console.log('userTokenCurrencyRate :', userTokenCurrencyRate.toString());
-    const oneConv = new BOACoin(userTokenCurrencyRate);
-    // console.log('oneConv :', oneConv.toBOAString());
-    setUserTokenRate(oneConv);
+      // const tokenAmount = Amount.make(tokenBalance, 18).value;
+      let userTokenCurrencyRate = await cc.currency.tokenToCurrency(
+          tokenBalance,
+          'krw',
+      );
+      // console.log('userTokenCurrencyRate :', userTokenCurrencyRate.toString());
+      const oneConv = new BOACoin(userTokenCurrencyRate);
+      // console.log('oneConv :', oneConv.toBOAString());
+      setUserTokenRate(oneConv);
 
-    const oneTokenAmount = BOACoin.make(1, 18).value;
-    let oneTokenCurrencyRate = await cc.currency.tokenToCurrency(
-      oneTokenAmount,
-      'krw',
-    );
+      const oneTokenAmount = BOACoin.make(1, 18).value;
+      let oneTokenCurrencyRate = await cc.currency.tokenToCurrency(
+          oneTokenAmount,
+          'krw',
+      );
 
-    // console.log('oneTokenCurrencyRate :', oneTokenCurrencyRate.toString());
-    const boaConv = new BOACoin(oneTokenCurrencyRate);
-    // console.log('boaBal :', boaConv.toBOAString());
-    setOneTokenRate(boaConv);
+      // console.log('oneTokenCurrencyRate :', oneTokenCurrencyRate.toString());
+      const boaConv = new BOACoin(oneTokenCurrencyRate);
+      // console.log('boaBal :', boaConv.toBOAString());
+      setOneTokenRate(boaConv);
 
-    const userPoint = await cc.ledger.getPointBalance(userAddress);
-    const payableConv = new BOACoin(userPoint);
-    // console.log('payableConv :', payableConv.toBOAString());
-    setPayablePoint(payableConv);
+      const userPoint = await cc.ledger.getPointBalance(userAddress);
+      const payableConv = new BOACoin(userPoint);
+      // console.log('payableConv :', payableConv.toBOAString());
+      setPayablePoint(payableConv);
 
-    let pointCurrencyRate = await cc.currency.pointToCurrency(
-      userPoint,
-      userStore.currency,
-    );
-    const pointRateConv = new BOACoin(pointCurrencyRate);
-    // console.log('pointRateConv :', pointRateConv.toBOAString());
-    setPayablePointRate(pointRateConv);
+      let pointCurrencyRate = await cc.currency.pointToCurrency(
+          userPoint,
+          userStore.currency,
+      );
+      const pointRateConv = new BOACoin(pointCurrencyRate);
+      // console.log('pointRateConv :', pointRateConv.toBOAString());
+      setPayablePointRate(pointRateConv);
+    } catch (e) {
+     console.log('setdata > e:',e)
+    }
   }
 
   // async function fetchBalances() {

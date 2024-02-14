@@ -110,15 +110,8 @@ const PhoneAuth = observer(({ navigation }) => {
       const isUp = await client.ledger.isRelayUp();
       console.log('isUp:', isUp);
     }
-    fetchClient().then(() => console.log('end of fetchClient'));
-    const deviceLocales = getLocales()[0];
-    console.log('deviceLocales :', deviceLocales);
-    // initiateTimer();
-    userStore.setCurrency(deviceLocales.currencyCode);
-    userStore.setLang(deviceLocales.languageCode);
-    userStore.setCountry(deviceLocales.regionCode);
-    userStore.setLangTag(deviceLocales.languageTag);
-    userStore.setCountryPhoneCode(deviceLocales.regionCode == 'KR' ? '82' : '');
+    fetchClient().then(() => console.log('end of fetchClient')).catch(error => {console.log(error)});
+
   }, []);
 
   const initiateTimer = () => {
@@ -168,6 +161,14 @@ const PhoneAuth = observer(({ navigation }) => {
       const pf = phoneUtil.format(number, PNF.INTERNATIONAL)
       console.log(phoneUtil.getRegionCodeForNumber(number));
       console.log('pf :', pf);
+      const phoneType = phoneUtil.getNumberType(number);
+      console.log('phoneType:', phoneType)
+      const isValid = phoneUtil.isValidNumber(number);
+      if(!isValid || (phoneType !== 1 && phoneType !== 2)){
+        userStore.setLoading(false);
+        alert(t('phone.alert.invalid'));
+        return;
+      }
 
       userStore.setPhoneFormatted(pf);
       for await (const step of client.link.register(pf)) {
@@ -217,7 +218,7 @@ const PhoneAuth = observer(({ navigation }) => {
       alert(t('phone.alert.auth.done'));
       userStore.setPhone(userStore.countryPhoneCode + phoneCode);
       userStore.setAuthState(AUTH_STATE.DONE);
-    });
+    }).catch(error => {console.log(error)});
   }
   async function changeUnpayableToPayable() {
     const phone = userStore.phoneFormatted;
@@ -260,7 +261,7 @@ const PhoneAuth = observer(({ navigation }) => {
         if (r === true) {
           completeAuth();
         }
-      });
+      }).catch(error => {console.log(error)});
       // completeAuth();
       resetForm();
     },
@@ -310,30 +311,33 @@ const PhoneAuth = observer(({ navigation }) => {
             <Text fontWeight='$bold' fontSize='$md'>
               {t('phone.number')}
             </Text>
-            <HStack my='$3' alignItems='center'>
+            <VStack flex={1} m='$2'>
               <Box flex={1}>
                 <Input
                   variant='outline'
-                  mr='$2'
+                  m='$2'
                   size='md'
                   isDisabled={false}
                   isInvalid={false}
                   isReadOnly={false}>
                   <InputField
+                      placeholder={t("phone.body.input.a")}
                     value={userStore.countryPhoneCode}
                     onChangeText={userStore.setCountryPhoneCode}
                   />
                 </Input>
               </Box>
+
               <Box flex={2}>
                 <Input
                   variant='outline'
-                  mr='$2'
+                  m='$2'
                   size='md'
                   isDisabled={false}
                   isInvalid={false}
                   isReadOnly={false}>
-                  <InputField value={phoneCode} onChangeText={setPhoneCode} />
+                  <InputField placeholder={t('phone.number')}
+                      value={phoneCode} onChangeText={setPhoneCode} />
                 </Input>
               </Box>
               <Button
@@ -341,10 +345,11 @@ const PhoneAuth = observer(({ navigation }) => {
                 onPress={() => {
                   registerPhone();
                 }}
+                m='$2'
                 flex={1}>
-                <ButtonText>전송</ButtonText>
+                <ButtonText>{t('next')}</ButtonText>
               </Button>
-            </HStack>
+            </VStack>
             <Text
               fontSize='$sm'
               fontWeight='normal'
