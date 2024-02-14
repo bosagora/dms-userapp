@@ -218,7 +218,7 @@ const PhoneAuth = observer(({ navigation }) => {
       alert(t('phone.alert.auth.done'));
       userStore.setPhone(userStore.countryPhoneCode + phoneCode);
       userStore.setAuthState(AUTH_STATE.DONE);
-    }).catch(error => {console.log(error)});
+    });
   }
   async function changeUnpayableToPayable() {
     const phone = userStore.phoneFormatted;
