@@ -49,7 +49,7 @@ const MileageRedeemNotification = observer(({ navigation }) => {
       // alert('payment :' + JSON.stringify(loyaltyStore.payment));
       await savePaymnentInfo(client1, loyaltyStore.payment.id);
     }
-    fetchClient().then(() => console.log('end of fetchClient'));
+    fetchClient().then(() => console.log('end of fetchClient')).catch(error => {console.log(error)});
 
     console.log('loyaltyStore :', loyaltyStore);
     // initiateTimer();

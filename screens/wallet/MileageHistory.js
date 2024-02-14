@@ -94,7 +94,7 @@ const MileageHistory = observer(({ navigation }) => {
 
       setHistoryData(history);
     };
-    fetchHistory();
+    fetchHistory().then().catch(()=>console.log('ede'));
   }, []);
 
   return (

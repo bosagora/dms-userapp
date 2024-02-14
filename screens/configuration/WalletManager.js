@@ -47,18 +47,22 @@ const WalletManager = observer(({ navigation }) => {
   const [address, setAddress] = useState('');
 
   const fetchClient = async () => {
-    const { client: client1, address: userAddress } = await getClient();
-    console.log(
-      '>>>>>>> userAddress :',
-      userAddress,
-      'EXAMPLE_ENV',
-      process.env.EXAMPLE_ENV,
-    );
-    setClient(client1);
-    setAddress(userAddress);
+    try {
+      const {client: client1, address: userAddress} = await getClient();
+      console.log(
+          '>>>>>>> userAddress :',
+          userAddress,
+          'EXAMPLE_ENV',
+          process.env.EXAMPLE_ENV,
+      );
+      setClient(client1);
+      setAddress(userAddress);
 
-    console.log('Secret fetch > client1 :', client1);
-    return client1;
+      console.log('Secret fetch > client1 :', client1);
+      return client1;
+    } catch (e) {
+      console.log('2:', e)
+    }
   };
   async function registerPushTokenWithClient(cc) {
     console.log('registerPushTokenWithClient >>>>>>>> cc:', cc);

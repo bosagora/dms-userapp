@@ -10,7 +10,13 @@ class SecretStore {
   constructor() {
     makeAutoObservable(this);
   }
+  reset(){
+    this.pKey = '';
+    this.address = '';
+    this.mnemonic = '';
 
+    this.showQRSheet = false;
+  }
   setPKey = (key) => {
     this.pKey = key;
   };
