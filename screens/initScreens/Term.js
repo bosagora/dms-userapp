@@ -19,14 +19,23 @@ import {
 import { CheckIcon } from 'lucide-react-native';
 import MobileHeader from '../../components/MobileHeader';
 import {useTranslation} from "react-i18next";
+import secretStore from "../../stores/secret.store";
 const Term = observer(({ navigation }) => {
   const { t } = useTranslation();
-  const { noteStore, userStore } = useStores();
-  const [values, setValues] = useState(['T1', 'T2']);
+  const { secretStore, userStore } = useStores();
+  const [values, setValues] = useState([]);
   function agreeTerm() {
     if (values.includes('T1') && values.includes('T2')) {
       navigation.navigate('Secret');
     }
+  }
+  function showTerm(){
+    console.log('showTerm')
+    secretStore.setShowTermSheet(true)
+  }
+  function showPrivacy(){
+    console.log('showPrivacy')
+    secretStore.setShowPrivacySheet(true)
   }
   return (
     <SafeAreaView>
@@ -64,7 +73,8 @@ const Term = observer(({ navigation }) => {
                     px='$1'
                     br='$7'
                     bg='$indigo600'
-                    borderColor='$indigo600'>
+                    borderColor='$indigo600'
+                  onPress={()=>showTerm()}>
                     <ButtonText>{t('view')}</ButtonText>
                   </Button>
                 </HStack>
@@ -85,7 +95,8 @@ const Term = observer(({ navigation }) => {
                     size='xs'
                     px='$1'
                     bg='$indigo600'
-                    borderColor='$indigo600'>
+                    borderColor='$indigo600'
+                    onPress={()=>showPrivacy()}>
                     <ButtonText>{t('view')}</ButtonText>
                   </Button>
                 </HStack>

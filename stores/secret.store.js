@@ -6,6 +6,8 @@ class SecretStore {
   mnemonic = '';
 
   showQRSheet = false;
+  showTermSheet = false;
+  showPrivacySheet = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -16,6 +18,8 @@ class SecretStore {
     this.mnemonic = '';
 
     this.showQRSheet = false;
+    this.showTermSheet = false;
+    this.showPrivacySheet = false;
   }
   setPKey = (key) => {
     this.pKey = key;
@@ -31,6 +35,12 @@ class SecretStore {
 
   setShowQRSheet = (show) => {
     this.showQRSheet = show;
+  };
+  setShowTermSheet = (show) => {
+    this.showTermSheet = show;
+  };
+  setShowPrivacySheet = (show) => {
+    this.showPrivacySheet = show;
   };
 }
 

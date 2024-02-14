@@ -58,7 +58,7 @@ const Permissions = observer(({ navigation }) => {
         userStore.setPermissionsCount();
       }
     } else {
-      navigation.navigate('Secret');
+      navigation.navigate('Term');
     }
   }
   return (

@@ -70,6 +70,8 @@ import * as I18N from 'i18next';
 import { useTranslation, initReactI18next } from 'react-i18next';
 import ModalActivityIndicator from 'react-native-modal-activityindicator';
 import {getLocales} from "expo-localization";
+import TermActionSheet from "../screens/TermActionSheet";
+import PrivacyActionSheet from "../screens/PrivacyActionSheet";
 
 I18N
   .use(initReactI18next) // passes i18n down to react-i18next
@@ -236,6 +238,8 @@ const App = observer(() => {
               <MainStackScreen />
             )}
             <QRActionSheet />
+            <TermActionSheet />
+            <PrivacyActionSheet />
           </GluestackUIProvider>
         </NavigationContainer>
         <PinCodeScreen />
