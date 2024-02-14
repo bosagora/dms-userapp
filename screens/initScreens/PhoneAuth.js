@@ -115,7 +115,7 @@ const PhoneAuth = observer(({ navigation }) => {
   }, []);
 
   const initiateTimer = () => {
-    fontRef.current = 60;
+    fontRef.current = 180;
     let timeLeftObj = secondsToTime(fontRef.current);
     setTimeLeft(timeLeftObj);
     console.log('timeLeftObj :', timeLeftObj);

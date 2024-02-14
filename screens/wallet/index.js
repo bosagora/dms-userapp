@@ -65,7 +65,7 @@ const Index = observer(({ navigation }) => {
   }
 
   async function fetchBalances(cc, userAddress) {
-    if (intervalId > 0) clearInterval(userStore.walletInterval);
+    if (userStore.walletInterval > 0) clearInterval(userStore.walletInterval);
 
     const id = setInterval(async () => {
       try {
@@ -75,7 +75,7 @@ const Index = observer(({ navigation }) => {
 
       }
     }, 5000);
-    userStore.walletInterval(id);
+    userStore.setWalletInterval(id);
   }
 
   async function setData(cc, userAddress) {
