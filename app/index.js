@@ -71,6 +71,8 @@ import ModalActivityIndicator from 'react-native-modal-activityindicator';
 import { getLocales } from 'expo-localization';
 import TermActionSheet from '../screens/TermActionSheet';
 import PrivacyActionSheet from '../screens/PrivacyActionSheet';
+import * as Updates from 'expo-updates';
+import * as Device from 'expo-device';
 
 I18N.use(initReactI18next) // passes i18n down to react-i18next
   .init({
@@ -134,12 +136,26 @@ const App = observer(() => {
           });
       }
     };
+    async function onFetchUpdateAsync() {
+      try {
+        const update = await Updates.checkForUpdateAsync();
+
+        if (update.isAvailable) {
+          await Updates.fetchUpdateAsync();
+          await Updates.reloadAsync();
+        }
+      } catch (error) {
+        // You can also add an alert() to see the error message in case of an error when fetching updates.
+        alert(`Error fetching latest Expo update: ${error}`);
+      }
+    }
     rehydrate();
+    if (Device.isDevice) onFetchUpdateAsync();
   }, []);
   function afterChangeLang(it) {
     console.log('afterChangeLang:', it);
     i18n
-      .changeLanguage('en')
+      .changeLanguage(userStore.lang)
       .then()
       .catch((error) => {
         console.log(error);
