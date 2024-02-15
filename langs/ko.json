@@ -19,7 +19,7 @@
   "copy": "복사",
   "view": "보기",
   "authenticate": "인증",
-  "next": "전송",
+  "next": "다음",
   "canceled": "취소",
   "saved": "적립",
   "used": "사용",
@@ -85,6 +85,9 @@
   "wallet.history.header.subtitle.a": "최근",
   "wallet.history.header.subtitle.b": "개 내역",
   "wallet.history.header.subtitle.nothing": "조회된 내역이 없습니다.",
+  "wallet.history.body.text.a": "취소",
+  "wallet.history.body.text.b": "적립",
+  "wallet.history.body.text.c": "사용",
 
   "wallet.redeem.use.fail": "사용 승인에 실패하였습니다. 관리자에게 문의하세요.",
   "wallet.redeem.use.done": "마일리지 사용이 성공적으로 승인되었습니다.",
@@ -92,6 +95,7 @@
   "wallet.redeem.header.subtitle": "마일리지로 상품 구매",
   "wallet.redeem.header.body.a": "사용 마일리지",
 
+  "config.setting": "설정",
   "config.menu.a": "PIN 번호 변경",
   "config.menu.b": "바이오 인증 사용",
   "config.menu.c": "지갑 설정",

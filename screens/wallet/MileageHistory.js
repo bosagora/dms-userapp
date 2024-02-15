@@ -8,7 +8,7 @@ import { getClient } from '../../utils/client';
 import { convertProperValue, timePadding } from '../../utils/convert';
 import { Amount, BOACoin } from 'dms-sdk-client';
 import { BigNumber } from '@ethersproject/bignumber';
-import {useTranslation} from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 const MileageHistory = observer(({ navigation }) => {
   const { t } = useTranslation();
@@ -94,7 +94,9 @@ const MileageHistory = observer(({ navigation }) => {
 
       setHistoryData(history);
     };
-    fetchHistory().then().catch(()=>console.log('ede'));
+    fetchHistory()
+      .then()
+      .catch(() => console.log('ede'));
   }, []);
 
   return (
@@ -114,7 +116,9 @@ const MileageHistory = observer(({ navigation }) => {
           title={t('wallet.history.header.title')}
           subTitle={
             historyData && historyData.length > 0
-              ? t('wallet.history.header.subtitle.a') + historyData.length + t('wallet.history.header.subtitle.b')
+              ? t('wallet.history.header.subtitle.a') +
+                historyData.length +
+                t('wallet.history.header.subtitle.b')
               : t('wallet.history.header.subtitle.nothing')
           }
         />
@@ -155,10 +159,10 @@ const MileageHistory = observer(({ navigation }) => {
                         },
                       }}>
                       {item.actionName === 'CANCEL'
-                        ? '취소'
+                        ? t('wallet.history.body.text.a')
                         : item.actionName === 'SAVED'
-                        ? '적립'
-                        : '사용'}
+                        ? t('wallet.history.body.text.b')
+                        : t('wallet.history.body.text.c')}
                     </Text>
                     <Text
                       fontSize='$sm'

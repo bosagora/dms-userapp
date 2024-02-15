@@ -85,6 +85,9 @@
   "wallet.history.header.subtitle.a": "Recent",
   "wallet.history.header.subtitle.b": "entries",
   "wallet.history.header.subtitle.nothing": "No history available.",
+  "wallet.history.body.text.a": "Canceled",
+  "wallet.history.body.text.b": "Collected",
+  "wallet.history.body.text.c": "Used",
 
   "wallet.redeem.use.fail": "Redemption authentication failed. Please contact support.",
   "wallet.redeem.use.done": "Redemption successfully authenticated.",
@@ -92,6 +95,7 @@
   "wallet.redeem.header.subtitle": "Redeem KIOS Loyalty",
   "wallet.redeem.header.body.a": "Loyalty redeemed amount",
 
+  "config.setting": "Settings",
   "config.menu.a": "Change your passcode",
   "config.menu.b": "Use Biometric authentication",
   "config.menu.c": "Wallet settings",
