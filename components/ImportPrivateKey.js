@@ -1,34 +1,23 @@
 import React, { useState } from 'react';
 import {
   ButtonText,
-  Center,
   FormControl,
-  FormControlLabel,
-  FormControlLabelText,
   Heading,
-  HStack,
   Input,
   InputField,
   Modal,
   ModalBackdrop,
   ModalBody,
   ModalContent,
-  Slider,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderTrack,
   VStack,
   Text,
   Button,
-  Switch,
-  Textarea,
-  TextareaInput,
   FormControlHelper,
   FormControlHelperText,
   ButtonGroup,
   Box,
 } from '@gluestack-ui/themed';
-import {useTranslation} from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 const ImportPrivateKey = ({ saveKey }) => {
   const { t } = useTranslation();
@@ -55,9 +44,7 @@ const ImportPrivateKey = ({ saveKey }) => {
           <ModalBody p='$5'>
             <VStack space='xs' mb='$4'>
               <Heading>{t('wallet.import')}</Heading>
-              <Text size='sm'>
-                {t('import.body.text.a')}
-              </Text>
+              <Text size='sm'>{t('import.body.text.a')}</Text>
             </VStack>
             <VStack py='$2' space='xl'>
               <FormControl>
@@ -70,19 +57,6 @@ const ImportPrivateKey = ({ saveKey }) => {
                 <Input>
                   <InputField value={privateKey} onChangeText={setPrivateKey} />
                 </Input>
-
-                {/*<Textarea*/}
-                {/*  size='md'*/}
-                {/*  isReadOnly={false}*/}
-                {/*  isInvalid={false}*/}
-                {/*  isDisabled={false}*/}
-                {/*  w='$64'>*/}
-                {/*  <TextareaInput*/}
-                {/*    placeholder='Your text goes here...'*/}
-                {/*    value={privateKey}*/}
-                {/*    onChangeText={setPrivateKey}*/}
-                {/*  />*/}
-                {/*</Textarea>*/}
               </FormControl>
             </VStack>
 

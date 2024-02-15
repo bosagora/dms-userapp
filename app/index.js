@@ -50,7 +50,6 @@ import 'react-native-url-polyfill/auto';
 import { usePushNotification } from '../hooks/usePushNotification';
 import Permissions from '../screens/initScreens/Permissions';
 
-
 const InitStack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -69,12 +68,11 @@ import en from '../langs/en.json';
 import * as I18N from 'i18next';
 import { useTranslation, initReactI18next } from 'react-i18next';
 import ModalActivityIndicator from 'react-native-modal-activityindicator';
-import {getLocales} from "expo-localization";
-import TermActionSheet from "../screens/TermActionSheet";
-import PrivacyActionSheet from "../screens/PrivacyActionSheet";
+import { getLocales } from 'expo-localization';
+import TermActionSheet from '../screens/TermActionSheet';
+import PrivacyActionSheet from '../screens/PrivacyActionSheet';
 
-I18N
-  .use(initReactI18next) // passes i18n down to react-i18next
+I18N.use(initReactI18next) // passes i18n down to react-i18next
   .init({
     compatibilityJSON: 'v3',
     resources: {
@@ -108,29 +106,44 @@ const App = observer(() => {
 
       userStore.setLoading(false);
       console.log('app.index > userStore : ', userStore);
-      if(userStore.currency === '') {
-          console.log('init locale')
-          const deviceLocales = getLocales()[0];
-          console.log('deviceLocales :', deviceLocales);
+      if (userStore.currency === '') {
+        console.log('init locale');
+        const deviceLocales = getLocales()[0];
+        console.log('deviceLocales :', deviceLocales);
 
-          userStore.setCurrency(deviceLocales.currencyCode);
-          userStore.setLang(deviceLocales.languageCode);
-          userStore.setCountry(deviceLocales.regionCode);
-          userStore.setLangTag(deviceLocales.languageTag);
-          userStore.setCountryPhoneCode(deviceLocales.regionCode == 'KR' ? '82' : '');
-          i18n.changeLanguage(deviceLocales.languageCode, afterChangeLang).then((()=>{})).catch(error => {console.log(error)});
-      }
-      else {
-          console.log('userStore.lang :', userStore.lang)
-          i18n.changeLanguage(userStore.lang, afterChangeLang).then().catch(error => {console.log(error)})
+        userStore.setCurrency(deviceLocales.currencyCode);
+        userStore.setLang(deviceLocales.languageCode);
+        userStore.setCountry(deviceLocales.regionCode);
+        userStore.setLangTag(deviceLocales.languageTag);
+        userStore.setCountryPhoneCode(
+          deviceLocales.regionCode == 'KR' ? '82' : '',
+        );
+        i18n
+          .changeLanguage(deviceLocales.languageCode, afterChangeLang)
+          .then(() => {})
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        console.log('userStore.lang :', userStore.lang);
+        i18n
+          .changeLanguage(userStore.lang, afterChangeLang)
+          .then()
+          .catch((error) => {
+            console.log(error);
+          });
       }
     };
-    rehydrate()
-
+    rehydrate();
   }, []);
-  function afterChangeLang(it){
-      console.log('afterChangeLang:', it)
-      i18n.changeLanguage(userStore.lang).then().catch(error => {console.log(error)})
+  function afterChangeLang(it) {
+    console.log('afterChangeLang:', it);
+    i18n
+      .changeLanguage('en')
+      .then()
+      .catch((error) => {
+        console.log(error);
+      });
   }
   let init = false;
   useEffect(() => {
@@ -326,7 +339,6 @@ function MainStackScreen() {
         name='BiometricAuthScreen'
         component={BiometricAuthScreen}
       />
-
     </MainStack.Navigator>
   );
 }

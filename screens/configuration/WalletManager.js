@@ -48,12 +48,12 @@ const WalletManager = observer(({ navigation }) => {
 
   const fetchClient = async () => {
     try {
-      const {client: client1, address: userAddress} = await getClient();
+      const { client: client1, address: userAddress } = await getClient();
       console.log(
-          '>>>>>>> userAddress :',
-          userAddress,
-          'EXAMPLE_ENV',
-          process.env.EXAMPLE_ENV,
+        '>>>>>>> userAddress :',
+        userAddress,
+        'EXAMPLE_ENV',
+        process.env.EXAMPLE_ENV,
       );
       setClient(client1);
       setAddress(userAddress);
@@ -61,7 +61,7 @@ const WalletManager = observer(({ navigation }) => {
       console.log('Secret fetch > client1 :', client1);
       return client1;
     } catch (e) {
-      console.log('2:', e)
+      console.log('2:', e);
     }
   };
   async function registerPushTokenWithClient(cc) {
@@ -146,7 +146,10 @@ const WalletManager = observer(({ navigation }) => {
         }}
         height='$full'
         bg='$backgroundLight0'>
-        <MobileHeader title='지갑 관리' subTitle='지갑을 외부에 저장하거나 불러오기' />
+        <MobileHeader
+          title={t('config.wallet.header.title')}
+          subTitle={t('config.wallet.header.subtitle')}
+        />
         <VStack space='lg' pt='$4' m='$7'>
           <Box>
             <Button py='$2.5' px='$3' onPress={() => exportWallet()}>

@@ -22,9 +22,9 @@ import { getClient } from '../../utils/client';
 import { Amount, BOACoin, ContractUtils } from 'dms-sdk-client';
 import { convertProperValue } from '../../utils/convert';
 import loyaltyStore from '../../stores/loyalty.store';
-import {SafeAreaView, StatusBar} from 'react-native';
+import { SafeAreaView, StatusBar } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import {useSafeAreaInsets} from "react-native-safe-area-context";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Index = observer(({ navigation }) => {
   const { t } = useTranslation();
@@ -44,12 +44,16 @@ const Index = observer(({ navigation }) => {
   useEffect(() => {
     console.log('================= userStore', userStore);
 
-    fetchClient().then(() =>
-      console.log(
-        'end of wallet fetch client > last :',
-        loyaltyStore.lastUpdateTime,
-      ),
-    ).catch(error => {console.log(error)})
+    fetchClient()
+      .then(() =>
+        console.log(
+          'end of wallet fetch client > last :',
+          loyaltyStore.lastUpdateTime,
+        ),
+      )
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
   async function fetchClient() {
     try {
@@ -60,7 +64,7 @@ const Index = observer(({ navigation }) => {
       await setData(client1, userAddress);
       await fetchBalances(client1, userAddress);
     } catch (e) {
-      console.log('ee :', e)
+      console.log('ee :', e);
     }
   }
 
@@ -71,8 +75,7 @@ const Index = observer(({ navigation }) => {
       try {
         await setData(cc, userAddress);
       } catch (e) {
-        console.log('setData > e:', e)
-
+        console.log('setData > e:', e);
       }
     }, 5000);
     userStore.setWalletInterval(id);
@@ -96,8 +99,8 @@ const Index = observer(({ navigation }) => {
 
       // const tokenAmount = Amount.make(tokenBalance, 18).value;
       let userTokenCurrencyRate = await cc.currency.tokenToCurrency(
-          tokenBalance,
-          'krw',
+        tokenBalance,
+        'krw',
       );
       // console.log('userTokenCurrencyRate :', userTokenCurrencyRate.toString());
       const oneConv = new BOACoin(userTokenCurrencyRate);
@@ -106,8 +109,8 @@ const Index = observer(({ navigation }) => {
 
       const oneTokenAmount = BOACoin.make(1, 18).value;
       let oneTokenCurrencyRate = await cc.currency.tokenToCurrency(
-          oneTokenAmount,
-          'krw',
+        oneTokenAmount,
+        'krw',
       );
 
       // console.log('oneTokenCurrencyRate :', oneTokenCurrencyRate.toString());
@@ -121,14 +124,14 @@ const Index = observer(({ navigation }) => {
       setPayablePoint(payableConv);
 
       let pointCurrencyRate = await cc.currency.pointToCurrency(
-          userPoint,
-          userStore.currency,
+        userPoint,
+        userStore.currency,
       );
       const pointRateConv = new BOACoin(pointCurrencyRate);
       // console.log('pointRateConv :', pointRateConv.toBOAString());
       setPayablePointRate(pointRateConv);
     } catch (e) {
-     console.log('setdata > e:',e)
+      console.log('setdata > e:', e);
     }
   }
 
@@ -174,11 +177,10 @@ const Index = observer(({ navigation }) => {
     setShowModal(false);
   };
 
-
   return (
-    <SafeAreaView >
+    <SafeAreaView>
       <View
-          h='$full'
+        h='$full'
         sx={{
           _dark: {
             bg: '$backgroundDark800',
@@ -207,7 +209,7 @@ const Index = observer(({ navigation }) => {
               }}>
               <Box>
                 <Heading _dark={{ color: '$textLight200' }} size='lg'>
-                  {t('wallet.heading')} v0.5.7 - {process.env.EXPO_PUBLIC_ENV}
+                  {t('wallet.heading')}
                 </Heading>
                 <Text
                   _dark={{ color: '$textLight200' }}
@@ -251,7 +253,7 @@ const Index = observer(({ navigation }) => {
                     </Text>
                   </HStack>
                   <Button mt='$12' onPress={() => handleQRSheet()}>
-                      <ButtonText>{t('wallet.use.qr')}</ButtonText>
+                    <ButtonText>{t('wallet.use.qr')}</ButtonText>
                   </Button>
                   <Box mt='$4' alignItems='flex-end'>
                     <Pressable onPress={() => convertToToken()}>
@@ -296,8 +298,7 @@ const Index = observer(({ navigation }) => {
                     </Text>
                   </HStack>
                   <Button mt='$12' onPress={() => handleQRSheet()}>
-                    <ButtonText>
-                      {t('wallet.use.qr')}</ButtonText>
+                    <ButtonText>{t('wallet.use.qr')}</ButtonText>
                   </Button>
                 </Box>
               )}
@@ -316,13 +317,9 @@ const Index = observer(({ navigation }) => {
             <ModalContent maxWidth='$96'>
               <ModalBody p='$5'>
                 <VStack space='lg' mb='$4'>
-                  <Heading>
-                    {t('wallet.link.convert')}</Heading>
-                  <Text size='sm'>
-                    {t('wallet.modal.heading.description')}
-                  </Text>
-                  <Text size='sm'>
-                    {t('wallet.modal.body.a')}</Text>
+                  <Heading>{t('wallet.link.convert')}</Heading>
+                  <Text size='sm'>{t('wallet.modal.heading.description')}</Text>
+                  <Text size='sm'>{t('wallet.modal.body.a')}</Text>
                 </VStack>
 
                 <ButtonGroup space='md' alignSelf='center'>
@@ -353,7 +350,7 @@ const Index = observer(({ navigation }) => {
             </ModalContent>
           </Modal>
         </Box>
-        <StatusBar style="dark-content" backgroundColor="black" />
+        <StatusBar style='dark-content' backgroundColor='black' />
       </View>
     </SafeAreaView>
   );
