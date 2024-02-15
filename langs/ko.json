@@ -69,7 +69,7 @@
   "phone.header.subtitle": "마일리지 사용을 위한 본인 인증",
   "phone.body.text.a": "전화번호 전송 후에 문자 메세지의 인증 코드 3개를 문자에 표시된 번호(#1, #2, #3)에 맞추어 입력하고 인증을 진행해 주세요.",
   "phone.body.text.b": "유효시간",
-  "phone.body.input.a": "국가 코드 번",
+  "phone.body.input.a": "국가 코드 번호",
 
   "wallet.alert.convert.fail": "토큰 전환에 실패하였습니다.",
   "wallet.alert.convert.done": "토큰 전환에 성공하였습니다.",

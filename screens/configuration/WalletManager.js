@@ -34,10 +34,12 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { getClient } from '../../utils/client';
 import * as Device from 'expo-device';
 import { MobileType } from 'dms-sdk-client';
+import { useTranslation } from 'react-i18next';
 
 const { Wallet } = ethers;
 
 const WalletManager = observer(({ navigation }) => {
+  const { t } = useTranslation();
   const { userStore, secretStore, loyaltyStore } = useStores();
   const [privateKey, setPrivateKey] = useState(
     '0000000000000000000000000000000000000000000000000000000000000001',

@@ -100,7 +100,7 @@ const Index = observer(({ navigation }) => {
       // const tokenAmount = Amount.make(tokenBalance, 18).value;
       let userTokenCurrencyRate = await cc.currency.tokenToCurrency(
         tokenBalance,
-        'krw',
+        userStore.currency.toLowerCase(),
       );
       // console.log('userTokenCurrencyRate :', userTokenCurrencyRate.toString());
       const oneConv = new BOACoin(userTokenCurrencyRate);
@@ -110,7 +110,7 @@ const Index = observer(({ navigation }) => {
       const oneTokenAmount = BOACoin.make(1, 18).value;
       let oneTokenCurrencyRate = await cc.currency.tokenToCurrency(
         oneTokenAmount,
-        'krw',
+        userStore.currency.toLowerCase(),
       );
 
       // console.log('oneTokenCurrencyRate :', oneTokenCurrencyRate.toString());
@@ -246,10 +246,11 @@ const Index = observer(({ navigation }) => {
                       _dark={{ color: '$textLight200' }}
                       fontSize='$sm'
                       mr='$1'>
-                      ≒ {convertProperValue(payablePointRate.toBOAString())} KRW
+                      ≒ {convertProperValue(payablePointRate.toBOAString())}{' '}
+                      {userStore.currency}
                     </Text>
                     <Text _dark={{ color: '$textLight200' }} fontSize='$sm'>
-                      (1 point ≒ 1 {userStore.currency})
+                      (1 point ≒ 1 {userStore.currency} )
                     </Text>
                   </HStack>
                   <Button mt='$12' onPress={() => handleQRSheet()}>
@@ -289,12 +290,13 @@ const Index = observer(({ navigation }) => {
                       _dark={{ color: '$textLight200' }}
                       fontSize='$sm'
                       mr='$1'>
-                      ≒ {convertProperValue(userTokenRate.toBOAString(), 0)} KRW
+                      ≒ {convertProperValue(userTokenRate.toBOAString(), 0)}{' '}
+                      {userStore.currency}
                     </Text>
                     <Text _dark={{ color: '$textLight200' }} fontSize='$sm'>
                       (1 KIOS ≒{' '}
                       {convertProperValue(oneTokenRate.toBOAString(), 0, 2)}{' '}
-                      KRW)
+                      {userStore.currency})
                     </Text>
                   </HStack>
                   <Button mt='$12' onPress={() => handleQRSheet()}>
