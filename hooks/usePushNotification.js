@@ -58,9 +58,13 @@ export const usePushNotification = (userStore, loyaltyStore) => {
   }
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) => {
-      setExpoPushToken(token);
-    }).catch(error => {console.log(error)});
+    registerForPushNotificationsAsync()
+      .then((token) => {
+        setExpoPushToken(token);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         setNotification(notification);
@@ -74,9 +78,16 @@ export const usePushNotification = (userStore, loyaltyStore) => {
         );
         const data = response.notification.request.content.data;
         const payment = { id: data.paymentId, type: data.type };
-
-        loyaltyStore.setPayment(payment);
-        RootNavigation.navigate('MileageRedeemNotification');
+        // alert(
+        //   'Notification type :' +
+        //     JSON.stringify(response.notification.request.content),
+        // );
+        if (data.type === 'new') {
+          loyaltyStore.setPayment(payment);
+          RootNavigation.navigate('MileageRedeemNotification');
+        } else if (data.type === 'provide') {
+          RootNavigation.navigate('MileageHistory');
+        }
       });
 
     return () => {

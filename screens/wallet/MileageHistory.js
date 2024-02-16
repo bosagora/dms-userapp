@@ -6,7 +6,7 @@ import { Box, FlatList, HStack, Text, VStack } from '@gluestack-ui/themed';
 import MobileHeader from '../../components/MobileHeader';
 import { getClient } from '../../utils/client';
 import { convertProperValue, timePadding } from '../../utils/convert';
-import { Amount, BOACoin } from 'dms-sdk-client';
+import { Amount, BOACoin, LedgerAction } from 'dms-sdk-client';
 import { BigNumber } from '@ethersproject/bignumber';
 import { useTranslation } from 'react-i18next';
 
@@ -70,7 +70,11 @@ const MileageHistory = observer(({ navigation }) => {
       console.log('len :', res.userTradeHistories?.length);
       const history = res.userTradeHistories
         .filter((it) => {
-          return it.action === 1 || it.action === 2;
+          return (
+            it.action === LedgerAction.SAVED ||
+            it.action === LedgerAction.USED ||
+            it.action === LedgerAction.CHANGED
+          );
         })
         .map((it) => {
           return {
@@ -79,8 +83,10 @@ const MileageHistory = observer(({ navigation }) => {
             actionName:
               it.cancel === true
                 ? 'CANCEL'
-                : it.action === 1
+                : it.action === LedgerAction.SAVED
                 ? 'SAVED'
+                : it.action === LedgerAction.CHANGED
+                ? 'CHANGED'
                 : 'USED',
             loyaltyType: it.loyaltyType,
             loyaltyTypeName: it.loyaltyType === 0 ? 'POINT' : 'TOKEN',
@@ -162,7 +168,9 @@ const MileageHistory = observer(({ navigation }) => {
                         ? t('wallet.history.body.text.a')
                         : item.actionName === 'SAVED'
                         ? t('wallet.history.body.text.b')
-                        : t('wallet.history.body.text.c')}
+                        : item.actionName === 'USED'
+                        ? t('wallet.history.body.text.c')
+                        : t('wallet.history.body.text.d')}
                     </Text>
                     <Text
                       fontSize='$sm'

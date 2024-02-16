@@ -56,7 +56,7 @@
   "pin.enter.title": "Enter 4-digit passcode",
   "pin.enter.subTitle": "Enter 4-digit passcode",
   "pin.set.title": "Set Your Passcode",
-  "pin.set.subTitle": "Re-enter your passcode",
+  "pin.set.subTitle": "Enter your passcode",
   "pin.set.repeat": "Re-enter your passcode",
   "pin.locked.title": "Screen locked",
   "pin.locked.subTitle": "Wrong PIN {{maxAttempt}} times.\nTemporarily locked in {{lockDuration}}.",
@@ -88,6 +88,7 @@
   "wallet.history.body.text.a": "Canceled",
   "wallet.history.body.text.b": "Collected",
   "wallet.history.body.text.c": "Used",
+  "wallet.history.body.text.d": "Converted",
 
   "wallet.redeem.use.fail": "Redemption authentication failed. Please contact support.",
   "wallet.redeem.use.done": "Redemption successfully authenticated.",

@@ -88,6 +88,7 @@
   "wallet.history.body.text.a": "취소",
   "wallet.history.body.text.b": "적립",
   "wallet.history.body.text.c": "사용",
+  "wallet.history.body.text.d": "토큰 전환",
 
   "wallet.redeem.use.fail": "사용 승인에 실패하였습니다. 관리자에게 문의하세요.",
   "wallet.redeem.use.done": "마일리지 사용이 성공적으로 승인되었습니다.",
