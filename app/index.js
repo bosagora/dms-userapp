@@ -95,7 +95,11 @@ const App = observer(() => {
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
   const { i18n } = useTranslation();
 
-  const { expoPushToken } = usePushNotification(userStore, loyaltyStore);
+  const { expoPushToken } = usePushNotification(
+    userStore,
+    loyaltyStore,
+    pinStore,
+  );
   useEffect(() => {
     const rehydrate = async () => {
       await trunk.init();

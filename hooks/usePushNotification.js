@@ -5,7 +5,7 @@ import * as RootNavigation from '../utils/root.navigation';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 
-export const usePushNotification = (userStore, loyaltyStore) => {
+export const usePushNotification = (userStore, loyaltyStore, pinStore) => {
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
       shouldPlaySound: false,
@@ -83,9 +83,11 @@ export const usePushNotification = (userStore, loyaltyStore) => {
         //     JSON.stringify(response.notification.request.content),
         // );
         if (data.type === 'new') {
+          pinStore.setNextScreen('MileageRedeemNotification');
           loyaltyStore.setPayment(payment);
           RootNavigation.navigate('MileageRedeemNotification');
         } else if (data.type === 'provide') {
+          pinStore.setNextScreen('MileageHistory');
           RootNavigation.navigate('MileageHistory');
         }
       });
