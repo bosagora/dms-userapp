@@ -185,7 +185,12 @@ const MileageHistory = observer(({ navigation }) => {
                   </VStack>
                   <Box>
                     <Text>
-                      {item.actionName === 'CANCEL' ? '-' : ''}
+                      {item.actionName === 'CANCEL' ||
+                      item.actionName === 'SAVED'
+                        ? '+'
+                        : item.actionName === 'USED'
+                        ? '-'
+                        : ''}
                       {convertProperValue(
                         item.loyaltyType === 1
                           ? new Amount(

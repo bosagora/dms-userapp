@@ -18,11 +18,11 @@ import { Amount, LoyaltyType, NormalSteps } from 'dms-sdk-client';
 import { getClient } from '../../utils/client';
 import { convertProperValue } from '../../utils/convert';
 import * as Clipboard from 'expo-clipboard';
-import {useTranslation} from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 const MileageRedeemNotification = observer(({ navigation }) => {
   const { t } = useTranslation();
-  const { loyaltyStore } = useStores();
+  const { pinStore, loyaltyStore } = useStores();
   const [values, setValues] = useState(['T1', 'T2']);
 
   const [client, setClient] = useState(null);
@@ -49,7 +49,11 @@ const MileageRedeemNotification = observer(({ navigation }) => {
       // alert('payment :' + JSON.stringify(loyaltyStore.payment));
       await savePaymnentInfo(client1, loyaltyStore.payment.id);
     }
-    fetchClient().then(() => console.log('end of fetchClient')).catch(error => {console.log(error)});
+    fetchClient()
+      .then(() => console.log('end of fetchClient'))
+      .catch((error) => {
+        console.log(error);
+      });
 
     console.log('loyaltyStore :', loyaltyStore);
     // initiateTimer();
@@ -108,13 +112,12 @@ const MileageRedeemNotification = observer(({ navigation }) => {
         const time = Math.round(+new Date() / 1000);
         loyaltyStore.setLastUpdateTime(time);
         alert(t('wallet.redeem.use.done'));
+        pinStore.setNextScreen('Wallet');
         navigation.navigate('Wallet');
       }
     } catch (e) {
       console.log('e :', e);
-      alert(
-          t('wallet.redeem.use.fail') + 'e:' + e.message,
-      );
+      alert(t('wallet.redeem.use.fail') + 'e:' + e.message);
     }
   }
 
@@ -146,7 +149,9 @@ const MileageRedeemNotification = observer(({ navigation }) => {
             <Text>{purchaseId}</Text>
           </HStack>
           <HStack>
-            <Text w='40%'>{t('purchase')} {t('amount')} :</Text>
+            <Text w='40%'>
+              {t('purchase')} {t('amount')} :
+            </Text>
             <Text>
               {convertProperValue(amount.toBOAString())}{' '}
               {currency.toUpperCase()}
