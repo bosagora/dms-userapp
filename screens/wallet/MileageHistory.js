@@ -59,7 +59,31 @@ const MileageHistory = observer(({ navigation }) => {
       console.log('>>>>>>> userAddress :', userAddress);
       setClient(client1);
       setAddress(userAddress);
+      const resEst = await client1.ledger.getEstimatedSaveHistory(userAddress);
+      console.log('resEst:', resEst);
+      /**
+       * resEst: [{"account": "0xa0ed5bb5995db52cdf3b004c5a8c11d58abfafa2",
+       * "currency": "krw", "loyaltyType": 1, "providePoint": "0",
+       * "provideToken": "31147990331000000000", "provideValue": "2500000000000000000000",
+       * "purchaseId": "441381708394076174",
+       * "shopId": "0x5f59d6b480ff5a30044dcd7fe3b28c69b6d0d725ca469d1b685b57dfc1055d7f",
+       * "timestamp": "1708394082"}]
+       */
 
+      const scheduledHistory = resEst.map((it) => {
+        return {
+          id: it.timestamp + it.purchaseId,
+          action: LedgerAction.SAVED,
+          actionName: 'SCHEDULED',
+          loyaltyType: it.loyaltyType,
+          loyaltyTypeName: it.loyaltyType === 0 ? 'POINT' : 'TOKEN',
+          amountPoint: it.providePoint.substring(0, it.providePoint.length - 9),
+          amountToken: it.provideToken.substring(0, it.provideToken.length - 9),
+          amountValue: it.provideValue,
+          blockTimestamp: it.timestamp,
+        };
+      });
+      console.log('scheduledHistory :', scheduledHistory);
       const res = await client1.ledger.getSaveAndUseHistory(userAddress, {
         limit: 100,
         skip: 0,
@@ -68,7 +92,7 @@ const MileageHistory = observer(({ navigation }) => {
       });
 
       console.log('len :', res.userTradeHistories?.length);
-      const history = res.userTradeHistories
+      const tradeHistory = res.userTradeHistories
         .filter((it) => {
           return (
             it.action === LedgerAction.SAVED ||
@@ -96,8 +120,16 @@ const MileageHistory = observer(({ navigation }) => {
             blockTimestamp: it.blockTimestamp,
           };
         });
-      console.log('history :', res.userTradeHistories.slice(0, 3));
-
+      const history = scheduledHistory.concat(tradeHistory);
+      history.sort(function (a, b) {
+        // 오름차순
+        return a.blockTimestamp > b.blockTimestamp
+          ? -1
+          : a.blockTimestamp < b.blockTimestamp
+          ? 1
+          : 0;
+      });
+      console.log('history :', history.slice(0, 3));
       setHistoryData(history);
     };
     fetchHistory()
@@ -164,7 +196,9 @@ const MileageHistory = observer(({ navigation }) => {
                           color: '$warmGray200',
                         },
                       }}>
-                      {item.actionName === 'CANCEL'
+                      {item.actionName === 'SCHEDULED'
+                        ? t('wallet.history.body.text.e')
+                        : item.actionName === 'CANCEL'
                         ? t('wallet.history.body.text.a')
                         : item.actionName === 'SAVED'
                         ? t('wallet.history.body.text.b')
@@ -186,7 +220,8 @@ const MileageHistory = observer(({ navigation }) => {
                   <Box>
                     <Text>
                       {item.actionName === 'CANCEL' ||
-                      item.actionName === 'SAVED'
+                      item.actionName === 'SAVED' ||
+                      item.actionName === 'SCHEDULED'
                         ? '+'
                         : item.actionName === 'USED'
                         ? '-'
