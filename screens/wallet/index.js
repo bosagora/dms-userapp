@@ -102,6 +102,7 @@ const Index = observer(({ navigation }) => {
         tokenBalance,
         userStore.currency.toLowerCase(),
       );
+
       // console.log('userTokenCurrencyRate :', userTokenCurrencyRate.toString());
       const oneConv = new BOACoin(userTokenCurrencyRate);
       // console.log('oneConv :', oneConv.toBOAString());

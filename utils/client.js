@@ -121,7 +121,7 @@ export async function getClient() {
       relayEndpoint: relayEndPoint.working,
       graphqlNodes: graphqlEndPoint.working,
       ledgerAddress: LIVE_CONTRACTS[sdkLink].LedgerAddress,
-      tokenAddress: LIVE_CONTRACTS[sdkLink].TokenAddress,
+      tokenAddress: LIVE_CONTRACTS[sdkLink].LoyaltyTokenAddress,
       phoneLinkAddress: LIVE_CONTRACTS[sdkLink].PhoneLinkCollectionAddress,
       validatorAddress: LIVE_CONTRACTS[sdkLink].ValidatorAddress,
       currencyRateAddress: LIVE_CONTRACTS[sdkLink].CurrencyRateAddress,
@@ -137,7 +137,7 @@ export async function getClient() {
     const client = createClient();
     return { client, address };
   } catch (e) {
-    console.log('1:', e)
-    return {client:null, address:null}
+    console.log('1:', e);
+    return { client: null, address: null };
   }
 }

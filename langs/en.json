@@ -89,6 +89,7 @@
   "wallet.history.body.text.b": "Collected",
   "wallet.history.body.text.c": "Used",
   "wallet.history.body.text.d": "Converted",
+  "wallet.history.body.text.e": "Scheduled to collect",
 
   "wallet.redeem.use.fail": "Redemption authentication failed. Please contact support.",
   "wallet.redeem.use.done": "Redemption successfully authenticated.",
