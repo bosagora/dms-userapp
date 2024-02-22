@@ -306,12 +306,21 @@ const Index = observer(({ navigation }) => {
                       _dark={{ color: '$textLight200' }}
                       fontSize='$sm'
                       mr='$1'>
-                      ≒ {convertProperValue(userTokenRate.toBOAString(), 0)}{' '}
+                      ≒{' '}
+                      {convertProperValue(
+                        userTokenRate.toBOAString(),
+                        1,
+                        userStore.currency.toLowerCase() === 'krw' ? 0 : 5,
+                      )}{' '}
                       {userStore.currency}
                     </Text>
                     <Text _dark={{ color: '$textLight200' }} fontSize='$sm'>
                       (1 KIOS ≒{' '}
-                      {convertProperValue(oneTokenRate.toBOAString(), 0, 2)}{' '}
+                      {convertProperValue(
+                        oneTokenRate.toBOAString(),
+                        1,
+                        userStore.currency.toLowerCase() === 'krw' ? 0 : 5,
+                      )}{' '}
                       {userStore.currency})
                     </Text>
                   </HStack>
