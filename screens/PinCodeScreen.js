@@ -7,16 +7,15 @@ import { observer } from 'mobx-react';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { useNavigation } from 'expo-router';
 import * as RootNavigation from '../utils/root.navigation';
-import {useTranslation} from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 const PinCodeScreen = observer(() => {
   const { t } = useTranslation();
   const { pinStore, userStore } = useStores();
 
-
   const customTexts = {
     enter: {
-      subTitle: t('pin.enter.subTitle')
+      subTitle: t('pin.enter.subTitle'),
     },
     set: {
       title: t('pin.set.title'),
@@ -58,7 +57,6 @@ const PinCodeScreen = observer(() => {
       confirmText: { color: 'red' },
     },
   };
-
 
   useEffect(() => {
     console.log('PinCodeScreen > useEffect : ', pinStore);
@@ -110,7 +108,9 @@ const PinCodeScreen = observer(() => {
       pinStore.setMode(PinCodeT.Modes.Set);
       pinStore.setNextScreen('none');
     } else {
-      RootNavigation.navigate(pinStore.nextScreen);
+      const nextScreen = pinStore.nextScreen;
+      pinStore.setNextScreen('none');
+      if (nextScreen !== 'none') RootNavigation.navigate(nextScreen);
       pinStore.setSuccessEnter(true);
       pinStore.setVisible(false);
     }

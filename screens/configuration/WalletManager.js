@@ -28,6 +28,10 @@ import {
   View,
   InputField,
   ButtonGroup,
+  ModalHeader,
+  ModalCloseButton,
+  Icon,
+  CloseIcon,
 } from '@gluestack-ui/themed';
 import MobileHeader from '../../components/MobileHeader'; //for ethers.js
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -35,12 +39,13 @@ import { getClient } from '../../utils/client';
 import * as Device from 'expo-device';
 import { MobileType } from 'dms-sdk-client';
 import { useTranslation } from 'react-i18next';
+import { AUTH_STATE } from '../../stores/user.store';
 
 const { Wallet } = ethers;
 
 const WalletManager = observer(({ navigation }) => {
   const { t } = useTranslation();
-  const { userStore, secretStore, loyaltyStore } = useStores();
+  const { userStore, secretStore, loyaltyStore, pinStore } = useStores();
   const [privateKey, setPrivateKey] = useState(
     '0000000000000000000000000000000000000000000000000000000000000001',
   );
@@ -135,6 +140,24 @@ const WalletManager = observer(({ navigation }) => {
     }
   }
   const [showModal, setShowModal] = useState(false);
+  const [showInitWalletModal, setShowInitWalletModal] = useState(false);
+
+  async function warnInitializeWallet() {
+    setShowInitWalletModal(true);
+  }
+  async function initAuth() {
+    console.log('initAuth');
+    clearInterval(userStore.walletInterval);
+    userStore.reset();
+    pinStore.reset();
+    loyaltyStore.reset();
+    secretStore.reset();
+    await saveSecureValue('address', '');
+    await saveSecureValue('mnemonic', '');
+    await saveSecureValue('privateKey', '');
+    userStore.setAuthState(AUTH_STATE.INIT);
+  }
+
   return (
     <SafeAreaView>
       <Box
@@ -159,6 +182,11 @@ const WalletManager = observer(({ navigation }) => {
             </Button>
           </Box>
           <ImportPrivateKey saveKey={saveKey} />
+          <Box>
+            <Button py='$2.5' px='$3' onPress={() => warnInitializeWallet()}>
+              <ButtonText>{t('wallet.init')}</ButtonText>
+            </Button>
+          </Box>
         </VStack>
         <Box>
           <KeyboardAwareScrollView
@@ -224,6 +252,58 @@ const WalletManager = observer(({ navigation }) => {
                         }}>
                         <ButtonText fontSize='$sm' fontWeight='$medium'>
                           {t('copy')}
+                        </ButtonText>
+                      </Button>
+                    </ButtonGroup>
+                  </ModalBody>
+                </ModalContent>
+              </Modal>
+
+              <Modal
+                isOpen={showInitWalletModal}
+                onClose={() => {
+                  setShowInitWalletModal(false);
+                }}>
+                <ModalBackdrop />
+                <ModalContent maxWidth='$96'>
+                  <ModalHeader>
+                    <Heading size='lg'>{t('wallet.init')}</Heading>
+                    <ModalCloseButton>
+                      <Icon as={CloseIcon} />
+                    </ModalCloseButton>
+                  </ModalHeader>
+                  <ModalBody p='$5'>
+                    <VStack space='xs' mb='$4'>
+                      <Text size='sm'>
+                        {t('config.wallet.modal.body.text.g')}
+                      </Text>
+                      <Text size='sm'>
+                        {t('config.wallet.modal.body.text.h')}
+                      </Text>
+                    </VStack>
+
+                    <ButtonGroup space='md' alignSelf='center'>
+                      <Button
+                        variant='solid'
+                        bg='$success700'
+                        borderColor='$success700'
+                        onPress={async () => {
+                          setShowInitWalletModal(false);
+                        }}>
+                        <ButtonText fontSize='$sm' fontWeight='$medium'>
+                          {t('button.press.b')}
+                        </ButtonText>
+                      </Button>
+                      <Button
+                        variant='solid'
+                        bg='$success700'
+                        borderColor='$success700'
+                        onPress={async () => {
+                          setShowInitWalletModal(false);
+                          await initAuth();
+                        }}>
+                        <ButtonText fontSize='$sm' fontWeight='$medium'>
+                          {t('button.press.a')}
                         </ButtonText>
                       </Button>
                     </ButtonGroup>

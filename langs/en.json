@@ -7,6 +7,7 @@
   "wallet.export": "Export your wallet",
   "wallet.import": "Import your wallet",
   "wallet.manage": "Manage your wallet",
+  "wallet.init": "Initialize your wallet",
   "kios": "KIOS",
   "kios.token" : "KIOS",
   "point": "points",
@@ -53,7 +54,7 @@
   "import.body.text.a": "Please enter the private key you copied from your old device in the space below to continue using your existing wallet on this device. \nWarning: Importing a wallet mean that your current wallet will be overwritten. If you want to recover your current wallet in the future, BE SURE TO COPY THE PRIVATE KEY OF YOUR CURRENT WALLET. ",
   "import.body.text.b": "Enter your private key here.",
 
-  "pin.enter.title": "Enter 4-digit passcode",
+  "pin.enter.title": "Set your passcode",
   "pin.enter.subTitle": "Enter 4-digit passcode",
   "pin.set.title": "Set Your Passcode",
   "pin.set.subTitle": "Enter your passcode",
@@ -108,7 +109,8 @@
   "config.wallet.modal.heading": "Your private key",
   "config.wallet.modal.body.text.a": "Enter this key on the app installed on your other device to restore your current wallet. (Select 'Import your wallet' on the app on your other device)",
   "config.wallet.modal.body.text.b": "Warning: Never expose or share your private key. Anyone with your private key can access and steal assets in your wallet.",
-
+  "config.wallet.modal.body.text.g": "If you reset your wallet now, all data associated with it will be deleted and can never be recovered. Be sure to save your wallet if you need to reuse it.",
+  "config.wallet.modal.body.text.h": "If you agree to reset your wallet, select the 'Confirm' button below.",
 
 
   "term.read": "Read and understood",

@@ -61,14 +61,6 @@ const MileageHistory = observer(({ navigation }) => {
       setAddress(userAddress);
       const resEst = await client1.ledger.getEstimatedSaveHistory(userAddress);
       console.log('resEst:', resEst);
-      /**
-       * resEst: [{"account": "0xa0ed5bb5995db52cdf3b004c5a8c11d58abfafa2",
-       * "currency": "krw", "loyaltyType": 1, "providePoint": "0",
-       * "provideToken": "31147990331000000000", "provideValue": "2500000000000000000000",
-       * "purchaseId": "441381708394076174",
-       * "shopId": "0x5f59d6b480ff5a30044dcd7fe3b28c69b6d0d725ca469d1b685b57dfc1055d7f",
-       * "timestamp": "1708394082"}]
-       */
 
       const scheduledHistory = resEst.map((it) => {
         return {
@@ -134,7 +126,7 @@ const MileageHistory = observer(({ navigation }) => {
     };
     fetchHistory()
       .then()
-      .catch(() => console.log('ede'));
+      .catch((e) => console.log('history error :', e));
   }, []);
 
   return (

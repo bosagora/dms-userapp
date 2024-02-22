@@ -7,6 +7,7 @@
   "wallet.export": "지갑 내보내기",
   "wallet.import": "지갑 가져오기",
   "wallet.manage": "지갑 관리",
+  "wallet.init": "지갑 초기화",
   "kios": "키오스",
   "kios.token" : "KIOS",
   "point": "포인트",
@@ -108,7 +109,8 @@
   "config.wallet.modal.heading": "지갑 비공개 키",
   "config.wallet.modal.body.text.a": "이 키를 다른 기기에 설치된 앱에 붙여 넣으면 현재지갑을 복구해 사용할 수 있습니다. (다른 기기의 앱에서 ‘지갑 가져오기’ 선택)",
   "config.wallet.modal.body.text.b": "경고 : 이 키를 노출하지 마세요. 비공개 키가 있는 사람이라면 누구든 회원님의 계정에 있는 자산을 훔칠 수 있습니다.",
-
+  "config.wallet.modal.body.text.g": "지금 지갑을 초기화하면, 지갑과 관련된 모든 데이터가 삭제되고 다시는 복구할 수 없습니다. 지갑 재사용이 필요한 경우에 반드시 지갑을 저장해 두시기 바랍니다.",
+  "config.wallet.modal.body.text.h": "지갑 초기화에 동의하면 아래에 '확인' 버튼을 선택하세요.",
 
 
   "term.read": "읽고 이해했음",
