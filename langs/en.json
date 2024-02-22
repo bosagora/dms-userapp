@@ -109,8 +109,8 @@
   "config.wallet.modal.heading": "Your private key",
   "config.wallet.modal.body.text.a": "Enter this key on the app installed on your other device to restore your current wallet. (Select 'Import your wallet' on the app on your other device)",
   "config.wallet.modal.body.text.b": "Warning: Never expose or share your private key. Anyone with your private key can access and steal assets in your wallet.",
-  "config.wallet.modal.body.text.g": "If you reset your wallet now, all data associated with it will be deleted and can never be recovered. Be sure to save your wallet if you need to reuse it.",
-  "config.wallet.modal.body.text.h": "If you agree to reset your wallet, select the 'Confirm' button below.",
+  "config.wallet.modal.body.text.g": "If you reset your wallet now, all data associated with it will be deleted on your current device. Be sure to save your private key if you need to restore your wallet in the future. ",
+  "config.wallet.modal.body.text.h": "Press 'Confirm' to proceed with resetting your wallet. ",
 
 
   "term.read": "Read and understood",
