@@ -115,9 +115,9 @@ const Index = observer(({ navigation }) => {
       );
 
       // console.log('oneTokenCurrencyRate :', oneTokenCurrencyRate.toString());
-      const boaConv = new BOACoin(oneTokenCurrencyRate);
+      const oneTokenConv = new BOACoin(oneTokenCurrencyRate);
       // console.log('boaBal :', boaConv.toBOAString());
-      setOneTokenRate(boaConv);
+      setOneTokenRate(oneTokenConv);
 
       const userPoint = await cc.ledger.getPointBalance(userAddress);
       const payableConv = new BOACoin(userPoint);
@@ -131,6 +131,15 @@ const Index = observer(({ navigation }) => {
       const pointRateConv = new BOACoin(pointCurrencyRate);
       // console.log('pointRateConv :', pointRateConv.toBOAString());
       setPayablePointRate(pointRateConv);
+
+      const onePointAmount = BOACoin.make(1, 18).value;
+      let onePointCurrencyRate = await cc.currency.pointToCurrency(
+        onePointAmount,
+        userStore.currency.toLowerCase(),
+      );
+      const onePointConv = new BOACoin(onePointCurrencyRate);
+      // console.log('onePointConv :', onePointConv.toBOAString());
+      setOnePointRate(onePointConv);
     } catch (e) {
       console.log('setdata > e:', e);
     }
@@ -251,7 +260,13 @@ const Index = observer(({ navigation }) => {
                       {userStore.currency}
                     </Text>
                     <Text _dark={{ color: '$textLight200' }} fontSize='$sm'>
-                      (1 point ≒ 1 {userStore.currency} )
+                      (1 point ≒{' '}
+                      {convertProperValue(
+                        onePointRate.toBOAString(),
+                        1,
+                        userStore.currency.toLowerCase() === 'krw' ? 0 : 5,
+                      )}{' '}
+                      {userStore.currency} )
                     </Text>
                   </HStack>
                   <Button mt='$12' onPress={() => handleQRSheet()}>
