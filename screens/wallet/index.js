@@ -25,6 +25,7 @@ import loyaltyStore from '../../stores/loyalty.store';
 import { SafeAreaView, StatusBar } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { FocusAwareStatusBar } from '../../components/FocusAwareStatusBar';
 
 const Index = observer(({ navigation }) => {
   const { t } = useTranslation();
@@ -263,7 +264,7 @@ const Index = observer(({ navigation }) => {
                       (1 point ≒{' '}
                       {convertProperValue(
                         onePointRate.toBOAString(),
-                        1,
+                        userStore.currency.toLowerCase() === 'krw' ? 0 : 1,
                         userStore.currency.toLowerCase() === 'krw' ? 0 : 5,
                       )}{' '}
                       {userStore.currency} )
@@ -309,8 +310,8 @@ const Index = observer(({ navigation }) => {
                       ≒{' '}
                       {convertProperValue(
                         userTokenRate.toBOAString(),
-                        1,
-                        userStore.currency.toLowerCase() === 'krw' ? 0 : 5,
+                        userStore.currency.toLowerCase() === 'krw' ? 0 : 1,
+                        userStore.currency.toLowerCase() === 'krw' ? 0 : 2,
                       )}{' '}
                       {userStore.currency}
                     </Text>
@@ -318,7 +319,7 @@ const Index = observer(({ navigation }) => {
                       (1 KIOS ≒{' '}
                       {convertProperValue(
                         oneTokenRate.toBOAString(),
-                        1,
+                        userStore.currency.toLowerCase() === 'krw' ? 0 : 1,
                         userStore.currency.toLowerCase() === 'krw' ? 0 : 5,
                       )}{' '}
                       {userStore.currency})

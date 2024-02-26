@@ -7,7 +7,7 @@
   "wallet.export": "Export your wallet",
   "wallet.import": "Import your wallet",
   "wallet.manage": "Manage your wallet",
-  "wallet.init": "Initialize your wallet",
+  "wallet.init": "Wallet reset",
   "kios": "KIOS",
   "kios.token" : "KIOS",
   "point": "points",
